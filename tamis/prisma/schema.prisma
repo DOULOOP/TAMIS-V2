@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String
+  role        UserRole @default(USER)
+  department  String?
+  isActive    Boolean  @default(true)
+  lastLogin   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations for monitoring system
+  incidents   Incident[]
+  assignedIncidents Incident[] @relation("AssignedIncidents")
+  reports     Report[]
+  
+  @@map("users")
+}
+
+model Incident {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  severity    SeverityLevel
+  status      IncidentStatus @default(OPEN)
+  location    String
+  coordinates String? // JSON string for lat/lng
+  reportedBy  String
+  assignedTo  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  resolvedAt  DateTime?
+  
+  user        User    @relation(fields: [reportedBy], references: [id])
+  assignee    User?   @relation("AssignedIncidents", fields: [assignedTo], references: [id])
+  reports     Report[]
+  
+  @@map("incidents")
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  incidentId  String
+  content     String
+  attachments String[] // Array of file URLs
+  reportedBy  String
+  createdAt   DateTime @default(now())
+  
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [reportedBy], references: [id])
+  
+  @@map("reports")
+}
+
+enum UserRole {
+  ADMIN
+  SUPERVISOR
+  ENGINEER
+  USER
+}
+
+enum SeverityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
