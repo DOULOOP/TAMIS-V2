@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_ee462618d4bcaebbe5de78b08e243d6d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                top: 10px; left: 50px; width: 400px; height: 90px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:14px; padding: 10px;">
+    <h4 style="margin: 0;">Hatay Earthquake Damage Assessment</h4>
+    <p style="margin: 5px 0;">Satellite imagery comparison: 2015 vs 2023<br>
+    <small>Blue: 2015 imagery extent | Orange: 2023 imagery extent</small></p>
+    </div>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; left: 50px; width: 200px; height: 120px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:12px; padding: 10px;">
+    <h5 style="margin: 0;">Legend</h5>
+    <p style="margin: 3px 0;"><span style="color: darkred;">■</span> Study Area</p>
+    <p style="margin: 3px 0;"><span style="color: blue;">■</span> 2015 Imagery</p>
+    <p style="margin: 3px 0;"><span style="color: orange;">■</span> 2023 Imagery</p>
+    <p style="margin: 3px 0;"><span style="color: red;">📍</span> Cities</p>
+    <p style="margin: 3px 0;"><span style="color: black;">⚠</span> Earthquake Info</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_ee462618d4bcaebbe5de78b08e243d6d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_ee462618d4bcaebbe5de78b08e243d6d = L.map(
+                "map_ee462618d4bcaebbe5de78b08e243d6d",
+                {
+                    center: [36.2012, 36.1611],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_e05067cd249c600d474d1064e7fb14fb = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_e05067cd249c600d474d1064e7fb14fb.addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var tile_layer_28b1688a50c93993b54990fd2caffdc8 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri World Imagery",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_28b1688a50c93993b54990fd2caffdc8.addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var tile_layer_f445531b271f608482c4831c6c8af9c3 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_f445531b271f608482c4831c6c8af9c3.addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+        function geo_json_001ded64ccdb10d90de866316a7439ed_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "darkred", "fillColor": "red", "fillOpacity": 0.1, "opacity": 0.8, "weight": 3};
+            }
+        }
+
+        function geo_json_001ded64ccdb10d90de866316a7439ed_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_001ded64ccdb10d90de866316a7439ed = L.geoJson(null, {
+                onEachFeature: geo_json_001ded64ccdb10d90de866316a7439ed_onEachFeature,
+            
+                style: geo_json_001ded64ccdb10d90de866316a7439ed_styler,
+            ...{
+}
+        });
+
+        function geo_json_001ded64ccdb10d90de866316a7439ed_add (data) {
+            geo_json_001ded64ccdb10d90de866316a7439ed
+                .addData(data);
+        }
+            geo_json_001ded64ccdb10d90de866316a7439ed_add({"bbox": [36.13688418237776, 36.200888908023686, 36.16478962606026, 36.21890819348048], "features": [{"bbox": [36.13688418237776, 36.200888908023686, 36.16478962606026, 36.21890819348048], "geometry": {"coordinates": [[[36.13691550610183, 36.21890819348048], [36.16478962606026, 36.21887305575337], [36.164751925319784, 36.200888908023686], [36.13688418237776, 36.200924022760475], [36.13691550610183, 36.21890819348048]]], "type": "Polygon"}, "id": "0", "properties": {"BORDER_COL": "RGB(0,0,0)", "BORDER_STY": "Solid", "BORDER_WID": 1, "CLOSED": "YES", "FILL_STYLE": "No Fill", "FONT_CHARS": 1, "FONT_COLOR": "RGB(0,0,0)", "FONT_SIZE": 12, "GEN\u00c4\u00b0\u00c5\u009eL\u00c4\u00b0": "2 km", "LABEL_POS": "513563.742,4008843.850", "LAYER": "Unknown Area Type", "MAP_NAME": "Kullan\u00fdc\u00fd Taraf\u00fdndan Olu\u00feturulan \u00d6zellikler", "NAME": "1", "UZUNLUK": "3 km", "\u00c3\u0087EVRE": "9 km", "\u00c3\u0087EVRELENM": "500 ha"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_001ded64ccdb10d90de866316a7439ed.bindTooltip(
+                `<div>
+                     Study Area Boundary
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+        var popup_029a44bee2dafe539459e62e1ac4e5bc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b13ea7d927f1bc0d92f8d2b5d55eb6e1 = $(`<div id="html_b13ea7d927f1bc0d92f8d2b5d55eb6e1" style="width: 100.0%; height: 100.0%;">Hatay Study Area</div>`)[0];
+                popup_029a44bee2dafe539459e62e1ac4e5bc.setContent(html_b13ea7d927f1bc0d92f8d2b5d55eb6e1);
+            
+        
+
+        geo_json_001ded64ccdb10d90de866316a7439ed.bindPopup(popup_029a44bee2dafe539459e62e1ac4e5bc)
+        ;
+
+        
+    
+    
+            geo_json_001ded64ccdb10d90de866316a7439ed.addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            map_ee462618d4bcaebbe5de78b08e243d6d.fitBounds(
+                [[36.200888908023686, 36.13688418237776], [36.21890819348048, 36.16478962606026]],
+                {}
+            );
+        
+    
+            var rectangle_785640d5cb6766bc282603fa1ab6a3c7 = L.rectangle(
+                [[36.20088873999167, 36.136884182085794], [36.21890819348048, 36.16478986446267]],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+        var popup_46d1091ed5ff98b8935e0c69a49658bf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_11759ba1388fc9797a8f461f3c76e086 = $(`<div id="html_11759ba1388fc9797a8f461f3c76e086" style="width: 100.0%; height: 100.0%;">                         <b>2015 Satellite Imagery</b><br>                         Resolution: 0.1m<br>                         Dimensions: 25063 x 19956<br>                         Bands: 4<br>                         Size: 0.66 GB                         </div>`)[0];
+                popup_46d1091ed5ff98b8935e0c69a49658bf.setContent(html_11759ba1388fc9797a8f461f3c76e086);
+            
+        
+
+        rectangle_785640d5cb6766bc282603fa1ab6a3c7.bindPopup(popup_46d1091ed5ff98b8935e0c69a49658bf)
+        ;
+
+        
+    
+    
+            rectangle_785640d5cb6766bc282603fa1ab6a3c7.bindTooltip(
+                `<div>
+                     2015 Imagery Extent
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var rectangle_126efb7b3a142980f5814bd65d144a0e = L.rectangle(
+                [[36.200889096969924, 36.1368841827071], [36.21890819348048, 36.164789789502365]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+        var popup_d2fc95ddcc2532ccb62bfd2b62a1ade8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_97bf0ba388e94a30ab23853eecb60932 = $(`<div id="html_97bf0ba388e94a30ab23853eecb60932" style="width: 100.0%; height: 100.0%;">                         <b>2023 Satellite Imagery</b><br>                         Resolution: 0.1m<br>                         Dimensions: 45289 x 36060<br>                         Bands: 4<br>                         Size: 2.48 GB                         </div>`)[0];
+                popup_d2fc95ddcc2532ccb62bfd2b62a1ade8.setContent(html_97bf0ba388e94a30ab23853eecb60932);
+            
+        
+
+        rectangle_126efb7b3a142980f5814bd65d144a0e.bindPopup(popup_d2fc95ddcc2532ccb62bfd2b62a1ade8)
+        ;
+
+        
+    
+    
+            rectangle_126efb7b3a142980f5814bd65d144a0e.bindTooltip(
+                `<div>
+                     2023 Imagery Extent
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_04d750d7b7957fedd2d8bfd5993ca287 = L.marker(
+                [36.2012, 36.1611],
+                {
+}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var icon_6ea291edaec8a2713bd7c37f707737b1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_87dea9c900508aac0e06b24fefcb79fd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_56a97680a1286a194e801b4183207661 = $(`<div id="html_56a97680a1286a194e801b4183207661" style="width: 100.0%; height: 100.0%;"><b>Antakya (Hatay Center)</b><br>Provincial capital and main urban center</div>`)[0];
+                popup_87dea9c900508aac0e06b24fefcb79fd.setContent(html_56a97680a1286a194e801b4183207661);
+            
+        
+
+        marker_04d750d7b7957fedd2d8bfd5993ca287.bindPopup(popup_87dea9c900508aac0e06b24fefcb79fd)
+        ;
+
+        
+    
+    
+            marker_04d750d7b7957fedd2d8bfd5993ca287.bindTooltip(
+                `<div>
+                     Antakya (Hatay Center)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_04d750d7b7957fedd2d8bfd5993ca287.setIcon(icon_6ea291edaec8a2713bd7c37f707737b1);
+            
+    
+            var marker_6f42a371be04eb47d311c66f15b13e29 = L.marker(
+                [36.5877, 36.1704],
+                {
+}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var icon_367cb9d24f00f579effb55d456e44835 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f1d3fb10831fa5b1c0f013a4d78f66d5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f5c568a8b24fad4dfc48448e85feecaa = $(`<div id="html_f5c568a8b24fad4dfc48448e85feecaa" style="width: 100.0%; height: 100.0%;"><b>İskenderun</b><br>Major port city</div>`)[0];
+                popup_f1d3fb10831fa5b1c0f013a4d78f66d5.setContent(html_f5c568a8b24fad4dfc48448e85feecaa);
+            
+        
+
+        marker_6f42a371be04eb47d311c66f15b13e29.bindPopup(popup_f1d3fb10831fa5b1c0f013a4d78f66d5)
+        ;
+
+        
+    
+    
+            marker_6f42a371be04eb47d311c66f15b13e29.bindTooltip(
+                `<div>
+                     İskenderun
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6f42a371be04eb47d311c66f15b13e29.setIcon(icon_367cb9d24f00f579effb55d456e44835);
+            
+    
+            var marker_e23735442a32fa3a1de15f4d79ae5bdb = L.marker(
+                [36.2669, 36.5666],
+                {
+}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var icon_49da315689fee1aa2da46b57470d1545 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1c7ec03de8f1736578fd30d654624843 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_abeda676353950bee1489fcfd511cf93 = $(`<div id="html_abeda676353950bee1489fcfd511cf93" style="width: 100.0%; height: 100.0%;"><b>Reyhanlı</b><br>Border town with Syria</div>`)[0];
+                popup_1c7ec03de8f1736578fd30d654624843.setContent(html_abeda676353950bee1489fcfd511cf93);
+            
+        
+
+        marker_e23735442a32fa3a1de15f4d79ae5bdb.bindPopup(popup_1c7ec03de8f1736578fd30d654624843)
+        ;
+
+        
+    
+    
+            marker_e23735442a32fa3a1de15f4d79ae5bdb.bindTooltip(
+                `<div>
+                     Reyhanlı
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e23735442a32fa3a1de15f4d79ae5bdb.setIcon(icon_49da315689fee1aa2da46b57470d1545);
+            
+    
+            var marker_f7c1bd9f328faf630e24b494bf0087cf = L.marker(
+                [36.0, 36.5],
+                {
+}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+        
+    
+            var icon_62644cbd06c66c86b27524f8d28b722e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "black",
+  "iconColor": "white",
+  "icon": "warning-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_669298a2dae7689e485a91479cf8567b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a68b30d783572fc3806560ebee22055e = $(`<div id="html_a68b30d783572fc3806560ebee22055e" style="width: 100.0%; height: 100.0%;">     <div style='width: 300px;'>     <h4>February 6, 2023 Earthquakes</h4>     <p><strong>Magnitude 7.8</strong> - 04:17 local time<br>     Epicenter: Pazarcık, Kahramanmaraş</p>     <p><strong>Magnitude 7.5</strong> - 13:24 local time<br>     Epicenter: Elbistan, Kahramanmaraş</p>     <p>These earthquakes severely affected Hatay Province,      causing widespread damage to buildings and infrastructure.</p>     </div>     </div>`)[0];
+                popup_669298a2dae7689e485a91479cf8567b.setContent(html_a68b30d783572fc3806560ebee22055e);
+            
+        
+
+        marker_f7c1bd9f328faf630e24b494bf0087cf.bindPopup(popup_669298a2dae7689e485a91479cf8567b)
+        ;
+
+        
+    
+    
+            marker_f7c1bd9f328faf630e24b494bf0087cf.bindTooltip(
+                `<div>
+                     2023 Earthquake Information
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f7c1bd9f328faf630e24b494bf0087cf.setIcon(icon_62644cbd06c66c86b27524f8d28b722e);
+            
+    
+            var layer_control_a8935aac8e7f7941629e6340f6bac14f_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_e05067cd249c600d474d1064e7fb14fb,
+                    "Satellite" : tile_layer_28b1688a50c93993b54990fd2caffdc8,
+                    "Street Map" : tile_layer_f445531b271f608482c4831c6c8af9c3,
+                },
+                overlays :  {
+                    "Study Area Boundaries" : geo_json_001ded64ccdb10d90de866316a7439ed,
+                },
+            };
+            let layer_control_a8935aac8e7f7941629e6340f6bac14f = L.control.layers(
+                layer_control_a8935aac8e7f7941629e6340f6bac14f_layers.base_layers,
+                layer_control_a8935aac8e7f7941629e6340f6bac14f_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_ee462618d4bcaebbe5de78b08e243d6d);
+
+        
+</script>
+</html>

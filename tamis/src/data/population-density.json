@@ -1,0 +1,285 @@
+{
+  "populationDensityAnalysis": {
+    "metadata": {
+      "analysisId": "pda_20250901_001",
+      "timestamp": "2025-09-01T14:30:00Z",
+      "region": "Hatay İli",
+      "coordinates": {
+        "center": [36.206, 36.150],
+        "bounds": {
+          "north": 36.220,
+          "south": 36.130,
+          "east": 36.250,
+          "west": 36.150
+        }
+      },
+      "dataSource": "AAIA_MODEM",
+      "status": "completed",
+      "processingTime": 3000
+    },
+    "summary": {
+      "totalPopulation": 125847,
+      "averageDensity": 2341,
+      "riskScore": 7.8,
+      "affectedArea": 53.7,
+      "criticalZones": 12
+    },
+    "populationData": [
+      {
+        "zoneId": "zone_001",
+        "name": "Merkez İlkokulu Çevresi",
+        "coordinates": [36.147, 36.206],
+        "bounds": {
+          "north": 36.149,
+          "south": 36.145,
+          "east": 36.208,
+          "west": 36.204
+        },
+        "population": 8750,
+        "area": 2.3,
+        "density": 3804,
+        "riskLevel": "high",
+        "demographics": {
+          "children": 2625,
+          "adults": 5250,
+          "elderly": 875,
+          "vulnerable": 1400
+        },
+        "facilities": {
+          "schools": 2,
+          "hospitals": 0,
+          "emergencyServices": 1
+        },
+        "lastUpdated": "2025-09-01T14:25:00Z"
+      },
+      {
+        "zoneId": "zone_002",
+        "name": "Atatürk Parkı Bölgesi",
+        "coordinates": [36.154, 36.212],
+        "bounds": {
+          "north": 36.157,
+          "south": 36.151,
+          "east": 36.215,
+          "west": 36.209
+        },
+        "population": 12400,
+        "area": 4.8,
+        "density": 2583,
+        "riskLevel": "medium",
+        "demographics": {
+          "children": 3100,
+          "adults": 8060,
+          "elderly": 1240,
+          "vulnerable": 1860
+        },
+        "facilities": {
+          "schools": 1,
+          "hospitals": 1,
+          "emergencyServices": 2
+        },
+        "lastUpdated": "2025-09-01T14:20:00Z"
+      },
+      {
+        "zoneId": "zone_003",
+        "name": "Spor Stadyumu Yakını",
+        "coordinates": [36.151, 36.204],
+        "bounds": {
+          "north": 36.154,
+          "south": 36.148,
+          "east": 36.207,
+          "west": 36.201
+        },
+        "population": 15600,
+        "area": 6.2,
+        "density": 2516,
+        "riskLevel": "medium",
+        "demographics": {
+          "children": 3900,
+          "adults": 10140,
+          "elderly": 1560,
+          "vulnerable": 2340
+        },
+        "facilities": {
+          "schools": 3,
+          "hospitals": 0,
+          "emergencyServices": 1
+        },
+        "lastUpdated": "2025-09-01T14:15:00Z"
+      },
+      {
+        "zoneId": "zone_004",
+        "name": "Cumhuriyet Meydanı",
+        "coordinates": [36.159, 36.208],
+        "bounds": {
+          "north": 36.162,
+          "south": 36.156,
+          "east": 36.211,
+          "west": 36.205
+        },
+        "population": 6780,
+        "area": 3.1,
+        "density": 2187,
+        "riskLevel": "low",
+        "demographics": {
+          "children": 1356,
+          "adults": 4746,
+          "elderly": 678,
+          "vulnerable": 1017
+        },
+        "facilities": {
+          "schools": 1,
+          "hospitals": 0,
+          "emergencyServices": 1
+        },
+        "lastUpdated": "2025-09-01T14:10:00Z"
+      },
+      {
+        "zoneId": "zone_005",
+        "name": "Belediye Parkı Çevresi",
+        "coordinates": [36.145, 36.213],
+        "bounds": {
+          "north": 36.148,
+          "south": 36.142,
+          "east": 36.216,
+          "west": 36.210
+        },
+        "population": 9850,
+        "area": 3.7,
+        "density": 2662,
+        "riskLevel": "medium",
+        "demographics": {
+          "children": 2463,
+          "adults": 6405,
+          "elderly": 985,
+          "vulnerable": 1478
+        },
+        "facilities": {
+          "schools": 2,
+          "hospitals": 1,
+          "emergencyServices": 1
+        },
+        "lastUpdated": "2025-09-01T14:05:00Z"
+      },
+      {
+        "zoneId": "zone_006",
+        "name": "Sanayi Bölgesi",
+        "coordinates": [36.163, 36.195],
+        "bounds": {
+          "north": 36.167,
+          "south": 36.159,
+          "east": 36.200,
+          "west": 36.190
+        },
+        "population": 4200,
+        "area": 8.5,
+        "density": 494,
+        "riskLevel": "low",
+        "demographics": {
+          "children": 630,
+          "adults": 3150,
+          "elderly": 420,
+          "vulnerable": 630
+        },
+        "facilities": {
+          "schools": 0,
+          "hospitals": 0,
+          "emergencyServices": 2
+        },
+        "lastUpdated": "2025-09-01T14:00:00Z"
+      }
+    ],
+    "riskAssessment": {
+      "criticalZones": [
+        {
+          "zoneId": "zone_001",
+          "riskFactors": [
+            "High population density",
+            "High vulnerable population ratio",
+            "Limited emergency services"
+          ],
+          "recommendedActions": [
+            "Increase emergency response capacity",
+            "Establish additional evacuation routes",
+            "Deploy mobile health units"
+          ]
+        }
+      ],
+      "evacuationCapacity": {
+        "currentCapacity": 45000,
+        "requiredCapacity": 62847,
+        "deficit": 17847,
+        "evacuationTime": "45 minutes"
+      }
+    },
+    "dataSources": {
+      "AAIA_MODEM": {
+        "accuracy": 0.92,
+        "coverage": 0.87,
+        "lastUpdate": "2025-09-01T13:45:00Z",
+        "dataPoints": 156
+      },
+      "GOVERNMENT": {
+        "accuracy": 0.78,
+        "coverage": 0.95,
+        "lastUpdate": "2025-08-15T09:00:00Z",
+        "dataPoints": 89
+      },
+      "COMBINED": {
+        "accuracy": 0.95,
+        "coverage": 0.98,
+        "lastUpdate": "2025-09-01T14:00:00Z",
+        "dataPoints": 245
+      }
+    },
+    "visualizationData": {
+      "heatmapLayers": [
+        {
+          "type": "population_density",
+          "colorScale": {
+            "low": "#90EE90",
+            "medium": "#FFD700",
+            "high": "#FF6347",
+            "critical": "#DC143C"
+          },
+          "thresholds": {
+            "low": 1000,
+            "medium": 2000,
+            "high": 3000,
+            "critical": 4000
+          }
+        }
+      ],
+      "markers": [
+        {
+          "type": "emergency_service",
+          "coordinates": [36.150, 36.205],
+          "name": "Merkez İtfaiye",
+          "capacity": 25
+        },
+        {
+          "type": "hospital",
+          "coordinates": [36.155, 36.210],
+          "name": "Devlet Hastanesi",
+          "capacity": 150
+        }
+      ]
+    },
+    "timeSeriesData": [
+      {
+        "timestamp": "2025-09-01T13:00:00Z",
+        "totalPopulation": 124580,
+        "averageDensity": 2318
+      },
+      {
+        "timestamp": "2025-09-01T13:30:00Z",
+        "totalPopulation": 125200,
+        "averageDensity": 2330
+      },
+      {
+        "timestamp": "2025-09-01T14:00:00Z",
+        "totalPopulation": 125847,
+        "averageDensity": 2341
+      }
+    ]
+  }
+}

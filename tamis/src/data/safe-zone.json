@@ -1,0 +1,351 @@
+{
+  "safeZoneAnalysis": {
+    "metadata": {
+      "analysisId": "sza_20250901_001",
+      "timestamp": "2025-09-01T14:30:00Z",
+      "region": "Hatay İli",
+      "coordinates": {
+        "center": [36.206, 36.150],
+        "bounds": {
+          "north": 36.220,
+          "south": 36.130,
+          "east": 36.250,
+          "west": 36.150
+        }
+      },
+      "status": "active",
+      "lastUpdated": "2025-09-01T14:25:00Z"
+    },
+    "summary": {
+      "totalSafeZones": 5,
+      "totalCapacity": 4900,
+      "currentOccupancy": 2590,
+      "occupancyRate": 52.9,
+      "availableSpace": 2310,
+      "averageAccessTime": 12,
+      "criticalZones": 2
+    },
+    "safeZones": [
+      {
+        "id": "zone_001",
+        "name": "Merkez İlkokulu Bahçesi",
+        "type": "school_ground",
+        "coordinates": [36.147, 36.206],
+        "address": "Merkez Mah. Atatürk Cad. No:15",
+        "capacity": 500,
+        "currentOccupancy": 120,
+        "occupancyRate": 24.0,
+        "availableSpace": 380,
+        "status": "safe",
+        "lastUpdated": "2025-09-01T14:20:00Z",
+        "facilities": {
+          "restrooms": true,
+          "water": true,
+          "electricity": true,
+          "shelter": true,
+          "medical": false,
+          "communication": true,
+          "parking": true
+        },
+        "accessRoutes": [
+          {
+            "routeId": "r001_01",
+            "fromArea": "Merkez Mahallesi",
+            "distance": 0.3,
+            "estimatedTime": 4,
+            "condition": "clear"
+          },
+          {
+            "routeId": "r001_02", 
+            "fromArea": "Kıbrıs Mahallesi",
+            "distance": 0.8,
+            "estimatedTime": 10,
+            "condition": "clear"
+          }
+        ],
+        "emergencyServices": {
+          "ambulance": {
+            "available": true,
+            "eta": 5
+          },
+          "fire": {
+            "available": true,
+            "eta": 8
+          },
+          "police": {
+            "available": true,
+            "eta": 3
+          }
+        },
+        "evacuationPlan": {
+          "primaryExit": "Ana Kapı - Atatürk Caddesi",
+          "secondaryExit": "Yan Kapı - Okul Sokağı",
+          "assemblyPoint": "Okul Bahçesi Merkezi",
+          "evacuationTime": 3
+        }
+      },
+      {
+        "id": "zone_002",
+        "name": "Atatürk Parkı",
+        "type": "park",
+        "coordinates": [36.154, 36.212],
+        "address": "Cumhuriyet Mah. Park Caddesi",
+        "capacity": 800,
+        "currentOccupancy": 450,
+        "occupancyRate": 56.3,
+        "availableSpace": 350,
+        "status": "warning",
+        "lastUpdated": "2025-09-01T14:18:00Z",
+        "facilities": {
+          "restrooms": true,
+          "water": true,
+          "electricity": true,
+          "shelter": false,
+          "medical": true,
+          "communication": true,
+          "parking": true
+        },
+        "accessRoutes": [
+          {
+            "routeId": "r002_01",
+            "fromArea": "Cumhuriyet Mahallesi",
+            "distance": 0.2,
+            "estimatedTime": 3,
+            "condition": "clear"
+          },
+          {
+            "routeId": "r002_02",
+            "fromArea": "Yeni Mahalle",
+            "distance": 1.2,
+            "estimatedTime": 15,
+            "condition": "congested"
+          }
+        ],
+        "emergencyServices": {
+          "ambulance": {
+            "available": true,
+            "eta": 7
+          },
+          "fire": {
+            "available": true,
+            "eta": 6
+          },
+          "police": {
+            "available": true,
+            "eta": 4
+          }
+        },
+        "evacuationPlan": {
+          "primaryExit": "Ana Giriş - Park Caddesi",
+          "secondaryExit": "Doğu Kapısı - Çevre Yolu",
+          "assemblyPoint": "Park Merkezi Çim Alan",
+          "evacuationTime": 5
+        }
+      },
+      {
+        "id": "zone_003",
+        "name": "Spor Stadyumu",
+        "type": "stadium",
+        "coordinates": [36.151, 36.204],
+        "address": "Spor Mah. Stadyum Caddesi No:1",
+        "capacity": 2000,
+        "currentOccupancy": 1200,
+        "occupancyRate": 60.0,
+        "availableSpace": 800,
+        "status": "warning",
+        "lastUpdated": "2025-09-01T14:15:00Z",
+        "facilities": {
+          "restrooms": true,
+          "water": true,
+          "electricity": true,
+          "shelter": true,
+          "medical": true,
+          "communication": true,
+          "parking": true
+        },
+        "accessRoutes": [
+          {
+            "routeId": "r003_01",
+            "fromArea": "Spor Mahallesi",
+            "distance": 0.1,
+            "estimatedTime": 2,
+            "condition": "clear"
+          },
+          {
+            "routeId": "r003_02",
+            "fromArea": "Sanayi Bölgesi",
+            "distance": 2.5,
+            "estimatedTime": 20,
+            "condition": "clear"
+          }
+        ],
+        "emergencyServices": {
+          "ambulance": {
+            "available": true,
+            "eta": 4
+          },
+          "fire": {
+            "available": true,
+            "eta": 10
+          },
+          "police": {
+            "available": true,
+            "eta": 2
+          }
+        },
+        "evacuationPlan": {
+          "primaryExit": "Ana Tribün Çıkışı",
+          "secondaryExit": "Doğu Tribün Kapısı",
+          "assemblyPoint": "Stadyum Sahası",
+          "evacuationTime": 8
+        }
+      },
+      {
+        "id": "zone_004",
+        "name": "Cumhuriyet Meydanı",
+        "type": "square",
+        "coordinates": [36.159, 36.208],
+        "address": "Merkez Mah. Cumhuriyet Meydanı",
+        "capacity": 1000,
+        "currentOccupancy": 300,
+        "occupancyRate": 30.0,
+        "availableSpace": 700,
+        "status": "safe",
+        "lastUpdated": "2025-09-01T14:12:00Z",
+        "facilities": {
+          "restrooms": false,
+          "water": true,
+          "electricity": true,
+          "shelter": false,
+          "medical": false,
+          "communication": true,
+          "parking": false
+        },
+        "accessRoutes": [
+          {
+            "routeId": "r004_01",
+            "fromArea": "Merkez Mahallesi",
+            "distance": 0.5,
+            "estimatedTime": 6,
+            "condition": "clear"
+          },
+          {
+            "routeId": "r004_02",
+            "fromArea": "Çarşı Bölgesi",
+            "distance": 0.3,
+            "estimatedTime": 4,
+            "condition": "clear"
+          }
+        ],
+        "emergencyServices": {
+          "ambulance": {
+            "available": true,
+            "eta": 6
+          },
+          "fire": {
+            "available": true,
+            "eta": 9
+          },
+          "police": {
+            "available": true,
+            "eta": 2
+          }
+        },
+        "evacuationPlan": {
+          "primaryExit": "Kuzey Çıkışı - Belediye Caddesi",
+          "secondaryExit": "Güney Çıkışı - Pazar Sokağı",
+          "assemblyPoint": "Meydan Merkezi",
+          "evacuationTime": 4
+        }
+      },
+      {
+        "id": "zone_005",
+        "name": "Belediye Parkı",
+        "type": "park",
+        "coordinates": [36.145, 36.213],
+        "address": "Yenişehir Mah. Belediye Caddesi",
+        "capacity": 600,
+        "currentOccupancy": 520,
+        "occupancyRate": 86.7,
+        "availableSpace": 80,
+        "status": "critical",
+        "lastUpdated": "2025-09-01T14:10:00Z",
+        "facilities": {
+          "restrooms": true,
+          "water": true,
+          "electricity": false,
+          "shelter": true,
+          "medical": false,
+          "communication": false,
+          "parking": true
+        },
+        "accessRoutes": [
+          {
+            "routeId": "r005_01",
+            "fromArea": "Yenişehir Mahallesi",
+            "distance": 0.4,
+            "estimatedTime": 5,
+            "condition": "clear"
+          },
+          {
+            "routeId": "r005_02",
+            "fromArea": "İnönü Mahallesi",
+            "distance": 0.9,
+            "estimatedTime": 12,
+            "condition": "blocked"
+          }
+        ],
+        "emergencyServices": {
+          "ambulance": {
+            "available": false,
+            "eta": 15
+          },
+          "fire": {
+            "available": true,
+            "eta": 12
+          },
+          "police": {
+            "available": true,
+            "eta": 7
+          }
+        },
+        "evacuationPlan": {
+          "primaryExit": "Ana Giriş - Belediye Caddesi",
+          "secondaryExit": "Arka Kapı - Park Arkası Sokak",
+          "assemblyPoint": "Park Merkezi Çardak",
+          "evacuationTime": 6
+        }
+      }
+    ],
+    "riskAssessment": {
+      "overallRisk": "medium",
+      "criticalFactors": [
+        "Zone 5 (Belediye Parkı) at critical occupancy",
+        "Limited ambulance coverage in southern zones",
+        "Route blockage affecting Zone 5 access"
+      ],
+      "recommendations": [
+        "Redirect overflow from Belediye Parkı to Cumhuriyet Meydanı",
+        "Clear blocked route to Zone 5",
+        "Deploy mobile medical unit to southern zones",
+        "Activate backup power for Zone 5"
+      ]
+    },
+    "weatherConditions": {
+      "temperature": 28,
+      "humidity": 65,
+      "windSpeed": 12,
+      "windDirection": "SW",
+      "visibility": "Good",
+      "precipitation": 0,
+      "uvIndex": 7
+    },
+    "emergencyContacts": {
+      "coordinationCenter": "+90 326 214 1000",
+      "medical": "+90 326 214 2000", 
+      "fire": "+90 326 214 3000",
+      "police": "+90 326 214 4000",
+      "municipality": "+90 326 214 5000"
+    }
+  }
+}

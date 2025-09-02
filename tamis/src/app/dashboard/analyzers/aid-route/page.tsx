@@ -1,21 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { aidRouteData } from '@/data';
 
 export default function AidRouteAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState(null);
+  const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
+
+  // Get data from JSON
+  const { aidRouteAnalysis } = aidRouteData;
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // TODO: Implement actual analysis logic
+    // Simulate analysis with actual data
     setTimeout(() => {
       setIsAnalyzing(false);
-      // TODO: Set real analysis results
+      setAnalysisResults(aidRouteAnalysis);
     }, 3000);
   };
+
+  useEffect(() => {
+    // Auto-load results for demo
+    setAnalysisResults(aidRouteAnalysis);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -146,23 +155,29 @@ export default function AidRouteAnalyzer() {
             </div>
           </div>
 
-          {/* Results Section (Template) */}
+          {/* Results Section */}
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Sonuçları</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-orange-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-orange-900">-</div>
+                  <div className="text-2xl font-bold text-orange-900">
+                    {analysisResults?.routes?.length || 0}
+                  </div>
                   <div className="text-sm text-orange-700 font-medium">Optimal Rotalar</div>
                   <div className="text-xs text-orange-600">Hesaplanan rota sayısı</div>
                 </div>
                 <div className="bg-orange-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-orange-900">-</div>
+                  <div className="text-2xl font-bold text-orange-900">
+                    {analysisResults?.averageTime || 0}
+                  </div>
                   <div className="text-sm text-orange-700 font-medium">Ortalama Süre</div>
-                  <div className="text-xs text-orange-600">Dakika</div>
+                  <div className="text-xs text-orange-600">Saat</div>
                 </div>
                 <div className="bg-orange-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-orange-900">-</div>
+                  <div className="text-2xl font-bold text-orange-900">
+                    {analysisResults?.averageDistance || 0}
+                  </div>
                   <div className="text-sm text-orange-700 font-medium">Toplam Mesafe</div>
                   <div className="text-xs text-orange-600">Kilometre</div>
                 </div>
@@ -179,13 +194,98 @@ export default function AidRouteAnalyzer() {
                 </div>
               </div>
 
-              {/* Route Details Placeholder */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-md font-medium text-gray-900 mb-3">Rota Detayları</h3>
-                <div className="text-center text-gray-500 py-8">
-                  <p>Hesaplanan rotalar ve detayları burada görüntülenecek</p>
+              {/* Route Details */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-md font-medium text-gray-900 mb-3">Rota Detayları</h3>
+                  <div className="space-y-4">
+                    {analysisResults.routes.map((route: any) => (
+                      <div key={route.id} className="bg-white rounded-lg p-4 border border-gray-200">
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h4 className="font-medium text-gray-900 mb-1">{route.name}</h4>
+                            <div className="flex items-center space-x-4 text-sm text-gray-600">
+                              <span>Mesafe: {route.distance}km</span>
+                              <span>Süre: {route.estimatedTime} saat</span>
+                              <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                                route.status === 'active' ? 'bg-green-100 text-green-800' :
+                                route.status === 'blocked' ? 'bg-red-100 text-red-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {route.status === 'active' ? 'Aktif' :
+                                 route.status === 'blocked' ? 'Kapalı' : 'Kısıtlı'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-medium text-gray-900">
+                              {route.vehicles.length} Araç
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Supplies Summary */}
+                        <div className="mb-3">
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Taşınan Malzemeler:</h5>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            {route.supplies.map((supply: any, index: number) => (
+                              <div key={index} className="text-sm bg-gray-100 rounded px-2 py-1">
+                                <span className="font-medium capitalize">{supply.type.replace('_', ' ')}: </span>
+                                <span>{supply.amount} {supply.unit}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Vehicles */}
+                        <div className="mb-3">
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Araçlar:</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {route.vehicles.map((vehicle: any) => (
+                              <span 
+                                key={vehicle.id}
+                                className={`px-2 py-1 text-xs rounded-full font-medium ${
+                                  vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
+                                  vehicle.status === 'maintenance' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}
+                              >
+                                {vehicle.type} ({vehicle.plate})
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Checkpoints */}
+                        <div>
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Kontrol Noktaları:</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {route.checkpoints.map((checkpoint: any) => (
+                              <span 
+                                key={checkpoint.id}
+                                className={`px-2 py-1 text-xs rounded-full ${
+                                  checkpoint.status === 'clear' ? 'bg-green-100 text-green-800' :
+                                  checkpoint.status === 'congested' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}
+                              >
+                                {checkpoint.name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-md font-medium text-gray-900 mb-3">Rota Detayları</h3>
+                  <div className="text-center text-gray-500 py-8">
+                    <p>Hesaplanan rotalar ve detayları burada görüntülenecek</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

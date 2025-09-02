@@ -1,21 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { communicationNetworkData } from '@/data';
 
 export default function CommunicationNetworkAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState(null);
+  const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
+
+  // Get data from JSON
+  const { communicationNetworkAnalysis } = communicationNetworkData;
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // TODO: Implement actual analysis logic
+    // Simulate analysis with actual data
     setTimeout(() => {
       setIsAnalyzing(false);
-      // TODO: Set real analysis results
+      setAnalysisResults(communicationNetworkAnalysis);
     }, 3000);
   };
+
+  useEffect(() => {
+    // Auto-load results for demo
+    setAnalysisResults(communicationNetworkAnalysis);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -156,46 +165,120 @@ export default function CommunicationNetworkAnalyzer() {
             </div>
           </div>
 
-          {/* Results Section (Template) */}
+          {/* Results Section */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-6 py-4">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Sonuçları</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.totalModems || 0}
+                  </div>
                   <div className="text-sm text-indigo-700 font-medium">Aktif Modem</div>
                   <div className="text-xs text-indigo-600">Toplam cihaz sayısı</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
-                  <div className="text-sm text-indigo-700 font-medium">Güncel Versiyon</div>
-                  <div className="text-xs text-indigo-600">En son firmware</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults ? analysisResults.stations.filter((s: any) => s.status === 'online').length : 0}
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Online İstasyon</div>
+                  <div className="text-xs text-indigo-600">Çalışan durumda</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-%</div>
-                  <div className="text-sm text-indigo-700 font-medium">Uyumluluk</div>
-                  <div className="text-xs text-indigo-600">Uyumlu cihazlar</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.networkHealth || 0}%
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Ağ Sağlığı</div>
+                  <div className="text-xs text-indigo-600">Genel performans</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
-                  <div className="text-sm text-indigo-700 font-medium">Risk Seviyesi</div>
-                  <div className="text-xs text-indigo-600">Genel değerlendirme</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.averageSignal || 0}
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Sinyal Gücü</div>
+                  <div className="text-xs text-indigo-600">dBm ortalaması</div>
                 </div>
               </div>
               
-              {/* Network Status Chart Placeholder */}
-              <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center mb-6">
-                <div className="text-center">
-                  <svg className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <p className="text-gray-500">İletişim Ağı Durumu Grafiği</p>
-                  <p className="text-sm text-gray-400">Analiz sonrası görüntülenecek</p>
+              {/* Network Status Chart */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <h3 className="text-md font-medium text-gray-900 mb-4">Ağ İstatistikleri</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg">
+                        <span className="font-medium text-green-800">Online</span>
+                        <span className="text-xl font-bold text-green-600">
+                          {analysisResults.stations.filter((s: any) => s.status === 'online').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-red-100 rounded-lg">
+                        <span className="font-medium text-red-800">Offline</span>
+                        <span className="text-xl font-bold text-red-600">
+                          {analysisResults.stations.filter((s: any) => s.status === 'offline').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-yellow-100 rounded-lg">
+                        <span className="font-medium text-yellow-800">Bakım</span>
+                        <span className="text-xl font-bold text-yellow-600">
+                          {analysisResults.stations.filter((s: any) => s.status === 'maintenance').length}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">En İyi Sinyal:</span>
+                        <span className="font-semibold text-green-600">
+                          {Math.max(...analysisResults.stations.map((s: any) => s.signalStrength))} dBm
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">En Kötü Sinyal:</span>
+                        <span className="font-semibold text-red-600">
+                          {Math.min(...analysisResults.stations.map((s: any) => s.signalStrength))} dBm
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Ortalama Ping:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.stations.reduce((acc: number, s: any) => acc + s.ping, 0) / analysisResults.stations.length)} ms
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Toplam Bağlantı:</span>
+                        <span className="font-semibold">
+                          {analysisResults.stations.reduce((acc: number, s: any) => acc + s.connectedDevices, 0)} cihaz
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Ağ Yükü:</span>
+                        <span className="font-semibold text-yellow-600">Orta</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Güvenlik Durumu:</span>
+                        <span className="font-semibold text-green-600">Güvenli</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center mb-6">
+                  <div className="text-center">
+                    <svg className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <p className="text-gray-500">İletişim Ağı Durumu Grafiği</p>
+                    <p className="text-sm text-gray-400">Analiz sonrası görüntülenecek</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -227,13 +310,69 @@ export default function CommunicationNetworkAnalyzer() {
                 />
               </div>
               
-              {/* Table Placeholder */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-center text-gray-500 py-8">
-                  <p>Cihaz listesi ve detayları burada görüntülenecek</p>
-                  <p className="text-sm text-gray-400">Tablo: Cihaz ID, Model, Firmware, Durum, Son Güncelleme</p>
+              {/* Station Details Table */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-white">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">İstasyon</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Durum</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Sinyal</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Ping</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Bağlı Cihaz</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Son Güncelleme</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {analysisResults.stations.map((station: any) => (
+                          <tr key={station.id} className="bg-white hover:bg-gray-50">
+                            <td className="px-4 py-2 font-medium">{station.name}</td>
+                            <td className="px-4 py-2">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                station.status === 'online' ? 'bg-green-100 text-green-800' :
+                                station.status === 'offline' ? 'bg-red-100 text-red-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {station.status === 'online' ? 'Online' :
+                                 station.status === 'offline' ? 'Offline' : 'Bakım'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className={`font-medium ${
+                                station.signalStrength > -50 ? 'text-green-600' :
+                                station.signalStrength > -70 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {station.signalStrength} dBm
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className={`font-medium ${
+                                station.ping < 50 ? 'text-green-600' :
+                                station.ping < 100 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {station.ping} ms
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">{station.connectedDevices}</td>
+                            <td className="px-4 py-2 text-gray-500 text-xs">{station.lastUpdate}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="text-center text-gray-500 py-8">
+                    <p>Cihaz listesi ve detayları burada görüntülenecek</p>
+                    <p className="text-sm text-gray-400">Tablo: Cihaz ID, Model, Firmware, Durum, Son Güncelleme</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

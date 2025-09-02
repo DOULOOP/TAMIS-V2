@@ -1,0 +1,471 @@
+{
+  "aidRouteAnalysis": {
+    "metadata": {
+      "analysisId": "ara_20250901_001",
+      "timestamp": "2025-09-01T14:30:00Z",
+      "region": "Hatay İli",
+      "coordinates": {
+        "center": [36.206, 36.150],
+        "bounds": {
+          "north": 36.220,
+          "south": 36.130,
+          "east": 36.250,
+          "west": 36.150
+        }
+      },
+      "status": "active",
+      "lastUpdated": "2025-09-01T14:25:00Z"
+    },
+    "summary": {
+      "totalRoutes": 8,
+      "activeRoutes": 6,
+      "blockedRoutes": 2,
+      "totalDistance": 47.8,
+      "averageSpeed": 35,
+      "estimatedDeliveryTime": 82,
+      "criticalSupplies": 3
+    },
+    "routes": [
+      {
+        "id": "route_001",
+        "name": "Ana Yardım Koridoru",
+        "type": "primary",
+        "status": "active",
+        "priority": "high",
+        "startPoint": {
+          "name": "Merkez Depo",
+          "coordinates": [36.180, 36.190],
+          "address": "Atatürk Bulvarı No:45"
+        },
+        "endPoint": {
+          "name": "Afet Koordinasyon Merkezi",
+          "coordinates": [36.150, 36.205],
+          "address": "Cumhuriyet Meydanı"
+        },
+        "waypoints": [
+          {
+            "name": "Belediye Kavşağı",
+            "coordinates": [36.165, 36.198],
+            "estimatedTime": 8,
+            "fuelStation": true
+          },
+          {
+            "name": "Hastane Kavşağı", 
+            "coordinates": [36.155, 36.202],
+            "estimatedTime": 15,
+            "fuelStation": false
+          }
+        ],
+        "distance": 8.5,
+        "estimatedTime": 18,
+        "currentSpeed": 28,
+        "trafficCondition": "moderate",
+        "roadCondition": "good",
+        "weatherImpact": "none",
+        "supplies": [
+          {
+            "type": "medical",
+            "quantity": 150,
+            "unit": "box",
+            "priority": "critical"
+          },
+          {
+            "type": "water",
+            "quantity": 500,
+            "unit": "liter",
+            "priority": "high"
+          },
+          {
+            "type": "food",
+            "quantity": 200,
+            "unit": "package",
+            "priority": "medium"
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "truck_001",
+            "type": "Heavy Truck",
+            "capacity": 15000,
+            "currentLoad": 8500,
+            "fuelLevel": 75,
+            "eta": 18,
+            "driverName": "Ahmet Yılmaz"
+          }
+        ],
+        "checkpoints": [
+          {
+            "id": "cp_001",
+            "name": "Güvenlik Kontrol",
+            "coordinates": [36.170, 36.195],
+            "status": "clear",
+            "delayTime": 2
+          },
+          {
+            "id": "cp_002",
+            "name": "Yardım Dağıtım",
+            "coordinates": [36.152, 36.203],
+            "status": "busy",
+            "delayTime": 5
+          }
+        ]
+      },
+      {
+        "id": "route_002",
+        "name": "Doğu Yardım Hattı",
+        "type": "secondary",
+        "status": "active",
+        "priority": "medium",
+        "startPoint": {
+          "name": "Doğu Depo",
+          "coordinates": [36.220, 36.160],
+          "address": "Sanayi Bölgesi 2. Cadde"
+        },
+        "endPoint": {
+          "name": "Spor Stadyumu",
+          "coordinates": [36.151, 36.204],
+          "address": "Stadyum Caddesi"
+        },
+        "waypoints": [
+          {
+            "name": "Sanayi Kavşağı",
+            "coordinates": [36.200, 36.170],
+            "estimatedTime": 12,
+            "fuelStation": true
+          }
+        ],
+        "distance": 12.3,
+        "estimatedTime": 25,
+        "currentSpeed": 32,
+        "trafficCondition": "light",
+        "roadCondition": "excellent",
+        "weatherImpact": "none",
+        "supplies": [
+          {
+            "type": "blankets",
+            "quantity": 300,
+            "unit": "piece",
+            "priority": "medium"
+          },
+          {
+            "type": "generators",
+            "quantity": 5,
+            "unit": "piece",
+            "priority": "high"
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "truck_002",
+            "type": "Medium Truck",
+            "capacity": 8000,
+            "currentLoad": 4200,
+            "fuelLevel": 68,
+            "eta": 25,
+            "driverName": "Mehmet Kaya"
+          }
+        ],
+        "checkpoints": [
+          {
+            "id": "cp_003",
+            "name": "Sanayi Girişi",
+            "coordinates": [36.210, 36.165],
+            "status": "clear",
+            "delayTime": 1
+          }
+        ]
+      },
+      {
+        "id": "route_003",
+        "name": "Güney Acil Koridor",
+        "type": "emergency",
+        "status": "active",
+        "priority": "critical",
+        "startPoint": {
+          "name": "İl Sağlık Müdürlüğü",
+          "coordinates": [36.160, 36.180],
+          "address": "İstiklal Caddesi"
+        },
+        "endPoint": {
+          "name": "Atatürk Parkı",
+          "coordinates": [36.154, 36.212],
+          "address": "Park Caddesi"
+        },
+        "waypoints": [],
+        "distance": 3.2,
+        "estimatedTime": 8,
+        "currentSpeed": 24,
+        "trafficCondition": "heavy",
+        "roadCondition": "good",
+        "weatherImpact": "slight",
+        "supplies": [
+          {
+            "type": "medical_emergency",
+            "quantity": 50,
+            "unit": "kit",
+            "priority": "critical"
+          },
+          {
+            "type": "oxygen",
+            "quantity": 20,
+            "unit": "tank",
+            "priority": "critical"
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "ambulance_001",
+            "type": "Ambulance",
+            "capacity": 2000,
+            "currentLoad": 800,
+            "fuelLevel": 85,
+            "eta": 8,
+            "driverName": "Dr. Fatma Demir"
+          }
+        ],
+        "checkpoints": []
+      },
+      {
+        "id": "route_004",
+        "name": "Kuzey Lojistik Hattı",
+        "type": "secondary",
+        "status": "active",
+        "priority": "medium",
+        "startPoint": {
+          "name": "Kuzey Depo",
+          "coordinates": [36.190, 36.230],
+          "address": "Kuzey Sanayi Sitesi"
+        },
+        "endPoint": {
+          "name": "Belediye Parkı",
+          "coordinates": [36.145, 36.213],
+          "address": "Belediye Caddesi"
+        },
+        "waypoints": [
+          {
+            "name": "Çevre Yolu",
+            "coordinates": [36.170, 36.220],
+            "estimatedTime": 15,
+            "fuelStation": false
+          }
+        ],
+        "distance": 9.8,
+        "estimatedTime": 22,
+        "currentSpeed": 27,
+        "trafficCondition": "moderate",
+        "roadCondition": "fair",
+        "weatherImpact": "none",
+        "supplies": [
+          {
+            "type": "tents",
+            "quantity": 25,
+            "unit": "piece",
+            "priority": "high"
+          },
+          {
+            "type": "clothing",
+            "quantity": 400,
+            "unit": "set",
+            "priority": "medium"
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "truck_003",
+            "type": "Light Truck",
+            "capacity": 5000,
+            "currentLoad": 3800,
+            "fuelLevel": 52,
+            "eta": 22,
+            "driverName": "Ali Özkan"
+          }
+        ],
+        "checkpoints": [
+          {
+            "id": "cp_004",
+            "name": "Çevre Yolu Kontrolü",
+            "coordinates": [36.168, 36.218],
+            "status": "clear",
+            "delayTime": 3
+          }
+        ]
+      },
+      {
+        "id": "route_005",
+        "name": "Batı Alternatif Yolu",
+        "type": "alternative",
+        "status": "blocked",
+        "priority": "low",
+        "startPoint": {
+          "name": "Batı Girişi",
+          "coordinates": [36.130, 36.180],
+          "address": "Batı Çevre Yolu"
+        },
+        "endPoint": {
+          "name": "Merkez İlkokulu",
+          "coordinates": [36.147, 36.206],
+          "address": "Okul Sokağı"
+        },
+        "waypoints": [],
+        "distance": 4.5,
+        "estimatedTime": 0,
+        "currentSpeed": 0,
+        "trafficCondition": "blocked",
+        "roadCondition": "damaged",
+        "weatherImpact": "severe",
+        "blockageReason": "Köprü hasar gördü",
+        "estimatedClearTime": "4 saat",
+        "alternativeRoute": "route_006",
+        "supplies": [],
+        "vehicles": [],
+        "checkpoints": []
+      },
+      {
+        "id": "route_006",
+        "name": "Batı Alternatif-2",
+        "type": "alternative",
+        "status": "active",
+        "priority": "medium",
+        "startPoint": {
+          "name": "Batı Girişi",
+          "coordinates": [36.130, 36.180],
+          "address": "Batı Çevre Yolu"
+        },
+        "endPoint": {
+          "name": "Merkez İlkokulu",
+          "coordinates": [36.147, 36.206],
+          "address": "Okul Sokağı"
+        },
+        "waypoints": [
+          {
+            "name": "Doğu Kavşağı",
+            "coordinates": [36.140, 36.190],
+            "estimatedTime": 10,
+            "fuelStation": false
+          }
+        ],
+        "distance": 7.2,
+        "estimatedTime": 16,
+        "currentSpeed": 30,
+        "trafficCondition": "light",
+        "roadCondition": "good",
+        "weatherImpact": "none",
+        "supplies": [
+          {
+            "type": "fuel",
+            "quantity": 1000,
+            "unit": "liter",
+            "priority": "medium"
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "tanker_001",
+            "type": "Fuel Tanker",
+            "capacity": 12000,
+            "currentLoad": 8000,
+            "fuelLevel": 90,
+            "eta": 16,
+            "driverName": "Osman Yıldız"
+          }
+        ],
+        "checkpoints": [
+          {
+            "id": "cp_005",
+            "name": "Güvenlik Kontrolü",
+            "coordinates": [36.135, 36.185],
+            "status": "clear",
+            "delayTime": 2
+          }
+        ]
+      }
+    ],
+    "supplyHubs": [
+      {
+        "id": "hub_001",
+        "name": "Ana Yardım Merkezi",
+        "coordinates": [36.180, 36.190],
+        "type": "primary",
+        "capacity": 50000,
+        "currentStock": 32000,
+        "supplies": {
+          "medical": 5000,
+          "water": 8000,
+          "food": 12000,
+          "blankets": 4000,
+          "clothing": 3000
+        },
+        "operationalStatus": "fully_operational",
+        "staff": 25,
+        "workingHours": "24/7"
+      },
+      {
+        "id": "hub_002",
+        "name": "Doğu Depo",
+        "coordinates": [36.220, 36.160],
+        "type": "secondary",
+        "capacity": 25000,
+        "currentStock": 18500,
+        "supplies": {
+          "generators": 15,
+          "tents": 100,
+          "tools": 500,
+          "fuel": 5000
+        },
+        "operationalStatus": "operational",
+        "staff": 12,
+        "workingHours": "06:00-22:00"
+      }
+    ],
+    "distributionPoints": [
+      {
+        "id": "dp_001",
+        "name": "Afet Koordinasyon Merkezi",
+        "coordinates": [36.150, 36.205],
+        "capacity": 1000,
+        "currentQueue": 45,
+        "estimatedWaitTime": 15,
+        "activeStaff": 8,
+        "operationalStatus": "busy"
+      },
+      {
+        "id": "dp_002",
+        "name": "Spor Stadyumu Dağıtım",
+        "coordinates": [36.151, 36.204],
+        "capacity": 2000,
+        "currentQueue": 120,
+        "estimatedWaitTime": 25,
+        "activeStaff": 12,
+        "operationalStatus": "very_busy"
+      }
+    ],
+    "riskAssessment": {
+      "overallRisk": "medium",
+      "criticalFactors": [
+        "Route 005 blocked due to bridge damage",
+        "Heavy traffic on emergency corridor",
+        "Low fuel levels in Truck 003"
+      ],
+      "recommendations": [
+        "Prioritize bridge repair on Route 005",
+        "Deploy traffic control officers to emergency corridor",
+        "Refuel Truck 003 at next checkpoint",
+        "Activate backup distribution point"
+      ]
+    },
+    "weatherConditions": {
+      "temperature": 28,
+      "humidity": 65,
+      "windSpeed": 12,
+      "precipitation": 0,
+      "visibility": "Good",
+      "roadConditions": "Dry"
+    },
+    "communication": {
+      "coordinationCenter": "+90 326 214 1000",
+      "logistics": "+90 326 214 6000",
+      "transport": "+90 326 214 7000",
+      "emergency": "112"
+    }
+  }
+}

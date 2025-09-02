@@ -1,0 +1,49 @@
+{
+  "analysis_metadata": {
+    "timestamp": "2025-08-29T17:26:41.344894",
+    "image_dimensions": "11323 x 9015",
+    "resolution_m_per_pixel": 0.2213599999999748,
+    "total_area_km2": 5.001790883379374,
+    "analysis_method": "Multi-method change detection with SSIM, color difference, and edge detection"
+  },
+  "damage_assessment": {
+    "minimal": {
+      "region_count": 1,
+      "total_area_m2": 31963.16,
+      "total_area_km2": 0.031963,
+      "percentage_of_total_area": 0.64,
+      "percentage_of_damaged_area": 1.13,
+      "average_change_intensity": 0.07699999958276749
+    },
+    "moderate": {
+      "region_count": 1,
+      "total_area_m2": 47013.98,
+      "total_area_km2": 0.047014,
+      "percentage_of_total_area": 0.94,
+      "percentage_of_damaged_area": 1.67,
+      "average_change_intensity": 0.18199999630451202
+    },
+    "severe": {
+      "region_count": 1,
+      "total_area_m2": 1779485.67,
+      "total_area_km2": 1.779486,
+      "percentage_of_total_area": 35.58,
+      "percentage_of_damaged_area": 63.17,
+      "average_change_intensity": 0.5680000185966492
+    },
+    "catastrophic": {
+      "region_count": 1,
+      "total_area_m2": 958689.25,
+      "total_area_km2": 0.958689,
+      "percentage_of_total_area": 19.17,
+      "percentage_of_damaged_area": 34.03,
+      "average_change_intensity": 0.6159999966621399
+    }
+  },
+  "summary": {
+    "total_damaged_area_km2": 2.817152,
+    "percentage_area_affected": 56.32,
+    "most_common_damage_level": "severe",
+    "total_damage_regions": 4
+  }
+}
