@@ -2,29 +2,186 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { aidRouteData } from '@/data';
+import dynamic from 'next/dynamic';
+
+const RouteMap = dynamic(() => import('@/components/map/RouteMap'), { ssr: false });
 
 export default function AidRouteAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
 
-  // Get data from JSON
-  const { aidRouteAnalysis } = aidRouteData;
+  // Load summary/list from DB-backed API
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/aid-routes', { cache: 'no-store' });
+        const j = await res.json();
+        setAnalysisResults(j.aidRouteAnalysis);
+      } catch {}
+    })();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // Simulate analysis with actual data
-    setTimeout(() => {
+    try {
+      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch('/api/aid-routes', { cache: 'no-store' });
+      const j = await res.json();
+      setAnalysisResults(j.aidRouteAnalysis);
+    } catch {
+    } finally {
       setIsAnalyzing(false);
-      setAnalysisResults(aidRouteAnalysis);
-    }, 3000);
+    }
   };
 
-  useEffect(() => {
-    // Auto-load results for demo
-    setAnalysisResults(aidRouteAnalysis);
-  }, []);
+  // New: interactive routing state
+  const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
+  const [endPoint, setEndPoint] = useState<[number, number] | null>(null);
+  const [routeCoords, setRouteCoords] = useState<[number, number][] | null>(null);
+  const [routeSteps, setRouteSteps] = useState<any[]>([]);
+  const [routeMeta, setRouteMeta] = useState<{ distanceKm?: number; durationMin?: number }>({});
+  const [fetchingRoute, setFetchingRoute] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  // Closed zones and alternatives state
+  const [closedZones, setClosedZones] = useState<{ id?: string; name?: string; polygon: [number, number][] }[]>([]);
+  const [drawZoneMode, setDrawZoneMode] = useState(false);
+  const [avoidClosed, setAvoidClosed] = useState(true);
+  const [altRoutes, setAltRoutes] = useState<[number, number][][]>([]);
+  const [hitZones, setHitZones] = useState<{ id?: string; name?: string }[]>([]);
+
+  async function loadZones() {
+    try {
+      const res = await fetch('http://127.0.0.1:8000/api/closed-zones');
+      if (res.ok) {
+        const j = await res.json();
+        setClosedZones(j.zones || []);
+      }
+    } catch {}
+  }
+  useEffect(() => { loadZones(); }, []);
+
+  const handleSelectPoint = (point: [number, number], kind: 'start' | 'end') => {
+    if (kind === 'start') setStartPoint(point);
+    else setEndPoint(point);
+  };
+
+  function extractCoordsFromRoute(route: any): [number, number][] {
+    let coords: [number, number][] = [];
+    const routes0 = route?.routes?.[0];
+    if (routes0?.geometry?.coordinates) {
+      coords = routes0.geometry.coordinates as [number, number][];
+    } else {
+      const feat0 = route?.features?.[0];
+      const geom = feat0?.geometry;
+      if (geom?.type === 'LineString' && Array.isArray(geom.coordinates)) {
+        coords = geom.coordinates as [number, number][];
+      } else if (geom?.type === 'MultiLineString' && Array.isArray(geom.coordinates)) {
+        const flat = (geom.coordinates as [number, number][][]).flat();
+        coords = flat as [number, number][];
+      }
+    }
+    return coords;
+  }
+
+  async function fetchOptimalRoute() {
+    if (!startPoint || !endPoint) return;
+    setFetchingRoute(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams({
+        start_lat: String(startPoint[1]),
+        start_lng: String(startPoint[0]),
+        end_lat: String(endPoint[1]),
+        end_lng: String(endPoint[0]),
+        avoid_closed_zones: String(avoidClosed),
+      });
+      const res = await fetch(`http://127.0.0.1:8000/api/findOptimalRoute?${params.toString()}`, {
+        headers: { accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      const data = await res.json();
+      const route = data.route;
+
+      // Extract geometry coordinates (supports LineString and MultiLineString)
+      let coords: [number, number][] = extractCoordsFromRoute(route);
+      if (!coords.length) throw new Error('Rota bulunamadı');
+      setRouteCoords(coords);
+
+      // Steps/instructions: support different shapes
+      let steps: any[] = [];
+      const routes0 = route?.routes?.[0];
+      if (routes0?.legs?.[0]?.steps) steps = routes0.legs[0].steps; else {
+        const feat0 = route?.features?.[0];
+        steps = feat0?.properties?.legs?.[0]?.steps || feat0?.properties?.segments?.[0]?.steps || [];
+      }
+      setRouteSteps(steps);
+
+      // Meta distance/duration
+      let distanceMeters = 0;
+      let durationSeconds = 0;
+      if (routes0?.summary) {
+        distanceMeters = routes0.summary.length || 0;
+        durationSeconds = routes0.summary.duration || 0;
+      } else {
+        const feat0 = route?.features?.[0];
+        distanceMeters = feat0?.properties?.distance
+          || feat0?.properties?.segments?.[0]?.distance
+          || feat0?.properties?.legs?.[0]?.distance
+          || 0;
+        durationSeconds = feat0?.properties?.time
+          || feat0?.properties?.segments?.[0]?.duration
+          || feat0?.properties?.legs?.[0]?.time
+          || 0;
+      }
+      setRouteMeta({
+        distanceKm: distanceMeters ? Math.round(distanceMeters) / 1000 : undefined,
+        durationMin: durationSeconds ? Math.round(durationSeconds / 60) : undefined,
+      });
+
+      // Closed zone hits and alternatives
+      setHitZones(data.closed_zones_hit || []);
+      const alts = Array.isArray(data.alternatives) ? data.alternatives : [];
+      const altCoords: [number, number][][] = [];
+      for (const a of alts) {
+        const rc = extractCoordsFromRoute(a.route);
+        if (rc.length) altCoords.push(rc);
+      }
+      setAltRoutes(altCoords);
+    } catch (e: any) {
+      setError(e.message || 'Rota alınamadı');
+      setRouteCoords(null);
+      setRouteSteps([]);
+      setRouteMeta({});
+      setAltRoutes([]);
+      setHitZones([]);
+    } finally {
+      setFetchingRoute(false);
+    }
+  }
+
+  async function handleClosedZoneComplete(poly: [number, number][]) {
+    try {
+      const name = typeof window !== 'undefined' ? (prompt('Bölge adı (opsiyonel):') || `Kapalı Bölge ${closedZones.length + 1}`) : `Kapalı Bölge ${closedZones.length + 1}`;
+      const res = await fetch('http://127.0.0.1:8000/api/closed-zones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, polygon: poly }),
+      });
+      if (!res.ok) throw new Error('Bölge kaydedilemedi');
+      await loadZones();
+    } catch (e: any) {
+      setError(e.message || 'Bölge kaydedilemedi');
+    }
+  }
+
+  async function deleteZone(id?: string) {
+    if (!id) return;
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/closed-zones/${id}`, { method: 'DELETE' });
+      if (res.ok) await loadZones();
+    } catch {}
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,13 +208,15 @@ export default function AidRouteAnalyzer() {
               </h1>
             </div>
             
-            <button
-              onClick={startAnalysis}
-              disabled={isAnalyzing}
-              className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isAnalyzing ? 'Analiz Yapılıyor...' : 'Analizi Başlat'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={startAnalysis}
+                disabled={isAnalyzing}
+                className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 disabled:opacity-50"
+              >
+                {isAnalyzing ? 'Analiz Yapılıyor...' : 'Analizi Başlat'}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -66,6 +225,99 @@ export default function AidRouteAnalyzer() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           
+          {/* Interactive Route Builder */}
+          <div className="bg-white shadow rounded-lg mb-6">
+            <div className="px-6 py-4">
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Harita Üzerinde Rota Oluştur</h2>
+              <p className="text-sm text-gray-600 mb-4">Haritaya tıklayarak önce başlangıç noktasını, sonra hedef noktayı seçin. Ardından "Rota Bul" ile en uygun rotayı çizin.</p>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-2">
+                  <RouteMap
+                    height="420px"
+                    center={[36.15972, 36.20294]}
+                    zoom={15}
+                    start={startPoint}
+                    end={endPoint}
+                    routeCoords={routeCoords}
+                    onSelectPoint={handleSelectPoint}
+                    closedZones={closedZones}
+                    drawClosedZone={drawZoneMode}
+                    onClosedZoneComplete={handleClosedZoneComplete}
+                    alternativeRoutes={altRoutes}
+                  />
+                </div>
+                <div className="space-y-3">
+                  <div className="bg-gray-50 rounded p-3 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">Başlangıç</span><span className="font-mono">{startPoint ? `${startPoint[1].toFixed(5)}, ${startPoint[0].toFixed(5)}` : '-'}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Hedef</span><span className="font-mono">{endPoint ? `${endPoint[1].toFixed(5)}, ${endPoint[0].toFixed(5)}` : '-'}</span></div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={fetchOptimalRoute} disabled={!startPoint || !endPoint || fetchingRoute} className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50">{fetchingRoute ? 'Rota Alınıyor...' : 'Rota Bul'}</button>
+                    <button onClick={() => { setStartPoint(null); setEndPoint(null); setRouteCoords(null); setRouteSteps([]); setRouteMeta({}); }} className="px-4 py-2 rounded border">Temizle</button>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <label className="inline-flex items-center gap-2 text-sm">
+                      <input type="checkbox" className="accent-blue-600" checked={avoidClosed} onChange={(e) => setAvoidClosed(e.target.checked)} />
+                      Kapalı bölgelerden kaçın
+                    </label>
+                    <button onClick={() => setDrawZoneMode((v) => !v)} className={`px-3 py-1.5 rounded text-sm ${drawZoneMode ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800'}`}>{drawZoneMode ? 'Çizimi Bitirmek için Çift Tıkla' : 'Kapalı Bölge Çiz'}</button>
+                  </div>
+                  {error && <div className="text-red-600 text-sm">{error}</div>}
+                  {routeMeta.distanceKm && (
+                    <div className="text-sm text-gray-700">Mesafe: <span className="font-semibold">{routeMeta.distanceKm} km</span>, Süre: <span className="font-semibold">{routeMeta.durationMin} dk</span></div>
+                  )}
+                  {hitZones.length > 0 && (
+                    <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded p-2">
+                      Kapalı bölge çakışması: {hitZones.map((z) => z.name || z.id).join(', ')}. Alternatifler gösteriliyor.
+                    </div>
+                  )}
+                  {altRoutes.length > 0 && (
+                    <div className="text-xs text-blue-700 bg-blue-50 border border-blue-200 rounded p-2">{altRoutes.length} alternatif rota görüntüleniyor (kesikli mavi çizgi)</div>
+                  )}
+                  {closedZones.length > 0 && (
+                    <div className="text-xs text-gray-700 bg-gray-50 border border-gray-200 rounded p-2">
+                      <div className="font-medium mb-1">Kapalı Bölgeler</div>
+                      <ul className="space-y-1">
+                        {closedZones.map((z) => (
+                          <li key={z.id || JSON.stringify(z.polygon.slice(0,1))} className="flex justify-between items-center">
+                            <span>{z.name || z.id}</span>
+                            {z.id && <button onClick={() => deleteZone(z.id)} className="text-red-600 hover:underline">Sil</button>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Steps / Instructions */}
+          {routeSteps.length > 0 && (
+            <div className="bg-white shadow rounded-lg mb-6">
+              <div className="px-6 py-4">
+                <h3 className="text-md font-medium text-gray-900 mb-3">Adım Adım Yönlendirme</h3>
+                <ol className="space-y-2 list-decimal list-inside text-sm">
+                  {routeSteps.map((s: any, idx: number) => {
+                    const text = s?.instruction?.text ?? s?.instruction ?? s?.name ?? s?.maneuver ?? 'Adım';
+                    const dist = s?.distance ?? s?.length;
+                    const dur = s?.time ?? s?.duration;
+                    return (
+                      <li key={idx} className="text-gray-700">
+                        <div className="flex justify-between">
+                          <span>{text}</span>
+                          <span className="text-gray-500">
+                            {dist ? `${Math.round(dist)} m` : ''} {dur ? `• ${Math.round(dur)} sn` : ''}
+                          </span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            </div>
+          )}
+
           {/* Analysis Description */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-6 py-4">
@@ -103,57 +355,7 @@ export default function AidRouteAnalyzer() {
             </div>
           </div>
 
-          {/* Analysis Parameters */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Parametreleri</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Ekip Türü
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500">
-                    <option>İtfaiye Ekibi</option>
-                    <option>Sağlık Ekibi</option>
-                    <option>Arama Kurtarma</option>
-                    <option>Polis Ekibi</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Öncelik Kriteri
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500">
-                    <option>En hızlı rota</option>
-                    <option>En güvenli rota</option>
-                    <option>En kısa mesafe</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Trafik Verisi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500">
-                    <option>Canlı trafik</option>
-                    <option>Geçmiş veriler</option>
-                    <option>Trafik göz ardı et</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Alternatif Rota Sayısı
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                    defaultValue={3}
-                    min={1}
-                    max={5}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Analysis Parameters removed by request */}
 
           {/* Results Section */}
           <div className="bg-white shadow rounded-lg">

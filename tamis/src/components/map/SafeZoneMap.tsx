@@ -21,7 +21,7 @@ interface SafeZone {
   coord: [number, number];
   capacity: number;
   currentOccupancy: number;
-  type: 'school' | 'park' | 'stadium' | 'plaza';
+  type: 'school' | 'park' | 'stadium' | 'plaza' | 'hospital' | 'other';
   facilities: string[];
   safetyScore: number;
 }
@@ -33,6 +33,20 @@ interface SafeZoneMapProps {
   onMapReady?: (map: Map) => void;
   showSafeZones?: boolean;
   onZoneSelect?: (zone: SafeZone) => void;
+  // Google Places candidates
+  googlePlaces?: Array<{
+    placeId: string;
+    name: string;
+    lat: number;
+    lng: number;
+    primaryType?: string | null;
+    types?: string[];
+    formattedAddress?: string | null;
+    shortFormattedAddress?: string | null;
+    placeUri?: string | null;
+    directionsUri?: string | null;
+  }>;
+  onGooglePlaceSelect?: (place: any) => void;
 }
 
 export default function SafeZoneMap({ 
@@ -41,65 +55,15 @@ export default function SafeZoneMap({
   zoom = 15,
   onMapReady,
   showSafeZones = true,
-  onZoneSelect
+  onZoneSelect,
+  googlePlaces,
+  onGooglePlaceSelect
 }: SafeZoneMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const vectorSourceRef = useRef<VectorSource | null>(null);
   const [selectedZone, setSelectedZone] = useState<SafeZone | null>(null);
-
-  const safeZones: SafeZone[] = [
-    {
-      id: 'sz1',
-      name: 'Merkez İlkokulu Bahçesi',
-      coord: [36.147000, 36.206000],
-      capacity: 500,
-      currentOccupancy: 120,
-      type: 'school',
-      facilities: ['Su', 'Elektrik', 'Tuvalet', 'İlk Yardım'],
-      safetyScore: 9.2
-    },
-    {
-      id: 'sz2', 
-      name: 'Atatürk Parkı',
-      coord: [36.154000, 36.212000],
-      capacity: 800,
-      currentOccupancy: 450,
-      type: 'park',
-      facilities: ['Su', 'Elektrik', 'Çeşme'],
-      safetyScore: 8.7
-    },
-    {
-      id: 'sz3',
-      name: 'Spor Stadyumu',
-      coord: [36.151000, 36.204000],
-      capacity: 2000,
-      currentOccupancy: 1200,
-      type: 'stadium',
-      facilities: ['Su', 'Elektrik', 'Tuvalet', 'İlk Yardım', 'Kapalı Alan'],
-      safetyScore: 9.8
-    },
-    {
-      id: 'sz4',
-      name: 'Cumhuriyet Meydanı',
-      coord: [36.159000, 36.208000],
-      capacity: 1000,
-      currentOccupancy: 300,
-      type: 'plaza',
-      facilities: ['Su', 'Elektrik'],
-      safetyScore: 8.1
-    },
-    {
-      id: 'sz5',
-      name: 'Belediye Parkı',
-      coord: [36.145000, 36.213000],
-      capacity: 600,
-      currentOccupancy: 520,
-      type: 'park',
-      facilities: ['Su', 'Çeşme'],
-      safetyScore: 7.9
-    }
-  ];
+  const [selectedGooglePlace, setSelectedGooglePlace] = useState<any | null>(null);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -128,7 +92,7 @@ export default function SafeZoneMap({
 
     mapInstanceRef.current = map;
 
-    // Add click handler for zone selection
+    // Add click handler for zone / google place selection
     map.on('click', (evt) => {
       const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => {
         return feature;
@@ -140,12 +104,23 @@ export default function SafeZoneMap({
         if (onZoneSelect) {
           onZoneSelect(zone);
         }
+        setSelectedGooglePlace(null);
+      } else if (feature && feature.get('googlePlace')) {
+        const place = feature.get('googlePlace');
+        setSelectedGooglePlace(place);
+        setSelectedZone(null);
+        onGooglePlaceSelect?.(place);
       }
     });
 
-    // Add safe zones if requested
-    if (showSafeZones) {
-      addSafeZones(vectorSource);
+    // Add safe zones if requested (use Google Places as safe zones)
+    if (showSafeZones && googlePlaces && googlePlaces.length) {
+      addSafeZonesFromGooglePlaces(vectorSource, googlePlaces);
+    }
+
+    // Add Google Places (if provided and not using them as safe zones)
+    if (googlePlaces && googlePlaces.length && !showSafeZones) {
+      addGooglePlaces(vectorSource, googlePlaces);
     }
 
     // Call onMapReady callback
@@ -160,7 +135,7 @@ export default function SafeZoneMap({
         mapInstanceRef.current = null;
       }
     };
-  }, [center, zoom, onMapReady, showSafeZones, onZoneSelect]);
+  }, [center, zoom, onMapReady, showSafeZones, onZoneSelect, JSON.stringify(googlePlaces)]);
 
   const getZoneColor = (zone: SafeZone) => {
     const occupancyRate = zone.currentOccupancy / zone.capacity;
@@ -180,7 +155,7 @@ export default function SafeZoneMap({
     }
   };
 
-  const addSafeZones = (vectorSource: VectorSource) => {
+  const addSafeZonesFromGooglePlaces = (vectorSource: VectorSource, places: NonNullable<SafeZoneMapProps['googlePlaces']>) => {
     // Add boundary rectangle first
     const swCorner: [number, number] = [36.136884, 36.200889];
     const neCorner: [number, number] = [36.164790, 36.218908];
@@ -218,20 +193,50 @@ export default function SafeZoneMap({
 
     vectorSource.addFeature(boundaryFeature);
 
-    // Add safe zones
-    safeZones.forEach(zone => {
-      const centerCoord = transform(zone.coord, 'EPSG:4326', 'EPSG:3857') as [number, number];
-      const occupancyRate = zone.currentOccupancy / zone.capacity;
+    // Convert Google Places to safe zones with estimated capacity and occupancy
+    places.forEach(place => {
+      const centerCoord = transform([place.lng, place.lat], 'EPSG:4326', 'EPSG:3857') as [number, number];
+      
+      // Estimate capacity based on place type
+      let estimatedCapacity = 200; // default
+      if (place.types?.includes('park')) estimatedCapacity = 800;
+      if (place.types?.includes('hospital')) estimatedCapacity = 150;
+      if (place.types?.includes('school')) estimatedCapacity = 500;
+      if (place.types?.includes('stadium')) estimatedCapacity = 2000;
+      if (place.types?.includes('shopping_mall')) estimatedCapacity = 1500;
+      
+      // Random occupancy for demo (20-80%)
+      const occupancyRate = 0.2 + Math.random() * 0.6;
+      const currentOccupancy = Math.floor(estimatedCapacity * occupancyRate);
+      
+      // Create safe zone object from Google Place
+      const safeZone = {
+        id: place.placeId,
+        name: place.name,
+        coord: [place.lat, place.lng] as [number, number],
+        capacity: estimatedCapacity,
+        currentOccupancy,
+        type: place.types?.includes('park') ? 'park' as const : 
+              place.types?.includes('hospital') ? 'hospital' as const :
+              place.types?.includes('school') ? 'school' as const : 'other' as const,
+        facilities: place.types?.includes('hospital') ? ['Tıbbi', 'Su', 'Elektrik'] :
+                   place.types?.includes('park') ? ['Su', 'Açık Alan'] :
+                   place.types?.includes('school') ? ['Su', 'Elektrik', 'Kapalı Alan'] : 
+                   ['Temel Olanaklar'],
+        safetyScore: 7.5 + Math.random() * 2, // 7.5-9.5 range
+        address: place.formattedAddress || place.shortFormattedAddress,
+        googlePlace: place
+      };
       
       // Create coverage area (circle showing zone influence)
-      const radius = Math.sqrt(zone.capacity) * 2; // Scale radius based on capacity
+      const radius = Math.sqrt(estimatedCapacity) * 3; // Scale radius based on capacity
       const coverageFeature = new Feature({
         geometry: new Circle(centerCoord, radius),
-        zone: zone,
+        zone: safeZone,
         type: 'coverage'
       });
 
-      const zoneColor = getZoneColor(zone);
+      const zoneColor = getZoneColor(safeZone);
       
       coverageFeature.setStyle(
         new Style({
@@ -249,9 +254,13 @@ export default function SafeZoneMap({
       // Create main zone marker
       const zoneFeature = new Feature({
         geometry: new Point(centerCoord),
-        zone: zone,
+        zone: safeZone,
         type: 'zone'
       });
+
+      const zoneIcon = place.types?.includes('park') ? '🌳' :
+                     place.types?.includes('hospital') ? '🏥' :
+                     place.types?.includes('school') ? '🏫' : '📍';
 
       zoneFeature.setStyle(
         new Style({
@@ -266,7 +275,7 @@ export default function SafeZoneMap({
             }),
           }),
           text: new Text({
-            text: getZoneIcon(zone.type),
+            text: zoneIcon,
             font: '16px sans-serif',
             fill: new Fill({
               color: 'white',
@@ -278,7 +287,7 @@ export default function SafeZoneMap({
       // Create occupancy indicator
       const occupancyFeature = new Feature({
         geometry: new Point([centerCoord[0], centerCoord[1] + 150]),
-        zone: zone,
+        zone: safeZone,
         type: 'occupancy'
       });
 
@@ -310,6 +319,37 @@ export default function SafeZoneMap({
     });
   };
 
+  const addSafeZones = (vectorSource: VectorSource) => {
+    // This function is now unused since we use Google Places as safe zones
+    // Keeping it for backward compatibility
+  };
+
+    const addGooglePlaces = (vectorSource: VectorSource, places: NonNullable<SafeZoneMapProps['googlePlaces']>) => {
+      places.forEach((p) => {
+        const coord = transform([p.lng, p.lat], 'EPSG:4326', 'EPSG:3857') as [number, number];
+        const f = new Feature({
+          geometry: new Point(coord),
+          googlePlace: p,
+          type: 'googlePlace',
+        });
+        f.setStyle(
+          new Style({
+            image: new CircleStyle({
+              radius: 8,
+              fill: new Fill({ color: '#2563eb' }), // blue
+              stroke: new Stroke({ color: 'white', width: 2 }),
+            }),
+            text: new Text({
+              text: 'G',
+              font: 'bold 10px sans-serif',
+              fill: new Fill({ color: 'white' }),
+            }),
+          })
+        );
+        vectorSource.addFeature(f);
+      });
+    };
+
   return (
     <div className="relative h-full w-full">
       {/* Map Container */}
@@ -339,7 +379,7 @@ export default function SafeZoneMap({
       </div>
 
       {/* Zone Info Panel */}
-      {selectedZone && (
+  {selectedZone && (
         <div className="absolute top-4 right-4 bg-white shadow-xl rounded-lg p-4 border border-gray-200 min-w-[300px]">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-lg font-semibold text-gray-900">{selectedZone.name}</h3>
@@ -421,6 +461,39 @@ export default function SafeZoneMap({
                     : 'Kapasite neredeyse dolu'}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Google Place Info Panel */}
+      {selectedGooglePlace && (
+        <div className="absolute top-4 right-4 bg-white shadow-xl rounded-lg p-4 border border-gray-200 min-w-[300px]">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold text-gray-900">{selectedGooglePlace.name}</h3>
+            <button
+              onClick={() => setSelectedGooglePlace(null)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="space-y-3">
+            {selectedGooglePlace.formattedAddress && (
+              <div className="text-sm text-gray-700">{selectedGooglePlace.formattedAddress}</div>
+            )}
+            {selectedGooglePlace.primaryType && (
+              <div className="text-xs text-gray-500">Tür: {selectedGooglePlace.primaryType}</div>
+            )}
+            <div className="flex gap-2 pt-2">
+              {selectedGooglePlace.placeUri && (
+                <a href={selectedGooglePlace.placeUri} target="_blank" rel="noreferrer" className="px-3 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200">Google Harita</a>
+              )}
+              {selectedGooglePlace.directionsUri && (
+                <a href={selectedGooglePlace.directionsUri} target="_blank" rel="noreferrer" className="px-3 py-1 text-xs bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200">Yol tarifi</a>
+              )}
             </div>
           </div>
         </div>

@@ -4,12 +4,14 @@ FastAPI Server for Hatay Earthquake Damage Assessment
 Provides REST API endpoints for analysis data and processing
 """
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Query
+from tracemalloc import start
+from urllib import response
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Path as ApiPath
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-from typing import Optional, Dict, List, Any
+from pydantic import BaseModel, Field
+from typing import Optional, Dict, List, Any, Tuple
 import uvicorn
 import os
 import json
@@ -18,6 +20,7 @@ from datetime import datetime
 import subprocess
 import sys
 from pathlib import Path
+import requests
 import queue
 import threading
 import time
@@ -273,6 +276,19 @@ class DamageReport(BaseModel):
     field_statistics: Dict[str, Any]
     summary: Dict[str, Any]
 
+# -----------------------------
+# Closed road zones data models
+# -----------------------------
+class ClosedZoneBase(BaseModel):
+    name: str = Field(..., description="Zone display name")
+    # Polygon coordinates as list of [lat, lng]
+    polygon: List[List[float]] = Field(..., description="Polygon vertices [lat, lng] in order, at least 3 points")
+    notes: Optional[str] = None
+    detour_points: Optional[List[List[float]]] = Field(default=None, description="Preferred detour waypoints [lat, lng] outside the closed area")
+
+class ClosedZone(ClosedZoneBase):
+    id: str
+
 # Helper functions
 def get_data_dir():
     """Get the data directory path"""
@@ -343,6 +359,132 @@ async def root():
             "GET /static/maps/{filename}": "Get generated maps"
         }
     }
+
+# ---------------------------------
+# Closed road zones helper functions
+# ---------------------------------
+ZONES_FILE = os.path.join("output", "closed_zones.json")
+
+def load_closed_zones() -> List[ClosedZone]:
+    try:
+        if os.path.exists(ZONES_FILE):
+            with open(ZONES_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # ensure structure
+                zones: List[ClosedZone] = [ClosedZone(**z) for z in data]
+                return [z.dict() for z in zones]  # return as dicts
+    except Exception as e:
+        print(f"Failed to load zones: {e}")
+    return []
+
+def save_closed_zones(zones: List[Dict[str, Any]]):
+    os.makedirs(os.path.dirname(ZONES_FILE), exist_ok=True)
+    with open(ZONES_FILE, 'w', encoding='utf-8') as f:
+        json.dump(zones, f, ensure_ascii=False, indent=2)
+
+def point_in_polygon(lat: float, lng: float, polygon: List[List[float]]) -> bool:
+    """Ray casting algorithm for point-in-polygon. Polygon: list of [lat, lng]."""
+    inside = False
+    n = len(polygon)
+    if n < 3:
+        return False
+    for i in range(n):
+        j = (i - 1) % n
+        yi, xi = polygon[i][0], polygon[i][1]
+        yj, xj = polygon[j][0], polygon[j][1]
+        # check if point is between yi and yj in lat dimension
+        intersect = ((yi > lat) != (yj > lat)) and (
+            lng < (xj - xi) * (lat - yi) / (yj - yi + 1e-12) + xi
+        )
+        if intersect:
+            inside = not inside
+    return inside
+
+def polygon_bbox(polygon: List[List[float]]) -> Tuple[float, float, float, float]:
+    lats = [p[0] for p in polygon]
+    lngs = [p[1] for p in polygon]
+    return min(lats), min(lngs), max(lats), max(lngs)
+
+def compute_detour_candidates(polygon: List[List[float]], margin: float = 0.001) -> List[List[float]]:
+    """Return 4 candidate detour points slightly outside polygon bbox: [lat, lng]."""
+    minLat, minLng, maxLat, maxLng = polygon_bbox(polygon)
+    return [
+        [minLat - margin, minLng - margin],
+        [minLat - margin, maxLng + margin],
+        [maxLat + margin, minLng - margin],
+        [maxLat + margin, maxLng + margin],
+    ]
+
+def compute_bbox_corners(polygon: List[List[float]], margin: float = 0.001) -> List[List[float]]:
+    """Return TL, TR, BR, BL corners of expanded bbox as [lat,lng]."""
+    minLat, minLng, maxLat, maxLng = polygon_bbox(polygon)
+    top = maxLat + margin
+    bottom = minLat - margin
+    left = minLng - margin
+    right = maxLng + margin
+    return [
+        [top, left],   # TL
+        [top, right],  # TR
+        [bottom, right],  # BR
+        [bottom, left],   # BL
+    ]
+
+def _orient(ax: float, ay: float, bx: float, by: float, cx: float, cy: float) -> float:
+    return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
+
+def _on_segment(ax: float, ay: float, bx: float, by: float, cx: float, cy: float) -> bool:
+    return min(ax, cx) - 1e-12 <= bx <= max(ax, cx) + 1e-12 and min(ay, cy) - 1e-12 <= by <= max(ay, cy) + 1e-12
+
+def segments_intersect(p1: List[float], p2: List[float], q1: List[float], q2: List[float]) -> bool:
+    """Segment intersection test using orientation, coordinates given as [lat,lng]."""
+    # Convert to x=lng, y=lat
+    ax, ay = p1[1], p1[0]
+    bx, by = p2[1], p2[0]
+    cx, cy = q1[1], q1[0]
+    dx, dy = q2[1], q2[0]
+    o1 = _orient(ax, ay, bx, by, cx, cy)
+    o2 = _orient(ax, ay, bx, by, dx, dy)
+    o3 = _orient(cx, cy, dx, dy, ax, ay)
+    o4 = _orient(cx, cy, dx, dy, bx, by)
+    if (o1 == 0 and _on_segment(ax, ay, cx, cy, bx, by)) or (o2 == 0 and _on_segment(ax, ay, dx, dy, bx, by)) or (o3 == 0 and _on_segment(cx, cy, ax, ay, dx, dy)) or (o4 == 0 and _on_segment(cx, cy, bx, by, dx, dy)):
+        return True
+    return (o1 > 0) != (o2 > 0) and (o3 > 0) != (o4 > 0)
+
+def polyline_intersects_polygon(polyline: List[List[float]], polygon: List[List[float]]) -> bool:
+    if len(polygon) < 3 or len(polyline) < 2:
+        return False
+    # Point-in-polygon quick check
+    for pt in polyline:
+        if point_in_polygon(pt[0], pt[1], polygon):
+            return True
+    # Segment vs polygon edges
+    ring = polygon + [polygon[0]]
+    for i in range(len(polyline) - 1):
+        a = polyline[i]
+        b = polyline[i+1]
+        for j in range(len(ring) - 1):
+            c = ring[j]
+            d = ring[j+1]
+            if segments_intersect(a, b, c, d):
+                return True
+    return False
+
+def distance2(a: List[float], b: List[float]) -> float:
+    return (a[0]-b[0])**2 + (a[1]-b[1])**2
+
+def choose_zone_detours(polygon: List[List[float]], start: List[float], end: List[float], preferred: Optional[List[List[float]]] = None) -> List[List[float]]:
+    candidates = (preferred or []) + compute_detour_candidates(polygon)
+    if not candidates:
+        candidates = compute_detour_candidates(polygon)
+    # pick one near start and one near end
+    near_start = min(candidates, key=lambda c: distance2(c, start))
+    near_end = min(candidates, key=lambda c: distance2(c, end))
+    # Deduplicate if same
+    if near_start == near_end and len(candidates) > 1:
+        # pick second best for end
+        candidates_sorted = sorted(candidates, key=lambda c: distance2(c, end))
+        near_end = candidates_sorted[1]
+    return [near_start, near_end]
 
 @app.get("/api/analyzers")
 async def get_available_analyzers():
@@ -527,6 +669,34 @@ async def get_data_status():
         "output_files": outputs_status,
         "ready_for_analysis": all(f["exists"] for f in files_status.values() if f)
     }
+
+# --------------------------
+# Closed road zones endpoints
+# --------------------------
+
+@app.get("/api/closed-zones")
+async def list_closed_zones():
+    return {"zones": load_closed_zones()}
+
+@app.post("/api/closed-zones")
+async def create_closed_zone(zone: ClosedZoneBase):
+    zones = load_closed_zones()
+    new_zone = {
+        "id": str(uuid.uuid4()),
+        **zone.dict(),
+    }
+    zones.append(new_zone)
+    save_closed_zones(zones)
+    return {"created": new_zone}
+
+@app.delete("/api/closed-zones/{zone_id}")
+async def delete_closed_zone(zone_id: str = ApiPath(..., description="Zone ID")):
+    zones = load_closed_zones()
+    new_zones = [z for z in zones if z.get("id") != zone_id]
+    if len(new_zones) == len(zones):
+        raise HTTPException(status_code=404, detail="Zone not found")
+    save_closed_zones(new_zones)
+    return {"deleted": zone_id}
 
 @app.get("/api/analysis/status", response_model=AnalysisStatus)
 async def get_analysis_status():
@@ -850,6 +1020,130 @@ async def search_fields(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error searching fields: {str(e)}")
+    
+@app.get("/api/findOptimalRoute")
+async def find_optimal_route(
+    start_lat: str,
+    start_lng: str,
+    end_lat: str,
+    end_lng: str,
+    avoid_closed_zones: Optional[bool] = Query(False, description="If true, compute alternatives to avoid closed zones"),
+    via: Optional[str] = Query(None, description="Pipe-separated additional waypoints 'lat,lng|lat,lng'")
+):
+    """Find the optimal route between two points.
+
+    - If `via` is provided, it will be inserted between start and end when calling the routing service.
+    - If `avoid_closed_zones` is true, we will check the base route against stored closed zones and compute
+      alternative routes by inserting detour points outside intersected zones.
+    """
+
+    url = "https://route-and-directions.p.rapidapi.com/v1/routing"
+
+    def call_service(waypoints_str: str) -> Dict[str, Any]:
+        headers = {
+            "x-rapidapi-key": "d6112b1e0dmsh15eef3375a831d2p1dc497jsneee5eb283733",
+            "x-rapidapi-host": "route-and-directions.p.rapidapi.com"
+        }
+        qs = {"waypoints": waypoints_str, "mode": "drive"}
+        resp = requests.get(url, headers=headers, params=qs)
+        if resp.status_code != 200:
+            raise HTTPException(status_code=500, detail=f"Error fetching route data ({resp.status_code})")
+        return resp.json()
+
+    base_waypoints = f"{start_lat},{start_lng}"
+    if via:
+        base_waypoints += f"|{via}"
+    base_waypoints += f"|{end_lat},{end_lng}"
+
+    base_data = call_service(base_waypoints)
+
+    # Helper to extract a flat list of [lat, lng] from service response
+    def extract_coords(route_json: Dict[str, Any]) -> List[List[float]]:
+        coords: List[List[float]] = []
+        routes0 = route_json.get("routes", [{}])[0] if isinstance(route_json.get("routes", None), list) else None
+        if routes0 and isinstance(routes0, dict):
+            geom = routes0.get("geometry")
+            if geom and isinstance(geom, dict) and geom.get("coordinates"):
+                c = geom["coordinates"]
+                if isinstance(c, list) and len(c) and isinstance(c[0], list) and len(c[0]) == 2:
+                    # service may return [lng, lat]; but our frontend expects [lng,lat]. For intersection we need [lat,lng]
+                    # Many services use [lng,lat]; we'll try both shapes. Assume [lng,lat] and convert to [lat,lng]
+                    coords = [[p[1], p[0]] for p in c]
+        # GeoJSON FeatureCollection fallback
+        if not coords and isinstance(route_json.get("features", None), list) and len(route_json["features"]) > 0:
+            feat0 = route_json["features"][0]
+            geom = feat0.get("geometry", {})
+            if geom.get("type") == "LineString":
+                coords = [[p[1], p[0]] for p in geom.get("coordinates", [])]
+            elif geom.get("type") == "MultiLineString":
+                flat = [pt for seg in geom.get("coordinates", []) for pt in seg]
+                coords = [[p[1], p[0]] for p in flat]
+        return coords
+
+    base_coords = extract_coords(base_data)
+    zones = load_closed_zones()
+    hit_zones: List[Dict[str, Any]] = []
+    if zones and base_coords:
+        for z in zones:
+            poly = z.get("polygon", [])
+            if len(poly) >= 3:
+                if polyline_intersects_polygon(base_coords, poly):
+                    hit_zones.append(z)
+
+    alternatives: List[Dict[str, Any]] = []
+    if avoid_closed_zones and hit_zones:
+        start_pt = [float(start_lat), float(start_lng)]
+        end_pt = [float(end_lat), float(end_lng)]
+        # For each hit zone build multiple candidate waypoint sequences and select those that avoid all zones
+        candidates: List[List[List[float]]] = []
+        for z in hit_zones:
+            poly = z.get("polygon", [])
+            corners = compute_bbox_corners(poly, margin=0.002)
+            # single-point detours
+            for c in corners:
+                candidates.append([c])
+            # adjacent corner pairs (cw path)
+            tl, tr, br, bl = corners
+            for pair in ([tl, tr], [tr, br], [br, bl], [bl, tl]):
+                candidates.append(pair)
+            # preferred near start/end
+            det2 = choose_zone_detours(poly, start_pt, end_pt, z.get("detour_points"))
+            if det2:
+                candidates.append(det2)
+        # Try candidates up to a reasonable limit
+        kept = 0
+        for wp in candidates:
+            if kept >= 4:
+                break
+            wps = [f"{start_lat},{start_lng}"] + [f"{p[0]},{p[1]}" for p in wp] + [f"{end_lat},{end_lng}"]
+            wp_str = "|".join(wps)
+            try:
+                alt_data = call_service(wp_str)
+                alt_coords = extract_coords(alt_data)
+                if not alt_coords:
+                    continue
+                # verify avoidance across all hit zones
+                avoids_all = True
+                for z in hit_zones:
+                    if polyline_intersects_polygon(alt_coords, z.get("polygon", [])):
+                        avoids_all = False
+                        break
+                if avoids_all:
+                    alternatives.append({
+                        "waypoints": wp_str,
+                        "route": alt_data
+                    })
+                    kept += 1
+            except HTTPException as e:
+                print(f"Alternative candidate failed: {e.detail}")
+
+    return {
+        "start": {"lat": start_lat, "lon": start_lng},
+        "end": {"lat": end_lat, "lon": end_lng},
+        "route": base_data,
+        "closed_zones_hit": [ {"id": z.get("id"), "name": z.get("name")} for z in hit_zones ],
+        "alternatives": alternatives,
+    }
 
 if __name__ == "__main__":
     print("Starting Hatay Earthquake Damage Assessment API Server")

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { populationDensityData } from '@/data';
+// Fetch from API instead of static JSON
 
 // Dynamically import the map component to avoid SSR issues
 const OpenLayersMap = dynamic(() => import('@/components/map/OpenLayersMap'), {
@@ -23,22 +23,29 @@ export default function PopulationDensityAnalyzer() {
   const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
 
-  // Get data from JSON
-  const { populationDensityAnalysis } = populationDensityData;
+  // Load analysis from API
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/population-zones', { cache: 'no-store' });
+        const j = await res.json();
+        setAnalysisResults(j.populationDensityAnalysis);
+      } catch {}
+    })();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // Simulate analysis with actual data
-    setTimeout(() => {
+    try {
+      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch('/api/population-zones', { cache: 'no-store' });
+      const j = await res.json();
+      setAnalysisResults(j.populationDensityAnalysis);
+    } catch {
+    } finally {
       setIsAnalyzing(false);
-      setAnalysisResults(populationDensityAnalysis);
-    }, 3000);
+    }
   };
-
-  useEffect(() => {
-    // Auto-load results for demo
-    setAnalysisResults(populationDensityAnalysis);
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">

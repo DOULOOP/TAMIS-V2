@@ -433,14 +433,17 @@ export default function DashboardPage() {
                   </div>
                 </button>
 
-                <button className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left">
+                <button 
+                  onClick={() => router.push('/dashboard/monitoring-map')}
+                  className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left"
+                >
                   <div className="flex items-center">
                     <svg className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium">İzleme Haritası</div>
-                      <div className="text-sm text-green-200">Coğrafi izleme sistemi</div>
+                      <div className="font-medium">Monitoring Haritası</div>
+                      <div className="text-sm text-green-200">Tüm sistem analitikleri - Gerçek zamanlı</div>
                     </div>
                   </div>
                 </button>
@@ -616,6 +619,78 @@ export default function DashboardPage() {
                     </span>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                       Otomatik İzleme
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Satellite Comparison Analysis - Full Width */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 mt-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center">
+                    <div className="h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                      <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-semibold text-blue-900">
+                        Uydu Görüntüsü Karşılaştırma Analizi
+                      </h4>
+                      <p className="text-blue-700 text-sm mt-1">
+                        2015 ve 2023 uydu görüntülerini karşılaştırarak deprem hasarını ve bölgesel değişimleri analiz eder.
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/dashboard/analyzers/satellite-comparison')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>Analiz Et</span>
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Hasar Oranı</div>
+                    <div className="text-xs text-blue-600">% Değişim</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Etkilenen Alan</div>
+                    <div className="text-xs text-blue-600">Hektar</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Kritik Değişim</div>
+                    <div className="text-xs text-blue-600">Bölge sayısı</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Analiz Doğruluğu</div>
+                    <div className="text-xs text-blue-600">% Güvenilirlik</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-blue-600">
+                    Son güncellenme: Henüz analiz yapılmadı
+                  </div>
+                  <div className="flex space-x-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      Görüntü Analizi
+                    </span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      Hasar Değerlendirme
                     </span>
                   </div>
                 </div>

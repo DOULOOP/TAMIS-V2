@@ -1,0 +1,579 @@
+{
+  "places": [
+    {
+      "name": "places/ChIJXQ0vm8nDJRUR2pJWXN7jb-0",
+      "id": "ChIJXQ0vm8nDJRUR2pJWXN7jb-0",
+      "types": [
+        "park",
+        "tourist_attraction",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Cumhuriyet, Cumhuriyet Mahallesi, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.1993651,
+        "longitude": 36.1569715
+      },
+      "displayName": {
+        "text": "Atatürk Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Cumhuriyet, Cumhuriyet Mahallesi, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3c99b2f0d5d:0xed6fe3de5c5692da!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=17109144053575226074&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3c99b2f0d5d:0xed6fe3de5c5692da!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3c99b2f0d5d:0xed6fe3de5c5692da!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3c99b2f0d5d:0xed6fe3de5c5692da!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJvQ8tIzTCJRUR4DemDJ_UO08",
+      "id": "ChIJvQ8tIzTCJRUR4DemDJ_UO08",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Kanatlı Mh., 31030 Merkez/Antakya/Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.2086299,
+        "longitude": 36.158395999999996
+      },
+      "displayName": {
+        "text": "Vali Ürgen Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Kanatlı Mh., Merkez/Antakya/Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c234232d0fbd:0x4f3bd49f0ca637e0!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=5709390732199344096&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c234232d0fbd:0x4f3bd49f0ca637e0!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c234232d0fbd:0x4f3bd49f0ca637e0!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c234232d0fbd:0x4f3bd49f0ca637e0!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJ20d1Sr7DJRURXlNa16ZD_F4",
+      "id": "ChIJ20d1Sr7DJRURXlNa16ZD_F4",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Sümerler, 31070 Hatay Merkez/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.189251999999996,
+        "longitude": 36.1515729
+      },
+      "displayName": {
+        "text": "Sevgi Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Sümerler, Hatay Merkez",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3be4a7547db:0x5efc43a6d75a535e!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=6844419917552964446&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3be4a7547db:0x5efc43a6d75a535e!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3be4a7547db:0x5efc43a6d75a535e!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3be4a7547db:0x5efc43a6d75a535e!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJd3kMGzTCJRUREFKm2kP3Q4o",
+      "id": "ChIJd3kMGzTCJRUREFKm2kP3Q4o",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Cebrail, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.208687999999995,
+        "longitude": 36.1591448
+      },
+      "displayName": {
+        "text": "Muammer Ürgen Myd.",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Cebrail, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c2341b0c7977:0x8a43f743daa65210!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=9963078671476871696&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2341b0c7977:0x8a43f743daa65210!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c2341b0c7977:0x8a43f743daa65210!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2341b0c7977:0x8a43f743daa65210!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJIYhgjn3DJRURkOMpgYXlWjc",
+      "id": "ChIJIYhgjn3DJRURkOMpgYXlWjc",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Çekmece, Uğur Mumcu Cd., 31141 Defne/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.198527899999995,
+        "longitude": 36.1410026
+      },
+      "displayName": {
+        "text": "Uğur mumcu parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Çekmece, Uğur Mumcu Cd., Defne",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c37d8e608821:0x375ae5858129e390!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=3988752781550412688&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c37d8e608821:0x375ae5858129e390!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c37d8e608821:0x375ae5858129e390!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c37d8e608821:0x375ae5858129e390!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJ73DyKCXDJRURKUkisRRRYnw",
+      "id": "ChIJ73DyKCXDJRURKUkisRRRYnw",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Çekmece, 31141 Defne/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.196648599999996,
+        "longitude": 36.1359007
+      },
+      "displayName": {
+        "text": "Armutlu Mezarlığı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Çekmece, Defne",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c32528f270ef:0x7c625114b1224929!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=8962815357733718313&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c32528f270ef:0x7c625114b1224929!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c32528f270ef:0x7c625114b1224929!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c32528f270ef:0x7c625114b1224929!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJ9WQ0QsnDJRURkBDukXdFiQ4",
+      "id": "ChIJ9WQ0QsnDJRURkBDukXdFiQ4",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Kışla Saray, Vilayet Sk. No:12, 31070 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.198915,
+        "longitude": 36.1587712
+      },
+      "displayName": {
+        "text": "Yunus Emre Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Kışla Saray, Vilayet Sk. No:12, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3c9423464f5:0xe89457791ee1090!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=1047444768192073872&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3c9423464f5:0xe89457791ee1090!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3c9423464f5:0xe89457791ee1090!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3c9423464f5:0xe89457791ee1090!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJ3zoefa3DJRURbAKL26zA0Jc",
+      "id": "ChIJ3zoefa3DJRURbAKL26zA0Jc",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Esenlik, 9. Sk. No:88, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.207926,
+        "longitude": 36.1435108
+      },
+      "displayName": {
+        "text": "Cemil Baki Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Esenlik, 9. Sk. No:88, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3ad7d1e3adf:0x97d0c0acdb8b026c!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=10939455343533163116&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3ad7d1e3adf:0x97d0c0acdb8b026c!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3ad7d1e3adf:0x97d0c0acdb8b026c!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3ad7d1e3adf:0x97d0c0acdb8b026c!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJCab6_a7DJRUR_pmu0zl51Vo",
+      "id": "ChIJCab6_a7DJRUR_pmu0zl51Vo",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Esentepe, 1. Sk. No:4, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.203733899999996,
+        "longitude": 36.1406147
+      },
+      "displayName": {
+        "text": "Park",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Esentepe, 1. Sk. No:4, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3aefdfaa609:0x5ad57939d3ae99fe!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=6545270922724415998&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3aefdfaa609:0x5ad57939d3ae99fe!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3aefdfaa609:0x5ad57939d3ae99fe!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3aefdfaa609:0x5ad57939d3ae99fe!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJOQtUujbCJRURUygzEm_w5js",
+      "id": "ChIJOQtUujbCJRURUygzEm_w5js",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.2098267,
+        "longitude": 36.1591388
+      },
+      "displayName": {
+        "text": "15 TEMMUZ PARKI",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c236ba540b39:0x3be6f06f12332853!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=4316401652718577747&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c236ba540b39:0x3be6f06f12332853!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c236ba540b39:0x3be6f06f12332853!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c236ba540b39:0x3be6f06f12332853!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJVQW2Q0HDJRURj_G521pJY10",
+      "id": "ChIJVQW2Q0HDJRURj_G521pJY10",
+      "types": [
+        "garden",
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.209691899999996,
+        "longitude": 36.15907
+      },
+      "displayName": {
+        "text": "حديقة السوريين",
+        "languageCode": "ar"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Bahçe",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c34143b60555:0x5d63495adbb9f18f!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=6729302922803933583&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c34143b60555:0x5d63495adbb9f18f!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c34143b60555:0x5d63495adbb9f18f!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c34143b60555:0x5d63495adbb9f18f!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJ-7IaozbCJRURRnmApvJJc-c",
+      "id": "ChIJ-7IaozbCJRURRnmApvJJc-c",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.2096612,
+        "longitude": 36.15882250000001
+      },
+      "displayName": {
+        "text": "DSİ Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c236a31ab2fb:0xe77349f2a6807946!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=16677755151607429446&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c236a31ab2fb:0xe77349f2a6807946!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c236a31ab2fb:0xe77349f2a6807946!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c236a31ab2fb:0xe77349f2a6807946!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJmxd5FzXCJRURYDPeV6LwU1w",
+      "id": "ChIJmxd5FzXCJRURYDPeV6LwU1w",
+      "types": [
+        "hospital",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Cebrail, Rüstem Tümer Paşa Cd. No:4, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.206804999999996,
+        "longitude": 36.156287
+      },
+      "displayName": {
+        "text": "Murat Cerrahi Hastanesi",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Hastane",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Cebrail, Rüstem Tümer Paşa Cd. No:4, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c2351779179b:0x5c53f0a257de3360!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=6652925654605902688&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2351779179b:0x5c53f0a257de3360!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c2351779179b:0x5c53f0a257de3360!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2351779179b:0x5c53f0a257de3360!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJGxAKIjTCJRURrN1VLNTkwtw",
+      "id": "ChIJGxAKIjTCJRURrN1VLNTkwtw",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, 31030 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.208901,
+        "longitude": 36.1586108
+      },
+      "displayName": {
+        "text": "AAG Parkı",
+        "languageCode": "en"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "General Şükrü Kanatlı, Atatürk Cd No:59, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c234220a101b:0xdcc2e4d42c55ddac!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=15907528433754037676&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c234220a101b:0xdcc2e4d42c55ddac!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c234220a101b:0xdcc2e4d42c55ddac!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c234220a101b:0xdcc2e4d42c55ddac!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJs_ZRFrTDJRURvzNSqLsjdPk",
+      "id": "ChIJs_ZRFrTDJRURvzNSqLsjdPk",
+      "types": [
+        "hospital",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Esenlik, Süleymanşah Cd. No:31, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.204180799999996,
+        "longitude": 36.1499009
+      },
+      "displayName": {
+        "text": "Özel Zirem Özel Eğitim Ve Rehabilitasyon Merkezi",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Hastane",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Esenlik, Süleymanşah Cd. No:31, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3b41651f6b3:0xf97423bba85233bf!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=17975031301632308159&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3b41651f6b3:0xf97423bba85233bf!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3b41651f6b3:0xf97423bba85233bf!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3b41651f6b3:0xf97423bba85233bf!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJl1TX0hjDJRURQgIXQlyqVbw",
+      "id": "ChIJl1TX0hjDJRURQgIXQlyqVbw",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Esenlik, 9. Sk. No:4, 31040, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.2074918,
+        "longitude": 36.14728
+      },
+      "displayName": {
+        "text": "Şehit Polis Beşir Güven Parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Esenlik, 9. Sk. No:4, 31040, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c318d2d75497:0xbc55aa5c42170242!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=13570940365373375042&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c318d2d75497:0xbc55aa5c42170242!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c318d2d75497:0xbc55aa5c42170242!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c318d2d75497:0xbc55aa5c42170242!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJqbKJL67DJRURmLqGoRKsQjQ",
+      "id": "ChIJqbKJL67DJRURmLqGoRKsQjQ",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Esenlik, Şht. Jan. Komutan Er Ahmet Sümer Sk No:34, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.203414599999995,
+        "longitude": 36.1431152
+      },
+      "displayName": {
+        "text": "Şht. Jnd. Kom. Er Ahmet Sümer Parkı",
+        "languageCode": "en"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Esenlik, Şht. Jan. Komutan Er Ahmet Sümer Sk No:34, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c3ae2f89b2a9:0x3442ac12a186ba98!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=3765761434454506136&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3ae2f89b2a9:0x3442ac12a186ba98!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c3ae2f89b2a9:0x3442ac12a186ba98!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c3ae2f89b2a9:0x3442ac12a186ba98!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJQZ97GknCJRURP74eLiHMIbY",
+      "id": "ChIJQZ97GknCJRURP74eLiHMIbY",
+      "types": [
+        "hospital",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Emek, Emek Mh No:41, 31030 Merkez/Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.213557099999996,
+        "longitude": 36.150704399999995
+      },
+      "displayName": {
+        "text": "Merkez 5 Nolu So",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Hastane",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Emek, Emek Mh No:41, Merkez/Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c2491a7b9f41:0xb621cc212e1ebe3f!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=13123995232014089791&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2491a7b9f41:0xb621cc212e1ebe3f!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c2491a7b9f41:0xb621cc212e1ebe3f!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c2491a7b9f41:0xb621cc212e1ebe3f!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    },
+    {
+      "name": "places/ChIJsxKX6DjDJRURAWHpLOqtIK4",
+      "id": "ChIJsxKX6DjDJRURAWHpLOqtIK4",
+      "types": [
+        "park",
+        "point_of_interest",
+        "establishment"
+      ],
+      "formattedAddress": "Gazi, Çekmece Cd. No:112, 31040 Antakya/Hatay, Türkiye",
+      "location": {
+        "latitude": 36.200796,
+        "longitude": 36.142339299999996
+      },
+      "displayName": {
+        "text": "gazi parkı",
+        "languageCode": "tr"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Park",
+        "languageCode": "tr-TR"
+      },
+      "shortFormattedAddress": "Gazi, Çekmece Cd. No:112, Antakya",
+      "googleMapsLinks": {
+        "directionsUri": "https://www.google.com/maps/dir//''/data=!4m7!4m6!1m1!4e2!1m2!1m1!1s0x1525c338e89712b3:0xae20adea2ce96101!3e0?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "placeUri": "https://maps.google.com/?cid=12547219783141646593&g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "writeAReviewUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c338e89712b3:0xae20adea2ce96101!12e1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "reviewsUri": "https://www.google.com/maps/place//data=!4m4!3m3!1s0x1525c338e89712b3:0xae20adea2ce96101!9m1!1b1?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA",
+        "photosUri": "https://www.google.com/maps/place//data=!4m3!3m2!1s0x1525c338e89712b3:0xae20adea2ce96101!10e5?g_mp=Cilnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaE5lYXJieRAAGAEgAA"
+      }
+    }
+  ]
+}

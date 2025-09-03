@@ -2,29 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { communicationNetworkData } from '@/data';
+// Fetch from API instead of static JSON
 
 export default function CommunicationNetworkAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
 
-  // Get data from JSON
-  const { communicationNetworkAnalysis } = communicationNetworkData;
+  // Load data from API
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/communication-network', { cache: 'no-store' });
+        const j = await res.json();
+        setAnalysisResults(j.communicationNetworkAnalysis);
+      } catch {}
+    })();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // Simulate analysis with actual data
-    setTimeout(() => {
+    try {
+      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch('/api/communication-network', { cache: 'no-store' });
+      const j = await res.json();
+      setAnalysisResults(j.communicationNetworkAnalysis);
+    } catch {
+    } finally {
       setIsAnalyzing(false);
-      setAnalysisResults(communicationNetworkAnalysis);
-    }, 3000);
+    }
   };
-
-  useEffect(() => {
-    // Auto-load results for demo
-    setAnalysisResults(communicationNetworkAnalysis);
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -114,56 +121,7 @@ export default function CommunicationNetworkAnalyzer() {
             </div>
           </div>
 
-          {/* Analysis Parameters */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Parametreleri</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Modem Tipi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tüm modemler</option>
-                    <option>4G LTE Modemler</option>
-                    <option>5G Modemler</option>
-                    <option>Satelit Modemler</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bölge Filtresi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tüm bölgeler</option>
-                    <option>Kritik bölgeler</option>
-                    <option>Afet bölgeleri</option>
-                    <option>İdari merkez</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Firmware Kontrolü
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Detaylı kontrol</option>
-                    <option>Hızlı tarama</option>
-                    <option>Sadece güncellik</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Güvenlik Analizi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tam güvenlik taraması</option>
-                    <option>Kritik açıklar</option>
-                    <option>Temel kontrol</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Parameters removed per request */}
 
           {/* Results Section */}
           <div className="bg-white shadow rounded-lg mb-6">
@@ -172,7 +130,7 @@ export default function CommunicationNetworkAnalyzer() {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-indigo-900">
-                    {analysisResults?.totalModems || 0}
+                    {analysisResults?.summary?.totalModems || 0}
                   </div>
                   <div className="text-sm text-indigo-700 font-medium">Aktif Modem</div>
                   <div className="text-xs text-indigo-600">Toplam cihaz sayısı</div>
@@ -180,7 +138,7 @@ export default function CommunicationNetworkAnalyzer() {
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-indigo-900">
-                    {analysisResults ? analysisResults.stations.filter((s: any) => s.status === 'online').length : 0}
+                    {analysisResults ? analysisResults.modemStations.filter((s: any) => s.status === 'active').length : 0}
                   </div>
                   <div className="text-sm text-indigo-700 font-medium">Online İstasyon</div>
                   <div className="text-xs text-indigo-600">Çalışan durumda</div>
@@ -188,7 +146,7 @@ export default function CommunicationNetworkAnalyzer() {
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-indigo-900">
-                    {analysisResults?.networkHealth || 0}%
+                    {analysisResults?.summary?.networkCoverage || 0}%
                   </div>
                   <div className="text-sm text-indigo-700 font-medium">Ağ Sağlığı</div>
                   <div className="text-xs text-indigo-600">Genel performans</div>
@@ -196,7 +154,7 @@ export default function CommunicationNetworkAnalyzer() {
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-indigo-900">
-                    {analysisResults?.averageSignal || 0}
+                    {analysisResults?.summary?.averageSignalStrength || 0}
                   </div>
                   <div className="text-sm text-indigo-700 font-medium">Sinyal Gücü</div>
                   <div className="text-xs text-indigo-600">dBm ortalaması</div>
@@ -212,19 +170,19 @@ export default function CommunicationNetworkAnalyzer() {
                       <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg">
                         <span className="font-medium text-green-800">Online</span>
                         <span className="text-xl font-bold text-green-600">
-                          {analysisResults.stations.filter((s: any) => s.status === 'online').length}
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'active').length}
                         </span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-red-100 rounded-lg">
                         <span className="font-medium text-red-800">Offline</span>
                         <span className="text-xl font-bold text-red-600">
-                          {analysisResults.stations.filter((s: any) => s.status === 'offline').length}
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'inactive').length}
                         </span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-yellow-100 rounded-lg">
                         <span className="font-medium text-yellow-800">Bakım</span>
                         <span className="text-xl font-bold text-yellow-600">
-                          {analysisResults.stations.filter((s: any) => s.status === 'maintenance').length}
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'maintenance').length}
                         </span>
                       </div>
                     </div>
@@ -233,19 +191,19 @@ export default function CommunicationNetworkAnalyzer() {
                       <div className="flex justify-between">
                         <span className="text-gray-600">En İyi Sinyal:</span>
                         <span className="font-semibold text-green-600">
-                          {Math.max(...analysisResults.stations.map((s: any) => s.signalStrength))} dBm
+                          {Math.max(...analysisResults.modemStations.map((s: any) => s.signalStrength))} dBm
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">En Kötü Sinyal:</span>
                         <span className="font-semibold text-red-600">
-                          {Math.min(...analysisResults.stations.map((s: any) => s.signalStrength))} dBm
+                          {Math.min(...analysisResults.modemStations.map((s: any) => s.signalStrength))} dBm
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Ortalama Ping:</span>
+                        <span className="text-gray-600">Ortalama Veri Oranı:</span>
                         <span className="font-semibold">
-                          {Math.round(analysisResults.stations.reduce((acc: number, s: any) => acc + s.ping, 0) / analysisResults.stations.length)} ms
+                          {Math.round(analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.dataRate, 0) / analysisResults.modemStations.length)}%
                         </span>
                       </div>
                     </div>
@@ -254,12 +212,14 @@ export default function CommunicationNetworkAnalyzer() {
                       <div className="flex justify-between">
                         <span className="text-gray-600">Toplam Bağlantı:</span>
                         <span className="font-semibold">
-                          {analysisResults.stations.reduce((acc: number, s: any) => acc + s.connectedDevices, 0)} cihaz
+                          {analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.connectedDevices, 0)} cihaz
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Ağ Yükü:</span>
-                        <span className="font-semibold text-yellow-600">Orta</span>
+                        <span className="font-semibold text-yellow-600">
+                          %{Math.round(analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.networkLoad, 0) / analysisResults.modemStations.length)}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Güvenlik Durumu:</span>
@@ -319,46 +279,46 @@ export default function CommunicationNetworkAnalyzer() {
                         <tr>
                           <th className="px-4 py-2 text-left font-medium text-gray-900">İstasyon</th>
                           <th className="px-4 py-2 text-left font-medium text-gray-900">Durum</th>
-                          <th className="px-4 py-2 text-left font-medium text-gray-900">Sinyal</th>
-                          <th className="px-4 py-2 text-left font-medium text-gray-900">Ping</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Sinyal Gücü</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Veri Oranı</th>
                           <th className="px-4 py-2 text-left font-medium text-gray-900">Bağlı Cihaz</th>
-                          <th className="px-4 py-2 text-left font-medium text-gray-900">Son Güncelleme</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Son Ping</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
-                        {analysisResults.stations.map((station: any) => (
+                        {analysisResults.modemStations.map((station: any) => (
                           <tr key={station.id} className="bg-white hover:bg-gray-50">
                             <td className="px-4 py-2 font-medium">{station.name}</td>
                             <td className="px-4 py-2">
                               <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                station.status === 'online' ? 'bg-green-100 text-green-800' :
-                                station.status === 'offline' ? 'bg-red-100 text-red-800' :
+                                station.status === 'active' ? 'bg-green-100 text-green-800' :
+                                station.status === 'inactive' ? 'bg-red-100 text-red-800' :
                                 'bg-yellow-100 text-yellow-800'
                               }`}>
-                                {station.status === 'online' ? 'Online' :
-                                 station.status === 'offline' ? 'Offline' : 'Bakım'}
+                                {station.status === 'active' ? 'Aktif' :
+                                 station.status === 'inactive' ? 'İnaktif' : 'Bakım'}
                               </span>
                             </td>
                             <td className="px-4 py-2">
                               <span className={`font-medium ${
-                                station.signalStrength > -50 ? 'text-green-600' :
-                                station.signalStrength > -70 ? 'text-yellow-600' :
+                                station.signalStrength > 80 ? 'text-green-600' :
+                                station.signalStrength > 60 ? 'text-yellow-600' :
                                 'text-red-600'
                               }`}>
-                                {station.signalStrength} dBm
+                                {station.signalStrength}%
                               </span>
                             </td>
                             <td className="px-4 py-2">
                               <span className={`font-medium ${
-                                station.ping < 50 ? 'text-green-600' :
-                                station.ping < 100 ? 'text-yellow-600' :
+                                station.dataRate > 90 ? 'text-green-600' :
+                                station.dataRate > 70 ? 'text-yellow-600' :
                                 'text-red-600'
                               }`}>
-                                {station.ping} ms
+                                {station.dataRate}%
                               </span>
                             </td>
                             <td className="px-4 py-2">{station.connectedDevices}</td>
-                            <td className="px-4 py-2 text-gray-500 text-xs">{station.lastUpdate}</td>
+                            <td className="px-4 py-2 text-gray-500 text-xs">{station.lastPing}</td>
                           </tr>
                         ))}
                       </tbody>
