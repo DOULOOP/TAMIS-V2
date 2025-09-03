@@ -296,24 +296,124 @@ export default function AidRouteAnalyzer() {
           {routeSteps.length > 0 && (
             <div className="bg-white shadow rounded-lg mb-6">
               <div className="px-6 py-4">
-                <h3 className="text-md font-medium text-gray-900 mb-3">Adım Adım Yönlendirme</h3>
-                <ol className="space-y-2 list-decimal list-inside text-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Adım Adım Yönlendirme</h3>
+                    <p className="text-sm text-gray-500">Rotanızı takip etmek için aşağıdaki talimatları izleyin</p>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-blue-700">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="font-medium">Toplam {routeSteps.length} adım</span>
+                    {routeMeta.distanceKm && (
+                      <>
+                        <span>•</span>
+                        <span>{routeMeta.distanceKm} km</span>
+                      </>
+                    )}
+                    {routeMeta.durationMin && (
+                      <>
+                        <span>•</span>
+                        <span>Tahmini {routeMeta.durationMin} dakika</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-3 max-h-96 overflow-y-auto">
                   {routeSteps.map((s: any, idx: number) => {
                     const text = s?.instruction?.text ?? s?.instruction ?? s?.name ?? s?.maneuver ?? 'Adım';
                     const dist = s?.distance ?? s?.length;
                     const dur = s?.time ?? s?.duration;
+                    
+                    // Get maneuver type for icon
+                    const getManeuverIcon = (instruction: string) => {
+                      const instr = instruction.toLowerCase();
+                      if (instr.includes('sağ') || instr.includes('right')) {
+                        return (
+                          <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        );
+                      }
+                      if (instr.includes('sol') || instr.includes('left')) {
+                        return (
+                          <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        );
+                      }
+                      if (instr.includes('düz') || instr.includes('straight') || instr.includes('devam')) {
+                        return (
+                          <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                          </svg>
+                        );
+                      }
+                      return (
+                        <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      );
+                    };
+
                     return (
-                      <li key={idx} className="text-gray-700">
-                        <div className="flex justify-between">
-                          <span>{text}</span>
-                          <span className="text-gray-500">
-                            {dist ? `${Math.round(dist)} m` : ''} {dur ? `• ${Math.round(dur)} sn` : ''}
-                          </span>
+                      <div key={idx} className="flex items-start gap-4 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm flex-shrink-0 mt-0.5">
+                          {idx + 1}
                         </div>
-                      </li>
+                        <div className="flex items-center gap-3 flex-shrink-0">
+                          {getManeuverIcon(text)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 leading-5">{text}</p>
+                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                            {dist && (
+                              <span className="flex items-center gap-1">
+                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                                {Math.round(dist)} m
+                              </span>
+                            )}
+                            {dur && (
+                              <span className="flex items-center gap-1">
+                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {Math.round(dur)} sn
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
-                </ol>
+                </div>
+                
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">Güvenli yolculuklar dileriz</span>
+                    <button 
+                      onClick={() => window.print()} 
+                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                      </svg>
+                      Yazdır
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}

@@ -1,564 +1,393 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import SatelliteDamageCompare from '@/components/map/SatelliteDamageCompare';
 
-type ViewMode = 'overlay' | 'split' | 'sideBySide';
+// Dynamically import the map to avoid SSR issues
+const DamageReportMap = dynamic(() => import('@/components/map/DamageReportMap'), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-[500px] bg-gray-100 rounded-lg">Harita yükleniyor...</div>
+});
 
-export default function SatelliteComparisonAnalyzer() {
+interface DamageField {
+  field_id: number;
+  geometry: {
+    compactness: number;
+    pixel_coordinates: {
+      centroid: [number, number];
+      bounds: {
+        xmin: number;
+        xmax: number;
+        ymin: number;
+        ymax: number;
+      };
+    };
+    geographic_coordinates?: {
+      centroid: [number, number];
+      bounds: {
+        xmin: number;
+        xmax: number;
+        ymin: number;
+        ymax: number;
+      };
+    };
+  };
+  damage_assessment: {
+    damage_level: 'minimal' | 'moderate' | 'severe' | 'catastrophic';
+    change_percentage: number;
+    severity_score: number;
+    confidence_level: number;
+  };
+  shape_analysis?: any;
+}
+
+interface AnalysisResults {
+  metadata: {
+    total_fields: number;
+    analysis_timestamp: string;
+    analysis_method: string;
+    damage_thresholds: {
+      minimal: string;
+      moderate: string;
+      severe: string;
+      catastrophic: string;
+    };
+    field_statistics: {
+      damage_distribution: {
+        catastrophic: number;
+        severe?: number;
+        moderate?: number;
+        minimal?: number;
+      };
+    };
+  };
+  fields: DamageField[];
+}
+
+export default function SatelliteComparisonPage() {
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
+  const [selectedField, setSelectedField] = useState<DamageField | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('overlay');
-  const [overlayOpacity, setOverlayOpacity] = useState(50);
-  const [splitPosition, setSplitPosition] = useState(50);
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [isSplitDragging, setIsSplitDragging] = useState(false);
-  const [lastPanPoint, setLastPanPoint] = useState({ x: 0, y: 0 });
-  const [analysisResults, setAnalysisResults] = useState<any>(null);
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+
+  // Fetch damage analysis data
+  const fetchDamageData = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/results/field-analysis', {
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      setAnalysisResults(data);
+    } catch (err) {
+      console.error('Error fetching damage data:', err);
+      setError(err instanceof Error ? err.message : 'Veri alınırken hata oluştu');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    fetchDamageData();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // Simulate analysis
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setAnalysisResults({
-        destructionPercentage: 35.7,
-        affectedAreas: 847,
-        totalArea: 2370,
-        changedPixels: 1256789,
-        majorChanges: [
-          { area: 'Merkez İş Bölgesi', destruction: 78.3, coordinates: [36.147, 36.206] },
-          { area: 'Konut Bölgesi A', destruction: 45.2, coordinates: [36.155, 36.198] },
-          { area: 'Sanayi Bölgesi', destruction: 23.1, coordinates: [36.162, 36.215] },
-        ]
-      });
-    }, 3000);
+    // Simulate analysis process
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await fetchDamageData();
+    setIsAnalyzing(false);
   };
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (isSplitDragging) return; // Don't pan when dragging split
-    setIsDragging(true);
-    setLastPanPoint({ x: e.clientX, y: e.clientY });
-  }, [isSplitDragging]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (isSplitDragging && containerRef.current) {
-      // Handle split line dragging
-      const rect = containerRef.current.getBoundingClientRect();
-      const newPosition = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-      setSplitPosition(newPosition);
-      return;
-    }
-
-    if (!isDragging) return;
+  const exportResults = () => {
+    if (!analysisResults) return;
     
-    const deltaX = e.clientX - lastPanPoint.x;
-    const deltaY = e.clientY - lastPanPoint.y;
-    
-    setPan(prev => ({
-      x: prev.x + deltaX / zoom,
-      y: prev.y + deltaY / zoom
-    }));
-    
-    setLastPanPoint({ x: e.clientX, y: e.clientY });
-  }, [isDragging, isSplitDragging, lastPanPoint, zoom]);
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-    setIsSplitDragging(false);
-  }, []);
-
-  const handleSplitMouseDown = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsSplitDragging(true);
-  }, []);
-
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-    setZoom(prev => Math.max(0.5, Math.min(3, prev * zoomFactor)));
-  }, []);
-
-  const resetView = () => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
+    const dataStr = JSON.stringify(analysisResults, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `hatay_damage_analysis_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
+
+  const getDamageStats = () => {
+    if (!analysisResults) return null;
+    
+    const stats = analysisResults.metadata.field_statistics.damage_distribution;
+    const total = analysisResults.metadata.total_fields;
+    
+    return {
+      total,
+      catastrophic: stats.catastrophic || 0,
+      severe: stats.severe || 0,
+      moderate: stats.moderate || 0,
+      minimal: stats.minimal || 0,
+    };
+  };
+
+  const stats = getDamageStats();
 
   return (
-    <>
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: #3B82F6;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          border: 2px solid white;
-        }
-        .slider::-moz-range-thumb {
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: #3B82F6;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          border: 2px solid white;
-        }
-      `}</style>
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <button
-                onClick={() => router.back()}
-                className="mr-4 p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Uydu Görüntü Karşılaştırması</h1>
+          <p className="text-gray-600">
+            Yapay zeka destekli uydu görüntü analizi ile Hatay bölgesindeki hasar tespiti
+          </p>
+        </div>
+
+        {/* Control Panel */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={startAnalysis}
+                disabled={isAnalyzing}
+                className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
+                <span className={`text-lg ${isAnalyzing ? 'animate-spin' : ''}`}>
+                  {isAnalyzing ? '🔄' : '▶️'}
+                </span>
+                <span>{isAnalyzing ? 'Analiz Ediliyor...' : 'Analizi Başlat'}</span>
               </button>
-              <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                Uydu Görüntüsü Karşılaştırma Analizi
-              </h1>
-            </div>
-            
-            <button
-              onClick={startAnalysis}
-              disabled={isAnalyzing}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isAnalyzing ? 'Analiz Yapılıyor...' : 'Analizi Başlat'}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          
-          {/* Analysis Description */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <div className="flex items-center mb-3">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-3">
-                  Görüntü Analizi
-                </span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                  Hasar Değerlendirme
-                </span>
-              </div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">Analiz Hakkında</h2>
-              <p className="text-gray-600">
-                Bu analiz, 2015 ve 2023 yıllarına ait uydu görüntülerini karşılaştırarak bölgedeki değişimleri tespit eder. 
-                Deprem hasarı, yapısal değişiklikler ve arazi kullanım farklılıkları detaylı olarak analiz edilir.
-              </p>
-            </div>
-          </div>
-
-          {/* View Controls */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Görünüm Kontrolleri</h2>
               
-              {/* View Mode Selection */}
-              <div className="flex flex-wrap gap-4 mb-4">
-                <button
-                  onClick={() => setViewMode('overlay')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium ${
-                    viewMode === 'overlay'
-                      ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  Üst Üste Bindirme
-                </button>
-                <button
-                  onClick={() => setViewMode('split')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium ${
-                    viewMode === 'split'
-                      ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  Bölünmüş Görünüm
-                </button>
-                <button
-                  onClick={() => setViewMode('sideBySide')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium ${
-                    viewMode === 'sideBySide'
-                      ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  Yan Yana
-                </button>
-              </div>
-
-              {/* Overlay Controls */}
-              {viewMode === 'overlay' && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Görüntü Şeffaflığı (2023 üstte)
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-sm text-gray-600">2015</span>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={overlayOpacity}
-                      onChange={(e) => setOverlayOpacity(parseInt(e.target.value))}
-                      className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <span className="text-sm text-gray-600">2023</span>
-                  </div>
-                  <div className="text-center text-sm text-gray-500 mt-1">
-                    {overlayOpacity}% 2023 Görünürlük
-                  </div>
-                </div>
-              )}
-
-              {/* Split Controls */}
-              {viewMode === 'split' && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bölünme Pozisyonu
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-sm text-gray-600">2015</span>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={splitPosition}
-                      onChange={(e) => setSplitPosition(parseInt(e.target.value))}
-                      className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${splitPosition}%, #e5e7eb ${splitPosition}%, #e5e7eb 100%)`
-                      }}
-                    />
-                    <span className="text-sm text-gray-600">2023</span>
-                  </div>
-                  <div className="text-center text-sm text-gray-500 mt-1">
-                    Bölünme: {splitPosition}%
-                  </div>
-                </div>
-              )}
-
-              {/* Zoom and Pan Controls */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => setZoom(prev => Math.max(0.5, prev * 0.8))}
-                    className="p-2 bg-gray-100 hover:bg-gray-200 rounded-md"
-                  >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                    </svg>
-                  </button>
-                  <span className="text-sm font-medium min-w-[60px] text-center">
-                    {Math.round(zoom * 100)}%
-                  </span>
-                  <button
-                    onClick={() => setZoom(prev => Math.min(3, prev * 1.25))}
-                    className="p-2 bg-gray-100 hover:bg-gray-200 rounded-md"
-                  >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
-                </div>
-                <button
-                  onClick={resetView}
-                  className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm"
-                >
-                  Sıfırla
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Image Comparison Viewer */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Görüntü Karşılaştırma</h2>
-              
-              <div 
-                ref={containerRef}
-                className="relative w-full h-[600px] border border-gray-300 rounded-lg overflow-hidden bg-gray-100"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-                onWheel={handleWheel}
-                style={{ 
-                  cursor: isSplitDragging ? 'col-resize' : 
-                          isDragging ? 'grabbing' : 
-                          viewMode === 'split' ? 'grab' : 'grab'
-                }}
+              <button
+                onClick={fetchDamageData}
+                disabled={isLoading}
+                className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {/* Side by Side View */}
-                {viewMode === 'sideBySide' && (
-                  <div className="flex h-full">
-                    <div className="w-1/2 relative border-r border-gray-300">
-                      <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm z-10">
-                        2015
-                      </div>
-                      <div 
-                        className="w-full h-full relative"
-                        style={{
-                          transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                          transformOrigin: 'center center'
-                        }}
-                      >
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2015.jpg"
-                          alt="2015 Satellite Image"
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-1/2 relative">
-                      <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm z-10">
-                        2023
-                      </div>
-                      <div 
-                        className="w-full h-full relative"
-                        style={{
-                          transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                          transformOrigin: 'center center'
-                        }}
-                      >
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2023.jpg"
-                          alt="2023 Satellite Image"
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <span className={`text-lg ${isLoading ? 'animate-spin' : ''}`}>🔄</span>
+                <span>Verileri Yenile</span>
+              </button>
+            </div>
 
-                {/* Overlay View */}
-                {viewMode === 'overlay' && (
-                  <>
-                    <div 
-                      className="absolute inset-0"
-                      style={{
-                        transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="relative w-full h-full">
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2015.jpg"
-                          alt="2015 Satellite Image"
-                          fill
-                          priority
-                          sizes="100vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                    <div 
-                      className="absolute inset-0"
-                      style={{
-                        opacity: overlayOpacity / 100,
-                        transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="relative w-full h-full">
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2023.jpg"
-                          alt="2023 Satellite Image"
-                          fill
-                          sizes="100vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm z-10">
-                      2015 + 2023 Bindirme
-                    </div>
-                  </>
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-600">
+                {analysisResults && (
+                  <>Analiz Tarihi: {new Date(analysisResults.metadata.analysis_timestamp).toLocaleString('tr-TR')}</>
                 )}
-
-                {/* Split View */}
-                {viewMode === 'split' && (
-                  <>
-                    <div 
-                      className="absolute inset-0"
-                      style={{
-                        transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="relative w-full h-full">
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2015.jpg"
-                          alt="2015 Satellite Image"
-                          fill
-                          priority
-                          sizes="100vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                    <div 
-                      className="absolute inset-0"
-                      style={{
-                        clipPath: `polygon(${splitPosition}% 0%, 100% 0%, 100% 100%, ${splitPosition}% 100%)`,
-                        transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                        transformOrigin: 'center center'
-                      }}
-                    >
-                      <div className="relative w-full h-full">
-                        <Image
-                          src="/images/HATAY-MERKEZ-2-2023.jpg"
-                          alt="2023 Satellite Image"
-                          fill
-                          sizes="100vw"
-                          style={{ objectFit: 'cover' }}
-                          className="pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                    
-                    {/* Split Line */}
-                    <div 
-                      className="absolute top-0 bottom-0 w-1 bg-white shadow-lg z-20 cursor-col-resize hover:bg-blue-300 transition-colors"
-                      style={{ left: `${splitPosition}%`, marginLeft: '-2px' }}
-                      onMouseDown={handleSplitMouseDown}
-                    >
-                      <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 bg-white rounded-full shadow-lg border-2 border-blue-500 flex items-center justify-center hover:border-blue-600">
-                        <svg className="h-3 w-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm z-10">
-                      2015
-                    </div>
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm z-10">
-                      2023
-                    </div>
-                  </>
-                )}
-
-                {/* Navigation hint */}
-                <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
-                  Sürükle: Hareket | Tekerlek: Yakınlaştır
-                </div>
               </div>
+              <button
+                onClick={exportResults}
+                disabled={!analysisResults}
+                className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>📥</span>
+                <span>Sonuçları İndir</span>
+              </button>
             </div>
           </div>
 
-          {/* Analysis Results */}
-          {analysisResults && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-              {/* Statistics */}
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Değişim İstatistikleri</h3>
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Statistics Panel */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Analiz İstatistikleri</h3>
+              
+              {stats ? (
                 <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Hasar Oranı:</span>
-                    <span className="font-bold text-red-600">{analysisResults.destructionPercentage}%</span>
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+                    <div className="text-sm text-gray-600">Toplam Alan</div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Etkilenen Alan:</span>
-                    <span className="font-semibold">{analysisResults.affectedAreas} hektar</span>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-red-900"></div>
+                        <span className="text-sm">Felaket</span>
+                      </div>
+                      <span className="font-semibold">{stats.catastrophic}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <span className="text-sm">Şiddetli</span>
+                      </div>
+                      <span className="font-semibold">{stats.severe}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <span className="text-sm">Orta</span>
+                      </div>
+                      <span className="font-semibold">{stats.moderate}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span className="text-sm">Minimal</span>
+                      </div>
+                      <span className="font-semibold">{stats.minimal}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Toplam Alan:</span>
-                    <span className="font-semibold">{analysisResults.totalArea} hektar</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Değişen Piksel:</span>
-                    <span className="font-semibold">{analysisResults.changedPixels.toLocaleString()}</span>
+                  
+                  {/* Damage percentage */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <div className="text-sm text-gray-600 mb-2">Hasar Dağılımı</div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Felaket</span>
+                        <span>{((stats.catastrophic / stats.total) * 100).toFixed(1)}%</span>
+                      </div>
+                      {stats.severe > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span>Şiddetli</span>
+                          <span>{((stats.severe / stats.total) * 100).toFixed(1)}%</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Analiz sonuçları yükleniyor...</p>
+                </div>
+              )}
+            </div>
 
-              {/* Major Changes */}
-              <div className="bg-white shadow rounded-lg p-6 lg:col-span-2">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Kritik Değişim Alanları</h3>
-                <div className="space-y-3">
-                  {analysisResults.majorChanges.map((change: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <div className="font-medium text-gray-900">{change.area}</div>
-                        <div className="text-sm text-gray-500">
-                          Koordinat: {change.coordinates[0]}, {change.coordinates[1]}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className={`text-lg font-bold ${
-                          change.destruction > 60 ? 'text-red-600' :
-                          change.destruction > 30 ? 'text-orange-600' :
-                          'text-yellow-600'
+            {/* Analysis Method Info */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Analiz Yöntemi</h3>
+              {analysisResults && (
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium">Yöntem:</span> 
+                    <span className="ml-2">{analysisResults.metadata.analysis_method}</span>
+                  </div>
+                  <div className="pt-3 border-t border-gray-200">
+                    <div className="font-medium mb-2">Hasar Eşikleri:</div>
+                    <div className="space-y-1 text-xs">
+                      <div>Minimal: {analysisResults.metadata.damage_thresholds.minimal}</div>
+                      <div>Orta: {analysisResults.metadata.damage_thresholds.moderate}</div>
+                      <div>Şiddetli: {analysisResults.metadata.damage_thresholds.severe}</div>
+                      <div>Felaket: {analysisResults.metadata.damage_thresholds.catastrophic}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Map Panel */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Hasar Haritası</h3>
+              
+              {isLoading ? (
+                <div className="flex items-center justify-center h-[500px] bg-gray-100 rounded-lg">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-gray-600">Analiz verileri yükleniyor...</p>
+                  </div>
+                </div>
+              ) : analysisResults ? (
+                <DamageReportMap
+
+                />
+              ) : (
+                <div className="flex items-center justify-center h-[500px] bg-gray-100 rounded-lg">
+                  <p className="text-gray-600">Analiz sonuçları bulunamadı</p>
+                </div>
+              )}
+            </div>
+
+            {/* Field Details */}
+            {selectedField && (
+              <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Seçili Alan Detayları - #{selectedField.field_id}
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Hasar Değerlendirmesi</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Hasar Seviyesi:</span>
+                        <span className={`font-medium ${
+                          selectedField.damage_assessment.damage_level === 'catastrophic' ? 'text-red-900' :
+                          selectedField.damage_assessment.damage_level === 'severe' ? 'text-red-500' :
+                          selectedField.damage_assessment.damage_level === 'moderate' ? 'text-yellow-500' :
+                          'text-green-500'
                         }`}>
-                          {change.destruction}%
-                        </div>
-                        <div className="text-sm text-gray-500">hasar</div>
+                          {selectedField.damage_assessment.damage_level === 'catastrophic' ? 'Felaket' :
+                           selectedField.damage_assessment.damage_level === 'severe' ? 'Şiddetli' :
+                           selectedField.damage_assessment.damage_level === 'moderate' ? 'Orta' :
+                           'Minimal'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Değişim Oranı:</span>
+                        <span>{selectedField.damage_assessment.change_percentage.toFixed(1)}%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Hasar Skoru:</span>
+                        <span>{selectedField.damage_assessment.severity_score.toFixed(1)}/10</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Güven Düzeyi:</span>
+                        <span>{selectedField.damage_assessment.confidence_level.toFixed(1)}%</span>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Geometrik Özellikler</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Kompaktlık:</span>
+                        <span>{selectedField.geometry.compactness.toFixed(2)}</span>
+                      </div>
+                      {selectedField.geometry.geographic_coordinates && (
+                        <>
+                          <div className="flex justify-between">
+                            <span>Enlem:</span>
+                            <span>{selectedField.geometry.geographic_coordinates.centroid[1].toFixed(6)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Boylam:</span>
+                            <span>{selectedField.geometry.geographic_coordinates.centroid[0].toFixed(6)}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
+            )}
+            <div>
+              <SatelliteDamageCompare></SatelliteDamageCompare>
             </div>
-          )}
-
-          {/* Analysis Status */}
-          {isAnalyzing && (
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-                  <span className="text-blue-600">Uydu görüntüleri analiz ediliyor...</span>
-                </div>
-              </div>
-            </div>
-          )}
-
+          </div>
         </div>
-      </main>
+      </div>
     </div>
-        <Image
-          src="/images/HATAY-MERKEZ-2-2023.jpg"
-          alt="2023 Satellite Image"
-          fill
-          sizes="100vw"
-          style={{ objectFit: 'cover' }}
-          className="pointer-events-none"
-        />
-    </>
   );
 }
