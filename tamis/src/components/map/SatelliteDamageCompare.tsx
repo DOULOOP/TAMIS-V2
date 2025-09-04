@@ -64,7 +64,7 @@ export default function SatelliteDamageCompare() {
 			});
 			const layer2023 = new ImageLayer({
 				source: new ImageStatic({
-					url: encodePublicPath("HATAY-MERKEZ-2-2023.jpg"),
+					url: encodePublicPath("HATAY-MERKEZ-2-2015.jpg"),
 					imageExtent: extent3857,
 					projection: "EPSG:3857",
 				}),
@@ -146,7 +146,7 @@ export default function SatelliteDamageCompare() {
 					new TileLayer({ source: new OSM() }),
 					new ImageLayer({
 						source: new ImageStatic({
-							url: encodePublicPath("HATAY-MERKEZ-2-2023.jpg"),
+							url: encodePublicPath("HATAY-MERKEZ-2-2015.jpg"),
 							imageExtent: extent3857,
 							projection: "EPSG:3857",
 						}),
