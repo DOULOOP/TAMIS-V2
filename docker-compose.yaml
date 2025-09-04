@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5432:5678"
     networks:
       - tamis-network
     healthcheck:
@@ -26,7 +26,7 @@ services:
       dockerfile: Dockerfile
     container_name: tamis-web
     ports:
-      - "3000:3000"
+      - "3000:3500"
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://tamis_user:tamis_password@postgres:5432/tamis
@@ -54,7 +54,7 @@ services:
       dockerfile: Dockerfile
     container_name: tamis-api
     ports:
-      - "8000:8000"
+      - "8000:8500"
     environment:
       - PYTHONPATH=/app
     networks:

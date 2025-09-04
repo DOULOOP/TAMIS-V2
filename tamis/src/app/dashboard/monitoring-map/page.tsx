@@ -154,45 +154,36 @@ export default function MonitoringMapPage() {
 
   return (
     <div className="h-screen bg-gray-900 text-white overflow-hidden">
-      {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => router.back()}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+      {/* Header Stats */}
+      <header className="bg-gray-800 border-b border-gray-700 px-4 py-3">
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold">TAMIS Monitoring Haritası</h1>
             <p className="text-sm text-gray-400">Tüm sistem analitikleri - Gerçek zamanlı izleme</p>
           </div>
-        </div>
-        
-        {/* Header Stats */}
-        <div className="flex items-center space-x-6 text-sm">
-          {systemStats && (
-            <>
-              <div className="text-center">
-                <div className="text-xs text-gray-400">Toplam Nüfus</div>
-                <div className="font-bold text-blue-400">{systemStats.population.totalPopulation.toLocaleString()}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xs text-gray-400">Güvenli Bölge</div>
-                <div className="font-bold text-green-400">{systemStats.safeZones.totalSafeZones}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xs text-gray-400">Aktif Rotalar</div>
-                <div className="font-bold text-yellow-400">{systemStats.aidRoutes.activeRoutes}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xs text-gray-400">Kritik Uyarılar</div>
-                <div className="font-bold text-red-400">{criticalAlerts.length}</div>
-              </div>
-            </>
-          )}
+          
+          <div className="flex items-center space-x-6 text-sm">
+            {systemStats && (
+              <>
+                <div className="text-center">
+                  <div className="text-xs text-gray-400">Toplam Nüfus</div>
+                  <div className="font-bold text-blue-400">{systemStats.population.totalPopulation.toLocaleString()}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-400">Güvenli Bölge</div>
+                  <div className="font-bold text-green-400">{systemStats.safeZones.totalSafeZones}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-400">Aktif Rotalar</div>
+                  <div className="font-bold text-yellow-400">{systemStats.aidRoutes.activeRoutes}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-400">Kritik Uyarılar</div>
+                  <div className="font-bold text-red-400">{criticalAlerts.length}</div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
