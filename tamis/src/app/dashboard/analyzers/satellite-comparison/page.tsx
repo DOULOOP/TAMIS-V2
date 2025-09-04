@@ -78,7 +78,7 @@ export default function SatelliteComparisonPage() {
     setError(null);
     
     try {
-      const response = await fetch('http://127.0.0.1:7887/api/results/field-analysis', {
+      const response = await fetch('https://tamis-v2.onrender.com/api/results/field-analysis', {
         headers: {
           'Accept': 'application/json',
         },

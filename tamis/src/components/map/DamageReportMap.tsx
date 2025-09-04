@@ -216,7 +216,7 @@ function MapCanvas() {
 
   useEffect(() => {
     // Load field data from JSON file
-    fetch('http://127.0.0.1:7887/api/results/field-analysis')
+    fetch('https://tamis-v2.onrender.com/api/results/field-analysis')
       .then(response => response.json())
       .then(data => {
         setFields(data.fields || []);
