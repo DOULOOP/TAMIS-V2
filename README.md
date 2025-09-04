@@ -1,6 +1,109 @@
-# TAMIS - Türkiye Deprem Analiz ve İzleme Sistemi
+**TAMİS Raporu**
 
-TAMIS, uydu görüntülerinin işlenmesi ve hasar değerlendirmesi için Python tabanlı jeouzamsal analiz ile Next.js frontend'ini birleştiren kapsamlı bir deprem hasar değerlendirme sistemidir.
+## 1. Proje Özeti 🚀
+
+TAMİS (Tehlike Alanı Müdahale İzleme Sistemi), afet anlarında hızlı,
+güvenilir ve sürdürülebilir karar desteği sağlamak amacıyla geliştirilen
+web tabanlı bir kriz yönetim platformudur. Sistem; deprem, sel, yangın
+ve diğer afetlerde yıkım yoğunluğu, yol durumu, nüfus dağılımı, güvenli
+alan kapasitesi ve kaynak yönetimini entegre ederek gerçek zamanlı
+olarak analiz eder. Yapay zekâ destekli görüntü işleme, resmi
+kurum API'leri ile veri entegrasyonu ve AAIA modem tabanlı offline
+iletişim desteği sayesinde hem kriz merkezlerine hem de saha ekiplerine
+kesintisiz ve doğru bilgi akışı sağlar.
+
+## 2. Çözüm Ürettiği Sorun / İhtiyaç ❗
+
+Afet sonrası mevcut sistemlerde gözlenen en kritik sorunlar şunlardır:
+• Farklı veri kaynaklarının dağınık olması ve ortak bir platformda
+birleşmemesi.
+• Yolların ve güvenli alanların anlık durumlarının izlenememesi.
+• İnternet ve enerji kesintilerinde saha--merkez iletişiminin kopması.
+• Yanlış veya gecikmeli kararlar nedeniyle kaynakların verimsiz
+kullanılması.
+
+TAMİS, bu sorunlara çözüm olarak; çok katmanlı verilerin (uydu, İHA,
+AFAD, belediye, meteoroloji, saha bildirimi) tek sistemde birleşmesini,
+offline senaryolarda dahi iletişimin sürdürülmesini ve akıllı
+algoritmalarla en hızlı ve güvenli müdahalenin yapılmasını mümkün kılar.
+
+## 3. Yerlilik ve Özgünlük Tarafı 🇹🇷
+
+TAMİS, Türkiye'nin afet yönetimi ihtiyaçlarına özel geliştirilmiş, yerli
+ve özgün bir sistemdir.
+
+• AAIA modem entegrasyonu sayesinde, saha ekipleri internet bağlantısına
+ihtiyaç duymadan ve düşük enerji tüketimiyle veri alışverişi yapabilir.
+• **Yapay zekâ tabanlı görüntü işleme** ile bina hasarı, yol engelleri
+ve kalabalık analizi otomatik yapılır.
+• **Dijital şehir ikizi + MAKS + ATLAS entegrasyonu** ile bina bazında
+nüfus yoğunluğu ve hasar durumu eşleştirilir.
+• **Multi-afet uyumluluğu** sayesinde deprem, sel, yangın, heyelan gibi
+farklı senaryolara modüler çözümler sunar.\
+Bu özellikler sayesinde TAMİS, hem milli hem de sürdürülebilir bir afet
+yönetim ekosistemi sunar.
+
+## 4. Yöntem ve Hedef Kitle 🎯
+
+**Yöntem:**
+
+1. **Veri Toplama:** Uydu, İHA/drone görüntüleri, AAIA modem verileri,
+resmi kurum API'leri, saha bildirimleri.
+2. **Veri İşleme:** CNN ( Convolutional Neural Network) tabanlı yapay
+zekâ ile hasar analizi, yol deformasyon tespiti, nüfus yoğunluğu
+hesaplama.
+3. **Entegrasyon:** PostgreSQL + PostGIS üzerinde mekânsal veri tabanı
+ile tüm verilerin birleştirilmesi.
+4. **Analiz ve Karar Destek:** Optimizasyon algoritmaları ile kaynak
+tahsisi, rota hesaplama, güvenli alan yönlendirmesi.
+5. **Görselleştirme ve Dağıtım:** Web tabanlı kriz merkezi paneli ve
+mobil uygulamalar üzerinden çok katmanlı harita gösterimi; offline
+senaryoda AAIA modem ağı üzerinden JSON veri paylaşımı.
+
+**Hedef Kitle:**
+
+• AFAD ve İçişleri Bakanlığı birimleri,
+• Valilikler, belediyeler ve kriz yönetim merkezleri,
+• Arama--kurtarma ekipleri, sağlık ekipleri ve lojistik birimler,
+• Uzun vadede vatandaş uygulamaları ve sigorta sektörüne entegrasyon.
+
+## 5. Yenilik ve Ticarileşme Potansiyeli 💡
+
+**Yenilik:**
+
+• Offline yerel saha iletişimi (AAIA modem entegrasyonu).
+• Yapay zekâ tabanlı otomatik hasar ve yol analizi.
+• Çok katmanlı (nüfus, yol, güvenli alan, kaynak) entegrasyonun tek
+platformda sunulması.
+• Dinamik rota hesaplama ve alternatif güzergâh önerileri.
+• Kullanıcı dostu, harita tabanlı ve gerçek zamanlı dashboard.
+
+**Ticarileşme Potansiyeli:**
+• Türkiye'de afet riski yüksek tüm şehirlerde kullanılabilir, kamu
+kurumlarına lisanslanabilir.
+• Belediyeler, AFAD ve valilikler için entegre çözümler sunarak ulusal
+ölçekte yaygınlaşabilir.
+• Afet yönetimi alanında **uluslararası pazarlara
+açılabilecek** rekabetçi bir ürün olma potansiyeline sahiptir.
+• Sigorta, şehir planlama ve afet risk haritalaması sektörleri için
+genişletilebilir modüller eklenerek sürdürülebilir gelir modeli
+oluşturulabilir.
+
+
+
+## 6. SWOT Analizi 📊
+
+| **Strengths (Güçlü Yönler)** 💪 | **Weaknesses (Zayıf Yönler)** ⚠️ |
+|---------------------------------|----------------------------------|
+| Yerli ve özgün çözüm            | İlk yatırım maliyetleri yüksek   |
+| AAIA modem entegrasyonu         | Eğitim ve adaptasyon süreci uzun |
+| Yapay zekâ tabanlı analiz        | Offline kapasite sınırlı olabilir|
+
+| **Opportunities (Fırsatlar)** 🌍 | **Threats (Tehditler)** 🔥 |
+|---------------------------------|-----------------------------|
+| Türkiye’de yüksek afet riski    | Yeni rakip çözümler          |
+| Kamu kurumlarıyla entegrasyon   | Yasal ve bürokratik engeller |
+| Uluslararası pazara açılma      | Doğal afetlerin öngörülemezliği|
 
 ## 🚀 Hızlı Başlangıç Seçenekleri
 
@@ -37,8 +140,8 @@ Tercih ettiğiniz kurulum yöntemini seçin:
 
 3. **Servislere erişin**:
    - **Web Uygulaması**: http://localhost:3000
-   - **API Dokümantasyonu**: http://localhost:7887/docs
-   - **API Durum Kontrolü**: http://localhost:7887/api/health
+   - **API Dokümantasyonu**: http://localhost:8000/docs
+   - **API Durum Kontrolü**: http://localhost:8000/api/health
 
 ### Docker Servisleri
 
@@ -52,7 +155,7 @@ Kurulum üç konteynerli servisi içerir:
 - **Veritabanı**: Prisma ORM ile PostgreSQL
 
 #### 🐍 Python API Sunucusu (`tamis-api`)
-- **Port**: 7887
+- **Port**: 8000
 - **Framework**: Python 3.11 ile FastAPI
 - **Özellikler**: 
   - Uydu görüntüsü analizi
@@ -101,7 +204,7 @@ NEXTAUTH_SECRET="your-super-secret-key-here"
 JWT_SECRET="tamis-super-secret-jwt-key-2025-change-in-production"
 
 # API Yapılandırması
-NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
+NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
 
 # Geliştirme
 NODE_ENV="development"
@@ -206,7 +309,7 @@ conda install -c conda-forge gdal geopandas
    python api_server.py
 
    # Veya uvicorn'u doğrudan kullanarak
-   uvicorn api_server:app --host 0.0.0.0 --port 7887 --reload
+   uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
    ```
 
 ### Veritabanı Kurulumu (PostgreSQL)
@@ -306,7 +409,7 @@ NEXTAUTH_SECRET="your-super-secret-key"
 JWT_SECRET="your-jwt-secret"
 
 # API Yapılandırması
-NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
+NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
 
 # Geliştirme ayarları
 NODE_ENV="development"
@@ -316,7 +419,7 @@ SKIP_ENV_VALIDATION="false"
 #### Python API (Ortam)
 Python API ortam değişkenlerini kullanır veya FastAPI ayarları aracılığıyla yapılandırılabilir. Ana yapılandırmalar:
 
-- **Host/Port**: Varsayılan `0.0.0.0:7887`
+- **Host/Port**: Varsayılan `0.0.0.0:8000`
 - **Veri Dizini**: `1c__Hatay_Enkaz_Bina_Etiketleme/` (uydu görüntüleri için)
 - **Çıktı Dizini**: `output/` (oluşturulan analiz için)
 
@@ -352,9 +455,9 @@ Python API ortam değişkenlerini kullanır veya FastAPI ayarları aracılığı
 
 API sunucusu çalıştığında şunlara erişebilirsiniz:
 
-- **Swagger UI**: http://localhost:7887/docs
-- **ReDoc**: http://localhost:7887/redoc
-- **OpenAPI JSON**: http://localhost:7887/openapi.json
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
 
 ### Ana Endpoint'ler
 
