@@ -15,11 +15,11 @@ kesintisiz ve doğru bilgi akışı sağlar.
 ## 2. Çözüm Ürettiği Sorun / İhtiyaç ❗
 
 Afet sonrası mevcut sistemlerde gözlenen en kritik sorunlar şunlardır:
-• Farklı veri kaynaklarının dağınık olması ve ortak bir platformda
+- Farklı veri kaynaklarının dağınık olması ve ortak bir platformda
 birleşmemesi.
-• Yolların ve güvenli alanların anlık durumlarının izlenememesi.
-• İnternet ve enerji kesintilerinde saha--merkez iletişiminin kopması.
-• Yanlış veya gecikmeli kararlar nedeniyle kaynakların verimsiz
+- Yolların ve güvenli alanların anlık durumlarının izlenememesi.
+- İnternet ve enerji kesintilerinde saha--merkez iletişiminin kopması.
+- Yanlış veya gecikmeli kararlar nedeniyle kaynakların verimsiz
 kullanılması.
 
 TAMİS, bu sorunlara çözüm olarak; çok katmanlı verilerin (uydu, İHA,
@@ -32,13 +32,13 @@ algoritmalarla en hızlı ve güvenli müdahalenin yapılmasını mümkün kıla
 TAMİS, Türkiye'nin afet yönetimi ihtiyaçlarına özel geliştirilmiş, yerli
 ve özgün bir sistemdir.
 
-• AAIA modem entegrasyonu sayesinde, saha ekipleri internet bağlantısına
+- AAIA modem entegrasyonu sayesinde, saha ekipleri internet bağlantısına
 ihtiyaç duymadan ve düşük enerji tüketimiyle veri alışverişi yapabilir.
-• **Yapay zekâ tabanlı görüntü işleme** ile bina hasarı, yol engelleri
+- **Yapay zekâ tabanlı görüntü işleme** ile bina hasarı, yol engelleri
 ve kalabalık analizi otomatik yapılır.
-• **Dijital şehir ikizi + MAKS + ATLAS entegrasyonu** ile bina bazında
+- **Dijital şehir ikizi + MAKS + ATLAS entegrasyonu** ile bina bazında
 nüfus yoğunluğu ve hasar durumu eşleştirilir.
-• **Multi-afet uyumluluğu** sayesinde deprem, sel, yangın, heyelan gibi
+- **Multi-afet uyumluluğu** sayesinde deprem, sel, yangın, heyelan gibi
 farklı senaryolara modüler çözümler sunar.\
 Bu özellikler sayesinde TAMİS, hem milli hem de sürdürülebilir bir afet
 yönetim ekosistemi sunar.
@@ -62,30 +62,30 @@ senaryoda AAIA modem ağı üzerinden JSON veri paylaşımı.
 
 **Hedef Kitle:**
 
-• AFAD ve İçişleri Bakanlığı birimleri,
-• Valilikler, belediyeler ve kriz yönetim merkezleri,
-• Arama--kurtarma ekipleri, sağlık ekipleri ve lojistik birimler,
-• Uzun vadede vatandaş uygulamaları ve sigorta sektörüne entegrasyon.
+- AFAD ve İçişleri Bakanlığı birimleri,
+- Valilikler, belediyeler ve kriz yönetim merkezleri,
+- Arama--kurtarma ekipleri, sağlık ekipleri ve lojistik birimler,
+- Uzun vadede vatandaş uygulamaları ve sigorta sektörüne entegrasyon.
 
 ## 5. Yenilik ve Ticarileşme Potansiyeli 💡
 
 **Yenilik:**
 
-• Offline yerel saha iletişimi (AAIA modem entegrasyonu).
-• Yapay zekâ tabanlı otomatik hasar ve yol analizi.
-• Çok katmanlı (nüfus, yol, güvenli alan, kaynak) entegrasyonun tek
+- Offline yerel saha iletişimi (AAIA modem entegrasyonu).
+- Yapay zekâ tabanlı otomatik hasar ve yol analizi.
+- Çok katmanlı (nüfus, yol, güvenli alan, kaynak) entegrasyonun tek
 platformda sunulması.
-• Dinamik rota hesaplama ve alternatif güzergâh önerileri.
-• Kullanıcı dostu, harita tabanlı ve gerçek zamanlı dashboard.
+- Dinamik rota hesaplama ve alternatif güzergâh önerileri.
+- Kullanıcı dostu, harita tabanlı ve gerçek zamanlı dashboard.
 
 **Ticarileşme Potansiyeli:**
-• Türkiye'de afet riski yüksek tüm şehirlerde kullanılabilir, kamu
+- Türkiye'de afet riski yüksek tüm şehirlerde kullanılabilir, kamu
 kurumlarına lisanslanabilir.
-• Belediyeler, AFAD ve valilikler için entegre çözümler sunarak ulusal
+- Belediyeler, AFAD ve valilikler için entegre çözümler sunarak ulusal
 ölçekte yaygınlaşabilir.
-• Afet yönetimi alanında **uluslararası pazarlara
+- Afet yönetimi alanında **uluslararası pazarlara
 açılabilecek** rekabetçi bir ürün olma potansiyeline sahiptir.
-• Sigorta, şehir planlama ve afet risk haritalaması sektörleri için
+- Sigorta, şehir planlama ve afet risk haritalaması sektörleri için
 genişletilebilir modüller eklenerek sürdürülebilir gelir modeli
 oluşturulabilir.
 
