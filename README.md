@@ -135,8 +135,8 @@ oluşturulabilir.
 | **Opportunities (Fırsatlar)** 🌍 | **Threats (Tehditler)** 🔥 |
 |---------------------------------|-----------------------------|
 | Türkiye’de yüksek afet riski    | Yeni rakip çözümler          |
-| Kamu kurumlarıyla entegrasyon   | Yasal ve bürokratik engeller |
-| Uluslararası pazara açılma      | Doğal afetlerin öngörülemezliği|
+| Kamu kurumlarıyla entegrasyon   | Doğal afetlerin öngörülemezliği |
+| Uluslararası pazara açılma      | Öngörülemeyen yıkımlar |
 
 ## 🚀 Hızlı Başlangıç Seçenekleri
 
