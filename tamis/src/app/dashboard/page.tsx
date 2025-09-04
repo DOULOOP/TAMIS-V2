@@ -11,10 +11,182 @@ interface User {
   department?: string;
 }
 
+interface FieldUnit {
+  id: string;
+  name: string;
+  location: string;
+  status: 'active' | 'inactive' | 'reporting';
+  lastReport: string;
+  dataCount: number;
+  areasCovered: string[];
+  batteryLevel: number;
+  signalStrength: number;
+}
+
+interface AreaData {
+  areaId: string;
+  areaName: string;
+  coordinates: string;
+  currentOccupancy: number;
+  maxCapacity: number;
+  lastUpdated: string;
+  reportingUnits: string[];
+  dataPoints: number;
+  status: 'safe' | 'warning' | 'critical';
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  // Sample field units data
+  const fieldUnits: FieldUnit[] = [
+    {
+      id: 'unit-001',
+      name: 'Alfa Takımı',
+      location: 'Merkez Bölge A',
+      status: 'active',
+      lastReport: '2 dakika önce',
+      dataCount: 45,
+      areasCovered: ['Merkez İlkokulu', 'Atatürk Parkı'],
+      batteryLevel: 87,
+      signalStrength: 92
+    },
+    {
+      id: 'unit-002', 
+      name: 'Beta Takımı',
+      location: 'Kuzey Bölge B',
+      status: 'reporting',
+      lastReport: '5 dakika önce',
+      dataCount: 32,
+      areasCovered: ['Spor Stadyumu', 'Belediye Parkı'],
+      batteryLevel: 64,
+      signalStrength: 78
+    },
+    {
+      id: 'unit-003',
+      name: 'Gamma Takımı', 
+      location: 'Güney Bölge C',
+      status: 'active',
+      lastReport: '1 dakika önce',
+      dataCount: 28,
+      areasCovered: ['Cumhuriyet Meydanı'],
+      batteryLevel: 91,
+      signalStrength: 85
+    },
+    {
+      id: 'unit-004',
+      name: 'Delta Takımı',
+      location: 'Doğu Bölge D', 
+      status: 'inactive',
+      lastReport: '25 dakika önce',
+      dataCount: 15,
+      areasCovered: ['Sanayi Bölgesi'],
+      batteryLevel: 23,
+      signalStrength: 45
+    }
+  ];
+
+  // Sample area data
+  const areaData: AreaData[] = [
+    {
+      areaId: 'area-001',
+      areaName: 'Merkez İlkokulu Bahçesi',
+      coordinates: '36.147°N, 36.206°E',
+      currentOccupancy: 120,
+      maxCapacity: 500,
+      lastUpdated: '1 dakika önce',
+      reportingUnits: ['Alfa Takımı'],
+      dataPoints: 25,
+      status: 'safe'
+    },
+    {
+      areaId: 'area-002',
+      areaName: 'Atatürk Parkı',
+      coordinates: '36.154°N, 36.212°E', 
+      currentOccupancy: 450,
+      maxCapacity: 800,
+      lastUpdated: '2 dakika önce',
+      reportingUnits: ['Alfa Takımı'],
+      dataPoints: 20,
+      status: 'warning'
+    },
+    {
+      areaId: 'area-003',
+      areaName: 'Spor Stadyumu',
+      coordinates: '36.151°N, 36.204°E',
+      currentOccupancy: 1200,
+      maxCapacity: 2000,
+      lastUpdated: '5 dakika önce',
+      reportingUnits: ['Beta Takımı'],
+      dataPoints: 18,
+      status: 'warning'
+    },
+    {
+      areaId: 'area-004',
+      areaName: 'Cumhuriyet Meydanı',
+      coordinates: '36.159°N, 36.208°E',
+      currentOccupancy: 300,
+      maxCapacity: 1000,
+      lastUpdated: '1 dakika önce',
+      reportingUnits: ['Gamma Takımı'],
+      dataPoints: 15,
+      status: 'safe'
+    },
+    {
+      areaId: 'area-005',
+      areaName: 'Belediye Parkı',
+      coordinates: '36.145°N, 36.213°E',
+      currentOccupancy: 520,
+      maxCapacity: 600,
+      lastUpdated: '5 dakika önce',
+      reportingUnits: ['Beta Takımı'],
+      dataPoints: 14,
+      status: 'critical'
+    }
+  ];
+
+  // Get status colors and icons
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'text-green-500 bg-green-50 border-green-200';
+      case 'reporting': return 'text-blue-500 bg-blue-50 border-blue-200';
+      case 'inactive': return 'text-red-500 bg-red-50 border-red-200';
+      default: return 'text-gray-500 bg-gray-50 border-gray-200';
+    }
+  };
+
+  const getAreaStatusColor = (status: string) => {
+    switch (status) {
+      case 'safe': return 'text-green-600 bg-green-100';
+      case 'warning': return 'text-yellow-600 bg-yellow-100';
+      case 'critical': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const getBatteryColor = (level: number) => {
+    if (level > 60) return 'text-green-500';
+    if (level > 30) return 'text-yellow-500';
+    return 'text-red-500';
+  };
+
+  const getSignalColor = (strength: number) => {
+    if (strength > 70) return 'text-green-500';
+    if (strength > 40) return 'text-yellow-500';
+    return 'text-red-500';
+  };
+
+  const getOccupancyPercentage = (current: number, max: number) => {
+    return Math.round((current / max) * 100);
+  };
+
+  const getOccupancyColor = (percentage: number) => {
+    if (percentage < 50) return 'text-green-600';
+    if (percentage < 80) return 'text-yellow-600';
+    return 'text-red-600';
+  };
 
   useEffect(() => {
     // Check if user is logged in
@@ -261,14 +433,17 @@ export default function DashboardPage() {
                   </div>
                 </button>
 
-                <button className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left">
+                <button 
+                  onClick={() => router.push('/dashboard/monitoring-map')}
+                  className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left"
+                >
                   <div className="flex items-center">
                     <svg className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium">İzleme Haritası</div>
-                      <div className="text-sm text-green-200">Coğrafi izleme sistemi</div>
+                      <div className="font-medium">Monitoring Haritası</div>
+                      <div className="text-sm text-green-200">Tüm sistem analitikleri - Gerçek zamanlı</div>
                     </div>
                   </div>
                 </button>
@@ -448,6 +623,78 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Satellite Comparison Analysis - Full Width */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 mt-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center">
+                    <div className="h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                      <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-semibold text-blue-900">
+                        Uydu Görüntüsü Karşılaştırma Analizi
+                      </h4>
+                      <p className="text-blue-700 text-sm mt-1">
+                        2015 ve 2023 uydu görüntülerini karşılaştırarak deprem hasarını ve bölgesel değişimleri analiz eder.
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/dashboard/analyzers/satellite-comparison')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>Analiz Et</span>
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Hasar Oranı</div>
+                    <div className="text-xs text-blue-600">% Değişim</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Etkilenen Alan</div>
+                    <div className="text-xs text-blue-600">Hektar</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Kritik Değişim</div>
+                    <div className="text-xs text-blue-600">Bölge sayısı</div>
+                  </div>
+                  
+                  <div className="bg-white/60 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-900">-</div>
+                    <div className="text-sm text-blue-700 font-medium">Analiz Doğruluğu</div>
+                    <div className="text-xs text-blue-600">% Güvenilirlik</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-blue-600">
+                    Son güncellenme: Henüz analiz yapılmadı
+                  </div>
+                  <div className="flex space-x-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      Görüntü Analizi
+                    </span>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      Hasar Değerlendirme
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -473,6 +720,175 @@ export default function DashboardPage() {
                   Tüm Analizleri Başlat
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Field Unit Management Section */}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-800 flex items-center">
+              <span className="mr-2">📡</span>
+              Saha Birim Yönetimi
+            </h2>
+            <button
+              onClick={() => router.push('/dashboard/field-units')}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center"
+            >
+              <span className="mr-2">🗺️</span>
+              Haritada Görüntüle
+            </button>
+          </div>
+          
+          {/* Field Units Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+            {fieldUnits.map((unit) => (
+              <div key={unit.id} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-l-blue-500">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-gray-800">{unit.name}</h3>
+                  <span className={`px-2 py-1 rounded-full text-xs border ${getStatusColor(unit.status)}`}>
+                    {unit.status === 'active' ? 'Aktif' : 
+                     unit.status === 'reporting' ? 'Raporluyor' : 'Pasif'}
+                  </span>
+                </div>
+                
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-center">
+                    <span className="mr-2">📍</span>
+                    <span>{unit.location}</span>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <span className="mr-2">⏱️</span>
+                    <span>{unit.lastReport}</span>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <span className="mr-2">📊</span>
+                    <span>{unit.dataCount} veri noktası</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <div className="flex items-center">
+                      <span className={`mr-1 ${getBatteryColor(unit.batteryLevel)}`}>🔋</span>
+                      <span className="text-xs">{unit.batteryLevel}%</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className={`mr-1 ${getSignalColor(unit.signalStrength)}`}>📶</span>
+                      <span className="text-xs">{unit.signalStrength}%</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <span className="text-xs font-medium text-gray-500">Sorumluluk Alanları:</span>
+                    <div className="mt-1 space-x-1">
+                      {unit.areasCovered.map((area, index) => (
+                        <span key={index} className="inline-block bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                          {area}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Area Data Section */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <span className="mr-2">🗺️</span>
+              Alan Doluluk Oranları
+            </h3>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Alan Adı
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Konum
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Doluluk
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Kapasite
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Durum
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Raporlayan Birim
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Son Güncelleme
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {areaData.map((area) => {
+                    const occupancyPercentage = getOccupancyPercentage(area.currentOccupancy, area.maxCapacity);
+                    return (
+                      <tr key={area.areaId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{area.areaName}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{area.coordinates}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className={`text-sm font-medium ${getOccupancyColor(occupancyPercentage)}`}>
+                              {area.currentOccupancy} kişi
+                            </div>
+                            <div className="ml-2 text-xs text-gray-500">
+                              ({occupancyPercentage}%)
+                            </div>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div 
+                              className={`h-2 rounded-full ${
+                                occupancyPercentage < 50 ? 'bg-green-500' :
+                                occupancyPercentage < 80 ? 'bg-yellow-500' : 'bg-red-500'
+                              }`}
+                              style={{ width: `${Math.min(occupancyPercentage, 100)}%` }}
+                            ></div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{area.maxCapacity}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getAreaStatusColor(area.status)}`}>
+                            {area.status === 'safe' ? 'Güvenli' :
+                             area.status === 'warning' ? 'Uyarı' : 'Kritik'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-wrap gap-1">
+                            {area.reportingUnits.map((unit, index) => (
+                              <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                {unit}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">
+                            {area.lastUpdated}
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            {area.dataPoints} veri noktası
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

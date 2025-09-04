@@ -1,0 +1,178 @@
+{
+  "extraction_time": "2025-08-31T14:59:35.896970",
+  "data_directory": "1c__Hatay_Enkaz_Bina_Etiketleme",
+  "shapefile": {
+    "file_path": "1c__Hatay_Enkaz_Bina_Etiketleme\\HATAY MERKEZ-2 SINIR.shp",
+    "feature_count": 1,
+    "crs_original": "PROJCS[\"Transverse_Mercator\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS84\",6378137,298.257223563],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",36],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+    "columns": [
+      "NAME",
+      "LAYER",
+      "MAP_NAME",
+      "ÃEVRE",
+      "ÃEVRELENM",
+      "UZUNLUK",
+      "GENÄ°ÅLÄ°",
+      "CLOSED",
+      "BORDER_STY",
+      "BORDER_COL",
+      "BORDER_WID",
+      "FILL_STYLE",
+      "LABEL_POS",
+      "FONT_SIZE",
+      "FONT_COLOR",
+      "FONT_CHARS",
+      "geometry"
+    ],
+    "geometry_type": "Polygon",
+    "bounds_original": {
+      "minx": 512310.6030802054,
+      "miny": 4007846.059012334,
+      "maxx": 514816.88164442976,
+      "maxy": 4009841.640403369
+    },
+    "coordinates_wgs84": {
+      "center": {
+        "latitude": 36.20989855075209,
+        "longitude": 36.15083690421901
+      },
+      "bounds": {
+        "minx": 36.13688418237776,
+        "miny": 36.200888908023686,
+        "maxx": 36.16478962606026,
+        "maxy": 36.21890819348048
+      },
+      "southwest_corner": {
+        "latitude": 36.200888908023686,
+        "longitude": 36.13688418237776
+      },
+      "northeast_corner": {
+        "latitude": 36.21890819348048,
+        "longitude": 36.16478962606026
+      }
+    },
+    "area_sq_km": 5.001482863516353,
+    "attribute_sample": [
+      {
+        "NAME": "1",
+        "LAYER": "Unknown Area Type",
+        "MAP_NAME": "Kullanıcı Tarafından Oluşturulan Özellikler",
+        "ÃEVRE": "9 km",
+        "ÃEVRELENM": "500 ha",
+        "UZUNLUK": "3 km",
+        "GENÄ°ÅLÄ°": "2 km",
+        "CLOSED": "YES",
+        "BORDER_STY": "Solid",
+        "BORDER_COL": "RGB(0,0,0)",
+        "BORDER_WID": 1,
+        "FILL_STYLE": "No Fill",
+        "LABEL_POS": "513563.742,4008843.850",
+        "FONT_SIZE": 12,
+        "FONT_COLOR": "RGB(0,0,0)",
+        "FONT_CHARS": 1
+      }
+    ]
+  },
+  "rasters": {
+    "2015": {
+      "file_path": "1c__Hatay_Enkaz_Bina_Etiketleme\\HATAY MERKEZ-2 2015.tif",
+      "year": "2015",
+      "bands": 4,
+      "width": 25063,
+      "height": 19956,
+      "crs_original": "PROJCS[\"GCS_WGS_1984\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.25722356049,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",36],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "data_types": [
+        "uint8",
+        "uint8",
+        "uint8",
+        "uint8"
+      ],
+      "resolution": {
+        "x": 0.09999999999999953,
+        "y": 0.10000000000000467
+      },
+      "bounds_original": {
+        "left": 512310.6030802054,
+        "bottom": 4007846.040403369,
+        "right": 514816.9030802054,
+        "top": 4009841.640403369
+      },
+      "coordinates_wgs84": {
+        "center": {
+          "latitude": 36.20989846673608,
+          "longitude": 36.150837023274235
+        },
+        "bounds": {
+          "minx": 36.136884182085794,
+          "miny": 36.20088873999167,
+          "maxx": 36.16478986446267,
+          "maxy": 36.21890819348048
+        },
+        "southwest_corner": {
+          "latitude": 36.20088873999167,
+          "longitude": 36.136884182085794
+        },
+        "northeast_corner": {
+          "latitude": 36.21890819348048,
+          "longitude": 36.16478986446267
+        }
+      }
+    },
+    "2023": {
+      "file_path": "1c__Hatay_Enkaz_Bina_Etiketleme\\HATAY MERKEZ-2 2023.tif",
+      "year": "2023",
+      "bands": 4,
+      "width": 45289,
+      "height": 36060,
+      "crs_original": "PROJCS[\"GCS_WGS_1984\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.25722356049,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",36],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "data_types": [
+        "uint8",
+        "uint8",
+        "uint8",
+        "uint8"
+      ],
+      "resolution": {
+        "x": 0.0553399999999937,
+        "y": 0.05533999999999562
+      },
+      "bounds_original": {
+        "left": 512310.6030802054,
+        "bottom": 4007846.080003369,
+        "right": 514816.8963402051,
+        "top": 4009841.640403369
+      },
+      "coordinates_wgs84": {
+        "center": {
+          "latitude": 36.2098986452252,
+          "longitude": 36.150836986104736
+        },
+        "bounds": {
+          "minx": 36.1368841827071,
+          "miny": 36.200889096969924,
+          "maxx": 36.164789789502365,
+          "maxy": 36.21890819348048
+        },
+        "southwest_corner": {
+          "latitude": 36.200889096969924,
+          "longitude": 36.1368841827071
+        },
+        "northeast_corner": {
+          "latitude": 36.21890819348048,
+          "longitude": 36.164789789502365
+        }
+      }
+    }
+  },
+  "summary": {
+    "region": "Hatay, Turkey",
+    "center_coordinates": {
+      "latitude": 36.20989855075209,
+      "longitude": 36.15083690421901
+    },
+    "available_years": [
+      "2015",
+      "2023"
+    ],
+    "coordinate_system": "WGS84 (EPSG:4326)"
+  }
+}

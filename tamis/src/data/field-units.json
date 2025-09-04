@@ -1,0 +1,637 @@
+{
+  "fieldUnitsData": {
+    "metadata": {
+      "dataId": "fud_20250901_001",
+      "timestamp": "2025-09-01T14:30:00Z",
+      "region": "Hatay İli",
+      "coordinates": {
+        "center": [36.206, 36.150],
+        "bounds": {
+          "north": 36.220,
+          "south": 36.130,
+          "east": 36.250,
+          "west": 36.150
+        }
+      },
+      "status": "operational",
+      "lastUpdated": "2025-09-01T14:28:00Z"
+    },
+    "summary": {
+      "totalUnits": 4,
+      "activeUnits": 3,
+      "reportingUnits": 1,
+      "inactiveUnits": 1,
+      "totalPersonnel": 12,
+      "totalEquipment": 15,
+      "averageBatteryLevel": 65.25,
+      "averageSignalStrength": 75.0,
+      "totalDataPoints": 120,
+      "coverageAreas": 7
+    },
+    "fieldUnits": [
+      {
+        "id": "unit-001",
+        "name": "Alfa Takımı",
+        "location": "Merkez Bölge A",
+        "coordinates": [36.206, 36.147],
+        "status": "active",
+        "lastReport": "2 dakika önce",
+        "dataCount": 45,
+        "areasCovered": ["Merkez İlkokulu", "Atatürk Parkı"],
+        "batteryLevel": 87,
+        "signalStrength": 92,
+        "teamLeader": "Mühendis Ahmet Kaya",
+        "establishedTime": "08:30",
+        "missionType": "Doluluk Oranı İzleme",
+        "personnel": [
+          {
+            "id": "p1",
+            "name": "Mühendis Ahmet Kaya",
+            "role": "Takım Lideri",
+            "certification": "İnşaat Mühendisi",
+            "experience": "8 yıl",
+            "contact": "+90 555 123 4567",
+            "specialSkills": ["Yapısal Analiz", "Risk Değerlendirme", "Ekip Yönetimi"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce", "Arapça"]
+          },
+          {
+            "id": "p2",
+            "name": "Teknisyen Mehmet Özkan",
+            "role": "Veri Toplama Uzmanı",
+            "certification": "Harita Teknisyeni",
+            "experience": "5 yıl",
+            "contact": "+90 555 234 5678",
+            "specialSkills": ["GPS Kullanımı", "Veri Analizi", "Harita Çizimi"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce"]
+          },
+          {
+            "id": "p3",
+            "name": "Görevli Fatma Demir",
+            "role": "İletişim Sorumlusu",
+            "certification": "Acil Durum Teknisyeni",
+            "experience": "3 yıl",
+            "contact": "+90 555 345 6789",
+            "specialSkills": ["Radyo İletişimi", "Kriz Yönetimi", "İlk Yardım"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "Kürtçe"]
+          }
+        ],
+        "equipment": [
+          {
+            "id": "eq1",
+            "name": "GPS Alıcısı",
+            "type": "Navigasyon",
+            "status": "active",
+            "condition": "İyi",
+            "lastMaintenance": "15 Ağustos 2025",
+            "manufacturer": "Garmin",
+            "model": "GPSMAP 66st",
+            "serialNumber": "GRM001234",
+            "accuracy": "±3m",
+            "batteryLife": "25 saat"
+          },
+          {
+            "id": "eq2",
+            "name": "Taşınabilir Radar",
+            "type": "Ölçüm",
+            "status": "active",
+            "condition": "Mükemmel",
+            "lastMaintenance": "10 Ağustos 2025",
+            "manufacturer": "Bosch",
+            "model": "GLM 150 C",
+            "serialNumber": "BSH005678",
+            "range": "150m",
+            "accuracy": "±1.5mm"
+          },
+          {
+            "id": "eq3",
+            "name": "Drone DJI Phantom",
+            "type": "Görüntüleme",
+            "status": "active",
+            "condition": "İyi",
+            "lastMaintenance": "20 Ağustos 2025",
+            "manufacturer": "DJI",
+            "model": "Phantom 4 Pro",
+            "serialNumber": "DJI009876",
+            "flightTime": "30 dakika",
+            "cameraResolution": "4K"
+          },
+          {
+            "id": "eq4",
+            "name": "Tablet Bilgisayar",
+            "type": "Veri Toplama",
+            "status": "active",
+            "condition": "İyi",
+            "lastMaintenance": "25 Ağustos 2025",
+            "manufacturer": "Samsung",
+            "model": "Galaxy Tab S8",
+            "serialNumber": "SMG012345",
+            "storage": "256GB",
+            "batteryLife": "15 saat"
+          }
+        ],
+        "communications": {
+          "radio": {
+            "frequency": "VHF 156.800 MHz",
+            "range": "15km",
+            "status": "active",
+            "batteryLevel": 85
+          },
+          "satellite": {
+            "device": "Thuraya XT-LITE",
+            "status": "active",
+            "signalStrength": 90,
+            "dataAllowance": "500MB/gün"
+          },
+          "cellular": {
+            "network": "4G LTE",
+            "carrier": "Turkcell",
+            "signalStrength": 92,
+            "status": "active"
+          }
+        },
+        "vehicle": {
+          "type": "Arazi Aracı - Toyota Hilux",
+          "plateNumber": "06 TAM 2024",
+          "fuelLevel": 75,
+          "condition": "İyi",
+          "mileage": 45670,
+          "lastService": "20 Ağustos 2025",
+          "capacity": "5 kişi",
+          "equipment_storage": "2000L"
+        },
+        "dataCollection": {
+          "totalDataPoints": 45,
+          "dataTypes": ["Nüfus Sayımı", "Yapı Durumu", "Ulaşım Yoları"],
+          "lastSync": "2025-09-01T14:28:00Z",
+          "storageUsed": "2.3GB",
+          "storageCapacity": "64GB"
+        }
+      },
+      {
+        "id": "unit-002",
+        "name": "Beta Takımı",
+        "location": "Kuzey Bölge B",
+        "coordinates": [36.212, 36.154],
+        "status": "reporting",
+        "lastReport": "5 dakika önce",
+        "dataCount": 32,
+        "areasCovered": ["Spor Stadyumu", "Belediye Parkı"],
+        "batteryLevel": 64,
+        "signalStrength": 78,
+        "teamLeader": "Mühendis Zeynep Yılmaz",
+        "establishedTime": "09:00",
+        "missionType": "Güvenlik Alan Kontrolü",
+        "personnel": [
+          {
+            "id": "p4",
+            "name": "Mühendis Zeynep Yılmaz",
+            "role": "Takım Lideri",
+            "certification": "Harita Mühendisi",
+            "experience": "6 yıl",
+            "contact": "+90 555 456 7890",
+            "specialSkills": ["CBS Analizi", "Fotogrametri", "Proje Yönetimi"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce", "Fransızca"]
+          },
+          {
+            "id": "p5",
+            "name": "Teknisyen Ali Şen",
+            "role": "Güvenlik Uzmanı",
+            "certification": "İSG Uzmanı",
+            "experience": "4 yıl",
+            "contact": "+90 555 567 8901",
+            "specialSkills": ["Güvenlik Analizi", "Risk Önleme", "İSG Kontrolü"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce"]
+          }
+        ],
+        "equipment": [
+          {
+            "id": "eq5",
+            "name": "Termal Kamera",
+            "type": "Görüntüleme",
+            "status": "active",
+            "condition": "İyi",
+            "lastMaintenance": "12 Ağustos 2025",
+            "manufacturer": "FLIR",
+            "model": "E8-XT",
+            "serialNumber": "FLR567890",
+            "resolution": "320x240",
+            "temperatureRange": "-40°C to +1000°C"
+          },
+          {
+            "id": "eq6",
+            "name": "Ses Seviye Ölçer",
+            "type": "Ölçüm",
+            "status": "warning",
+            "condition": "Orta",
+            "lastMaintenance": "5 Ağustos 2025",
+            "manufacturer": "Extech",
+            "model": "HD600",
+            "serialNumber": "EXT123789",
+            "range": "30-130 dB",
+            "accuracy": "±1.5dB"
+          }
+        ],
+        "communications": {
+          "radio": {
+            "frequency": "UHF 450.125 MHz",
+            "range": "20km",
+            "status": "active",
+            "batteryLevel": 70
+          },
+          "satellite": {
+            "device": "Iridium 9555",
+            "status": "active",
+            "signalStrength": 75,
+            "dataAllowance": "300MB/gün"
+          },
+          "cellular": {
+            "network": "3G",
+            "carrier": "Vodafone",
+            "signalStrength": 45,
+            "status": "weak"
+          }
+        },
+        "vehicle": {
+          "type": "Minibüs - Ford Transit",
+          "plateNumber": "06 TAM 2025",
+          "fuelLevel": 45,
+          "condition": "Orta",
+          "mileage": 78450,
+          "lastService": "5 Ağustos 2025",
+          "capacity": "12 kişi",
+          "equipment_storage": "3500L"
+        },
+        "dataCollection": {
+          "totalDataPoints": 32,
+          "dataTypes": ["Güvenlik Değerlendirme", "Kapasite Analizi"],
+          "lastSync": "2025-09-01T14:25:00Z",
+          "storageUsed": "1.8GB",
+          "storageCapacity": "32GB"
+        }
+      },
+      {
+        "id": "unit-003",
+        "name": "Gamma Takımı",
+        "location": "Güney Bölge C",
+        "coordinates": [36.208, 36.159],
+        "status": "active",
+        "lastReport": "1 dakika önce",
+        "dataCount": 28,
+        "areasCovered": ["Cumhuriyet Meydanı"],
+        "batteryLevel": 91,
+        "signalStrength": 85,
+        "teamLeader": "Mühendis Can Arslan",
+        "establishedTime": "08:45",
+        "missionType": "Alan Kapasitesi Analizi",
+        "personnel": [
+          {
+            "id": "p6",
+            "name": "Mühendis Can Arslan",
+            "role": "Takım Lideri",
+            "certification": "Şehir Plancısı",
+            "experience": "7 yıl",
+            "contact": "+90 555 678 9012",
+            "specialSkills": ["Şehir Planlama", "Demografik Analiz", "Ulaşım Planlaması"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce", "Almanca"]
+          },
+          {
+            "id": "p7",
+            "name": "Teknisyen Ayşe Kılıç",
+            "role": "Veri Analisti",
+            "certification": "CBS Uzmanı",
+            "experience": "4 yıl",
+            "contact": "+90 555 789 0123",
+            "specialSkills": ["Veri Analizi", "İstatistik", "Database Yönetimi"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce"]
+          }
+        ],
+        "equipment": [
+          {
+            "id": "eq7",
+            "name": "Lazer Mesafe Ölçer",
+            "type": "Ölçüm",
+            "status": "active",
+            "condition": "Mükemmel",
+            "lastMaintenance": "18 Ağustos 2025",
+            "manufacturer": "Leica",
+            "model": "DISTO D2",
+            "serialNumber": "LCA456123",
+            "range": "100m",
+            "accuracy": "±1.5mm"
+          },
+          {
+            "id": "eq8",
+            "name": "Tablet PC",
+            "type": "Veri Toplama",
+            "status": "active",
+            "condition": "İyi",
+            "lastMaintenance": "22 Ağustos 2025",
+            "manufacturer": "Microsoft",
+            "model": "Surface Pro 8",
+            "serialNumber": "MSF789456",
+            "storage": "512GB",
+            "batteryLife": "16 saat"
+          }
+        ],
+        "communications": {
+          "radio": {
+            "frequency": "VHF 162.550 MHz",
+            "range": "18km",
+            "status": "active",
+            "batteryLevel": 88
+          },
+          "satellite": {
+            "device": "Thuraya X5-Touch",
+            "status": "active",
+            "signalStrength": 88,
+            "dataAllowance": "1GB/gün"
+          },
+          "cellular": {
+            "network": "4G LTE",
+            "carrier": "Türk Telekom",
+            "signalStrength": 85,
+            "status": "strong"
+          }
+        },
+        "vehicle": {
+          "type": "SUV - Honda CR-V",
+          "plateNumber": "06 TAM 2026",
+          "fuelLevel": 85,
+          "condition": "Mükemmel",
+          "mileage": 23450,
+          "lastService": "1 Eylül 2025",
+          "capacity": "5 kişi",
+          "equipment_storage": "1500L"
+        },
+        "dataCollection": {
+          "totalDataPoints": 28,
+          "dataTypes": ["Kapasite Ölçümü", "İnsan Akış Analizi"],
+          "lastSync": "2025-09-01T14:29:00Z",
+          "storageUsed": "1.4GB",
+          "storageCapacity": "512GB"
+        }
+      },
+      {
+        "id": "unit-004",
+        "name": "Delta Takımı",
+        "location": "Doğu Bölge D",
+        "coordinates": [36.204, 36.151],
+        "status": "inactive",
+        "lastReport": "25 dakika önce",
+        "dataCount": 15,
+        "areasCovered": ["Sanayi Bölgesi"],
+        "batteryLevel": 23,
+        "signalStrength": 45,
+        "teamLeader": "Mühendis Oğuz Tuncay",
+        "establishedTime": "07:30",
+        "missionType": "Altyapı Kontrolü",
+        "personnel": [
+          {
+            "id": "p8",
+            "name": "Mühendis Oğuz Tuncay",
+            "role": "Takım Lideri",
+            "certification": "Makine Mühendisi",
+            "experience": "9 yıl",
+            "contact": "+90 555 890 1234",
+            "specialSkills": ["Makine Analizi", "Altyapı Değerlendirme", "Bakım Planlaması"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe", "İngilizce", "Rusça"]
+          },
+          {
+            "id": "p9",
+            "name": "Teknisyen Serkan Demirtaş",
+            "role": "Teknik Uzman",
+            "certification": "Elektrik Teknisyeni",
+            "experience": "6 yıl",
+            "contact": "+90 555 901 2345",
+            "specialSkills": ["Elektrik Sistemleri", "Elektronik Onarım", "Kablo Testi"],
+            "emergencyTraining": true,
+            "languages": ["Türkçe"]
+          }
+        ],
+        "equipment": [
+          {
+            "id": "eq9",
+            "name": "Multimetre",
+            "type": "Ölçüm",
+            "status": "inactive",
+            "condition": "Orta",
+            "lastMaintenance": "1 Ağustos 2025",
+            "manufacturer": "Fluke",
+            "model": "87V MAX",
+            "serialNumber": "FLK987654",
+            "accuracy": "±0.5%",
+            "testVoltage": "1000V"
+          },
+          {
+            "id": "eq10",
+            "name": "Endoskop Kamera",
+            "type": "İnceleme",
+            "status": "maintenance",
+            "condition": "Bakım Gerekli",
+            "lastMaintenance": "28 Temmuz 2025",
+            "manufacturer": "Ridgid",
+            "model": "SeeSnake MicroReel",
+            "serialNumber": "RDG321789",
+            "cableLength": "30m",
+            "resolution": "512Hz"
+          }
+        ],
+        "communications": {
+          "radio": {
+            "frequency": "UHF 465.000 MHz",
+            "range": "12km",
+            "status": "weak",
+            "batteryLevel": 25
+          },
+          "satellite": {
+            "device": "Bağlantı Yok",
+            "status": "offline",
+            "signalStrength": 0,
+            "dataAllowance": "N/A"
+          },
+          "cellular": {
+            "network": "2G",
+            "carrier": "Turkcell",
+            "signalStrength": 30,
+            "status": "very_weak"
+          }
+        },
+        "vehicle": {
+          "type": "Pickup - Mitsubishi L200",
+          "plateNumber": "06 TAM 2023",
+          "fuelLevel": 15,
+          "condition": "Bakım Gerekli",
+          "mileage": 125680,
+          "lastService": "15 Temmuz 2025",
+          "capacity": "4 kişi",
+          "equipment_storage": "1200L"
+        },
+        "dataCollection": {
+          "totalDataPoints": 15,
+          "dataTypes": ["Altyapı Durumu", "Elektrik Sistemleri"],
+          "lastSync": "2025-09-01T13:05:00Z",
+          "storageUsed": "0.8GB",
+          "storageCapacity": "128GB"
+        }
+      }
+    ],
+    "areaData": [
+      {
+        "areaId": "area-001",
+        "areaName": "Merkez İlkokulu Bahçesi",
+        "coordinates": "36.147°N, 36.206°E",
+        "currentOccupancy": 120,
+        "maxCapacity": 500,
+        "lastUpdated": "1 dakika önce",
+        "reportingUnits": ["Alfa Takımı"],
+        "dataPoints": 25,
+        "status": "safe",
+        "areaType": "educational_facility",
+        "facilityDetails": {
+          "buildingType": "school",
+          "buildingCondition": "good",
+          "accessPoints": 3,
+          "emergencyExits": 5,
+          "waterAccess": true,
+          "electricityStatus": "operational",
+          "medicalFacility": false
+        }
+      },
+      {
+        "areaId": "area-002",
+        "areaName": "Atatürk Parkı",
+        "coordinates": "36.154°N, 36.212°E",
+        "currentOccupancy": 450,
+        "maxCapacity": 800,
+        "lastUpdated": "2 dakika önce",
+        "reportingUnits": ["Alfa Takımı"],
+        "dataPoints": 20,
+        "status": "warning",
+        "areaType": "public_space",
+        "facilityDetails": {
+          "buildingType": "park",
+          "buildingCondition": "excellent",
+          "accessPoints": 4,
+          "emergencyExits": 6,
+          "waterAccess": true,
+          "electricityStatus": "operational",
+          "medicalFacility": true
+        }
+      },
+      {
+        "areaId": "area-003",
+        "areaName": "Spor Stadyumu",
+        "coordinates": "36.151°N, 36.204°E",
+        "currentOccupancy": 1200,
+        "maxCapacity": 2000,
+        "lastUpdated": "5 dakika önce",
+        "reportingUnits": ["Beta Takımı"],
+        "dataPoints": 18,
+        "status": "warning",
+        "areaType": "sports_facility",
+        "facilityDetails": {
+          "buildingType": "stadium",
+          "buildingCondition": "good",
+          "accessPoints": 8,
+          "emergencyExits": 12,
+          "waterAccess": true,
+          "electricityStatus": "operational",
+          "medicalFacility": true
+        }
+      },
+      {
+        "areaId": "area-004",
+        "areaName": "Cumhuriyet Meydanı",
+        "coordinates": "36.159°N, 36.208°E",
+        "currentOccupancy": 300,
+        "maxCapacity": 1000,
+        "lastUpdated": "1 dakika önce",
+        "reportingUnits": ["Gamma Takımı"],
+        "dataPoints": 15,
+        "status": "safe",
+        "areaType": "public_square",
+        "facilityDetails": {
+          "buildingType": "open_space",
+          "buildingCondition": "excellent",
+          "accessPoints": 6,
+          "emergencyExits": 8,
+          "waterAccess": true,
+          "electricityStatus": "operational",
+          "medicalFacility": false
+        }
+      },
+      {
+        "areaId": "area-005",
+        "areaName": "Belediye Parkı",
+        "coordinates": "36.145°N, 36.213°E",
+        "currentOccupancy": 520,
+        "maxCapacity": 600,
+        "lastUpdated": "5 dakika önce",
+        "reportingUnits": ["Beta Takımı"],
+        "dataPoints": 14,
+        "status": "critical",
+        "areaType": "public_space",
+        "facilityDetails": {
+          "buildingType": "park",
+          "buildingCondition": "fair",
+          "accessPoints": 2,
+          "emergencyExits": 3,
+          "waterAccess": true,
+          "electricityStatus": "limited",
+          "medicalFacility": false
+        }
+      },
+      {
+        "areaId": "area-006",
+        "areaName": "Sanayi Bölgesi",
+        "coordinates": "36.163°N, 36.195°E",
+        "currentOccupancy": 85,
+        "maxCapacity": 200,
+        "lastUpdated": "25 dakika önce",
+        "reportingUnits": ["Delta Takımı"],
+        "dataPoints": 8,
+        "status": "unknown",
+        "areaType": "industrial",
+        "facilityDetails": {
+          "buildingType": "industrial",
+          "buildingCondition": "fair",
+          "accessPoints": 4,
+          "emergencyExits": 6,
+          "waterAccess": true,
+          "electricityStatus": "partial",
+          "medicalFacility": false
+        }
+      }
+    ],
+    "missionStatus": {
+      "overallProgress": 75.5,
+      "completedAreas": 4,
+      "pendingAreas": 2,
+      "criticalIssues": [
+        "Delta Takımı iletişim sorunu",
+        "Belediye Parkı kritik doluluk",
+        "Unit-002 yakıt seviyesi düşük"
+      ],
+      "nextActions": [
+        "Delta Takımı ile iletişim kurulması",
+        "Unit-002 yakıt ikmali",
+        "Belediye Parkı alternatif alan açılması"
+      ]
+    },
+    "emergencyContacts": {
+      "fieldCoordination": "+90 326 214 9000",
+      "technicalSupport": "+90 326 214 9100",
+      "logistics": "+90 326 214 9200",
+      "medical": "+90 326 214 9300",
+      "communication": "+90 326 214 9400"
+    }
+  }
+}

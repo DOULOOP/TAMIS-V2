@@ -1,0 +1,451 @@
+{
+  "communicationNetworkAnalysis": {
+    "metadata": {
+      "analysisId": "cna_20250901_001",
+      "timestamp": "2025-09-01T14:30:00Z",
+      "region": "Hatay İli",
+      "coordinates": {
+        "center": [36.206, 36.150],
+        "bounds": {
+          "north": 36.220,
+          "south": 36.130,
+          "east": 36.250,
+          "west": 36.150
+        }
+      },
+      "status": "monitoring",
+      "lastUpdated": "2025-09-01T14:28:00Z"
+    },
+    "summary": {
+      "totalModems": 15,
+      "activeModems": 12,
+      "inactiveModems": 2,
+      "maintenanceModems": 1,
+      "networkCoverage": 87.5,
+      "averageSignalStrength": 78.2,
+      "dataTransmissionRate": 94.1,
+      "criticalAlerts": 3
+    },
+    "modemStations": [
+      {
+        "id": "modem_001",
+        "name": "Merkez Koordinasyon",
+        "type": "primary",
+        "location": {
+          "name": "Afet Koordinasyon Merkezi",
+          "coordinates": [36.150, 36.205],
+          "address": "Cumhuriyet Meydanı",
+          "elevation": 125
+        },
+        "status": "active",
+        "signalStrength": 92,
+        "dataRate": 98.5,
+        "uptime": 99.2,
+        "lastPing": "2025-09-01T14:29:45Z",
+        "batteryLevel": 95,
+        "powerSource": "mains",
+        "backupPower": "ups_battery",
+        "coverageRadius": 2.5,
+        "connectedDevices": 24,
+        "networkLoad": 65,
+        "frequency": "2.4GHz",
+        "bandwidth": "100Mbps",
+        "technology": "4G-LTE",
+        "manufacturer": "Huawei",
+        "model": "B535-232",
+        "firmware": "11.189.63.00.00",
+        "installDate": "2025-01-15",
+        "lastMaintenance": "2025-08-20",
+        "operatingTemp": 32,
+        "humidity": 68,
+        "alerts": []
+      },
+      {
+        "id": "modem_002",
+        "name": "Spor Stadyumu Hub",
+        "type": "secondary",
+        "location": {
+          "name": "Spor Stadyumu",
+          "coordinates": [36.151, 36.204],
+          "address": "Stadyum Caddesi",
+          "elevation": 118
+        },
+        "status": "active",
+        "signalStrength": 85,
+        "dataRate": 94.2,
+        "uptime": 98.7,
+        "lastPing": "2025-09-01T14:29:30Z",
+        "batteryLevel": 88,
+        "powerSource": "mains",
+        "backupPower": "generator",
+        "coverageRadius": 2.0,
+        "connectedDevices": 18,
+        "networkLoad": 72,
+        "frequency": "5GHz",
+        "bandwidth": "200Mbps",
+        "technology": "5G",
+        "manufacturer": "Ericsson",
+        "model": "AIR-3246",
+        "firmware": "22.Q2.R1A",
+        "installDate": "2025-02-01",
+        "lastMaintenance": "2025-08-15",
+        "operatingTemp": 34,
+        "humidity": 71,
+        "alerts": [
+          {
+            "level": "warning",
+            "message": "High network load detected",
+            "timestamp": "2025-09-01T14:15:00Z"
+          }
+        ]
+      },
+      {
+        "id": "modem_003",
+        "name": "Atatürk Parkı Relay",
+        "type": "relay",
+        "location": {
+          "name": "Atatürk Parkı",
+          "coordinates": [36.154, 36.212],
+          "address": "Park Caddesi",
+          "elevation": 132
+        },
+        "status": "active",
+        "signalStrength": 79,
+        "dataRate": 91.8,
+        "uptime": 97.3,
+        "lastPing": "2025-09-01T14:29:20Z",
+        "batteryLevel": 76,
+        "powerSource": "battery",
+        "backupPower": "solar",
+        "coverageRadius": 1.8,
+        "connectedDevices": 12,
+        "networkLoad": 58,
+        "frequency": "2.4GHz",
+        "bandwidth": "50Mbps",
+        "technology": "4G",
+        "manufacturer": "Nokia",
+        "model": "ASIK-100",
+        "firmware": "20.FP2",
+        "installDate": "2025-03-10",
+        "lastMaintenance": "2025-08-10",
+        "operatingTemp": 36,
+        "humidity": 74,
+        "alerts": [
+          {
+            "level": "info",
+            "message": "Running on battery power",
+            "timestamp": "2025-09-01T13:45:00Z"
+          }
+        ]
+      },
+      {
+        "id": "modem_004",
+        "name": "Merkez İlkokulu Link",
+        "type": "access_point",
+        "location": {
+          "name": "Merkez İlkokulu",
+          "coordinates": [36.147, 36.206],
+          "address": "Okul Sokağı",
+          "elevation": 128
+        },
+        "status": "active",
+        "signalStrength": 82,
+        "dataRate": 96.1,
+        "uptime": 99.8,
+        "lastPing": "2025-09-01T14:29:40Z",
+        "batteryLevel": 91,
+        "powerSource": "mains",
+        "backupPower": "ups_battery",
+        "coverageRadius": 1.5,
+        "connectedDevices": 15,
+        "networkLoad": 45,
+        "frequency": "2.4GHz/5GHz",
+        "bandwidth": "100Mbps",
+        "technology": "Wi-Fi 6",
+        "manufacturer": "Cisco",
+        "model": "Catalyst 9130",
+        "firmware": "8.10.185.0",
+        "installDate": "2025-04-05",
+        "lastMaintenance": "2025-08-25",
+        "operatingTemp": 31,
+        "humidity": 66,
+        "alerts": []
+      },
+      {
+        "id": "modem_005",
+        "name": "Belediye Parkı Node",
+        "type": "access_point",
+        "location": {
+          "name": "Belediye Parkı",
+          "coordinates": [36.145, 36.213],
+          "address": "Belediye Caddesi",
+          "elevation": 120
+        },
+        "status": "active",
+        "signalStrength": 68,
+        "dataRate": 87.3,
+        "uptime": 95.1,
+        "lastPing": "2025-09-01T14:28:55Z",
+        "batteryLevel": 34,
+        "powerSource": "battery",
+        "backupPower": "none",
+        "coverageRadius": 1.2,
+        "connectedDevices": 8,
+        "networkLoad": 78,
+        "frequency": "2.4GHz",
+        "bandwidth": "25Mbps",
+        "technology": "3G",
+        "manufacturer": "ZTE",
+        "model": "MF286R",
+        "firmware": "BD_MF286RV1.0.0",
+        "installDate": "2025-05-20",
+        "lastMaintenance": "2025-07-30",
+        "operatingTemp": 38,
+        "humidity": 79,
+        "alerts": [
+          {
+            "level": "critical",
+            "message": "Low battery level - requires immediate attention",
+            "timestamp": "2025-09-01T14:10:00Z"
+          },
+          {
+            "level": "warning",
+            "message": "High operating temperature",
+            "timestamp": "2025-09-01T14:00:00Z"
+          }
+        ]
+      },
+      {
+        "id": "modem_006",
+        "name": "Sanayi Bölgesi Gateway",
+        "type": "gateway",
+        "location": {
+          "name": "Sanayi Bölgesi",
+          "coordinates": [36.163, 36.195],
+          "address": "Sanayi Caddesi",
+          "elevation": 105
+        },
+        "status": "inactive",
+        "signalStrength": 0,
+        "dataRate": 0,
+        "uptime": 0,
+        "lastPing": "2025-09-01T13:15:00Z",
+        "batteryLevel": 0,
+        "powerSource": "none",
+        "backupPower": "generator",
+        "coverageRadius": 0,
+        "connectedDevices": 0,
+        "networkLoad": 0,
+        "frequency": "N/A",
+        "bandwidth": "N/A",
+        "technology": "4G-LTE",
+        "manufacturer": "Samsung",
+        "model": "SM-G998B",
+        "firmware": "12.0.0",
+        "installDate": "2025-06-15",
+        "lastMaintenance": "2025-07-15",
+        "operatingTemp": 0,
+        "humidity": 0,
+        "alerts": [
+          {
+            "level": "critical",
+            "message": "Complete power failure - unit offline",
+            "timestamp": "2025-09-01T13:15:00Z"
+          }
+        ]
+      },
+      {
+        "id": "modem_007",
+        "name": "Cumhuriyet Meydanı Hotspot",
+        "type": "hotspot",
+        "location": {
+          "name": "Cumhuriyet Meydanı",
+          "coordinates": [36.159, 36.208],
+          "address": "Merkez Mahallesi",
+          "elevation": 135
+        },
+        "status": "maintenance",
+        "signalStrength": 0,
+        "dataRate": 0,
+        "uptime": 0,
+        "lastPing": "2025-09-01T12:00:00Z",
+        "batteryLevel": 55,
+        "powerSource": "mains",
+        "backupPower": "ups_battery",
+        "coverageRadius": 0,
+        "connectedDevices": 0,
+        "networkLoad": 0,
+        "frequency": "N/A",
+        "bandwidth": "N/A",
+        "technology": "4G",
+        "manufacturer": "TP-Link",
+        "model": "Archer MR600",
+        "firmware": "1.2.0 0.9.1",
+        "installDate": "2025-07-01",
+        "lastMaintenance": "2025-09-01T09:00:00Z",
+        "operatingTemp": 25,
+        "humidity": 60,
+        "alerts": [
+          {
+            "level": "info",
+            "message": "Scheduled maintenance in progress",
+            "timestamp": "2025-09-01T09:00:00Z"
+          }
+        ]
+      }
+    ],
+    "networkTopology": {
+      "backbone": [
+        {
+          "from": "modem_001",
+          "to": "modem_002",
+          "linkType": "fiber",
+          "bandwidth": "1Gbps",
+          "latency": 2,
+          "status": "active"
+        },
+        {
+          "from": "modem_001",
+          "to": "modem_003",
+          "linkType": "wireless",
+          "bandwidth": "100Mbps",
+          "latency": 8,
+          "status": "active"
+        },
+        {
+          "from": "modem_002",
+          "to": "modem_004",
+          "linkType": "wireless",
+          "bandwidth": "50Mbps",
+          "latency": 12,
+          "status": "active"
+        }
+      ],
+      "redundancy": {
+        "primaryPaths": 4,
+        "backupPaths": 2,
+        "redundancyLevel": "high"
+      }
+    },
+    "dataTransmission": {
+      "totalDataTransmitted": "847.2GB",
+      "hourlyAverage": "35.3GB",
+      "peakHour": "14:00",
+      "peakTransmission": "58.7GB",
+      "protocolDistribution": {
+        "HTTP/HTTPS": 45.2,
+        "WebSocket": 28.7,
+        "FTP": 15.1,
+        "TCP": 8.3,
+        "UDP": 2.7
+      },
+      "qualityMetrics": {
+        "packetLoss": 0.3,
+        "averageLatency": 45,
+        "jitter": 8,
+        "errorRate": 0.12
+      }
+    },
+    "emergencyProtocols": {
+      "alertingSystems": [
+        {
+          "type": "SMS_BROADCAST",
+          "status": "active",
+          "coverage": 95.2,
+          "lastTest": "2025-08-30T10:00:00Z"
+        },
+        {
+          "type": "VOICE_ALERT",
+          "status": "active", 
+          "coverage": 87.8,
+          "lastTest": "2025-08-28T14:00:00Z"
+        },
+        {
+          "type": "DATA_PRIORITY",
+          "status": "active",
+          "coverage": 98.1,
+          "lastTest": "2025-09-01T08:00:00Z"
+        }
+      ],
+      "priorityChannels": [
+        {
+          "name": "EMERGENCY_COORDINATION",
+          "frequency": "462.725MHz",
+          "bandwidth": "25kHz",
+          "status": "active"
+        },
+        {
+          "name": "MEDICAL_DISPATCH",
+          "frequency": "463.175MHz", 
+          "bandwidth": "25kHz",
+          "status": "active"
+        },
+        {
+          "name": "FIELD_OPERATIONS",
+          "frequency": "467.825MHz",
+          "bandwidth": "50kHz",
+          "status": "active"
+        }
+      ]
+    },
+    "riskAssessment": {
+      "overallRisk": "medium",
+      "criticalFactors": [
+        "Modem 005 critical battery level",
+        "Modem 006 complete power failure",
+        "High network load on Modem 002"
+      ],
+      "recommendations": [
+        "Immediate battery replacement for Modem 005",
+        "Restore power supply to Modem 006",
+        "Load balancing for Modem 002",
+        "Deploy mobile communication unit to Sanayi Bölgesi"
+      ],
+      "contingencyPlans": [
+        {
+          "scenario": "Primary hub failure",
+          "action": "Activate secondary hub at Spor Stadyumu",
+          "eta": "5 minutes"
+        },
+        {
+          "scenario": "Network congestion",
+          "action": "Implement QoS prioritization",
+          "eta": "immediate"
+        }
+      ]
+    },
+    "performanceMetrics": {
+      "last24Hours": {
+        "averageUptime": 96.8,
+        "dataTransmitted": "847.2GB",
+        "peakConcurrentUsers": 156,
+        "networkIncidents": 3
+      },
+      "trends": {
+        "uptimeTrend": "stable",
+        "performanceTrend": "improving",
+        "userGrowth": 8.3
+      }
+    },
+    "maintenanceSchedule": [
+      {
+        "modemId": "modem_001",
+        "type": "routine",
+        "scheduledDate": "2025-09-15",
+        "estimatedDuration": "2 hours"
+      },
+      {
+        "modemId": "modem_005",
+        "type": "emergency",
+        "scheduledDate": "2025-09-01",
+        "estimatedDuration": "1 hour"
+      }
+    ],
+    "emergencyContacts": {
+      "networkOperations": "+90 326 214 8000",
+      "technicalSupport": "+90 326 214 8100",
+      "emergencyResponse": "+90 326 214 8200",
+      "fieldMaintenance": "+90 326 214 8300"
+    }
+  }
+}

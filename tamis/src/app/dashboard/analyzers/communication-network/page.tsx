@@ -1,20 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+// Fetch from API instead of static JSON
 
 export default function CommunicationNetworkAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState(null);
+  const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
+
+  // Load data from API
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/communication-network', { cache: 'no-store' });
+        const j = await res.json();
+        setAnalysisResults(j.communicationNetworkAnalysis);
+      } catch {}
+    })();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // TODO: Implement actual analysis logic
-    setTimeout(() => {
+    try {
+      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch('/api/communication-network', { cache: 'no-store' });
+      const j = await res.json();
+      setAnalysisResults(j.communicationNetworkAnalysis);
+    } catch {
+    } finally {
       setIsAnalyzing(false);
-      // TODO: Set real analysis results
-    }, 3000);
+    }
   };
 
   return (
@@ -105,97 +121,124 @@ export default function CommunicationNetworkAnalyzer() {
             </div>
           </div>
 
-          {/* Analysis Parameters */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Parametreleri</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Modem Tipi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tüm modemler</option>
-                    <option>4G LTE Modemler</option>
-                    <option>5G Modemler</option>
-                    <option>Satelit Modemler</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bölge Filtresi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tüm bölgeler</option>
-                    <option>Kritik bölgeler</option>
-                    <option>Afet bölgeleri</option>
-                    <option>İdari merkez</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Firmware Kontrolü
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Detaylı kontrol</option>
-                    <option>Hızlı tarama</option>
-                    <option>Sadece güncellik</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Güvenlik Analizi
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                    <option>Tam güvenlik taraması</option>
-                    <option>Kritik açıklar</option>
-                    <option>Temel kontrol</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Parameters removed per request */}
 
-          {/* Results Section (Template) */}
+          {/* Results Section */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-6 py-4">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Sonuçları</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.summary?.totalModems || 0}
+                  </div>
                   <div className="text-sm text-indigo-700 font-medium">Aktif Modem</div>
                   <div className="text-xs text-indigo-600">Toplam cihaz sayısı</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
-                  <div className="text-sm text-indigo-700 font-medium">Güncel Versiyon</div>
-                  <div className="text-xs text-indigo-600">En son firmware</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults ? analysisResults.modemStations.filter((s: any) => s.status === 'active').length : 0}
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Online İstasyon</div>
+                  <div className="text-xs text-indigo-600">Çalışan durumda</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-%</div>
-                  <div className="text-sm text-indigo-700 font-medium">Uyumluluk</div>
-                  <div className="text-xs text-indigo-600">Uyumlu cihazlar</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.summary?.networkCoverage || 0}%
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Ağ Sağlığı</div>
+                  <div className="text-xs text-indigo-600">Genel performans</div>
                 </div>
                 
                 <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-indigo-900">-</div>
-                  <div className="text-sm text-indigo-700 font-medium">Risk Seviyesi</div>
-                  <div className="text-xs text-indigo-600">Genel değerlendirme</div>
+                  <div className="text-2xl font-bold text-indigo-900">
+                    {analysisResults?.summary?.averageSignalStrength || 0}
+                  </div>
+                  <div className="text-sm text-indigo-700 font-medium">Sinyal Gücü</div>
+                  <div className="text-xs text-indigo-600">dBm ortalaması</div>
                 </div>
               </div>
               
-              {/* Network Status Chart Placeholder */}
-              <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center mb-6">
-                <div className="text-center">
-                  <svg className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <p className="text-gray-500">İletişim Ağı Durumu Grafiği</p>
-                  <p className="text-sm text-gray-400">Analiz sonrası görüntülenecek</p>
+              {/* Network Status Chart */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <h3 className="text-md font-medium text-gray-900 mb-4">Ağ İstatistikleri</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg">
+                        <span className="font-medium text-green-800">Online</span>
+                        <span className="text-xl font-bold text-green-600">
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'active').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-red-100 rounded-lg">
+                        <span className="font-medium text-red-800">Offline</span>
+                        <span className="text-xl font-bold text-red-600">
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'inactive').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-yellow-100 rounded-lg">
+                        <span className="font-medium text-yellow-800">Bakım</span>
+                        <span className="text-xl font-bold text-yellow-600">
+                          {analysisResults.modemStations.filter((s: any) => s.status === 'maintenance').length}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">En İyi Sinyal:</span>
+                        <span className="font-semibold text-green-600">
+                          {Math.max(...analysisResults.modemStations.map((s: any) => s.signalStrength))} dBm
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">En Kötü Sinyal:</span>
+                        <span className="font-semibold text-red-600">
+                          {Math.min(...analysisResults.modemStations.map((s: any) => s.signalStrength))} dBm
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Ortalama Veri Oranı:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.dataRate, 0) / analysisResults.modemStations.length)}%
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Toplam Bağlantı:</span>
+                        <span className="font-semibold">
+                          {analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.connectedDevices, 0)} cihaz
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Ağ Yükü:</span>
+                        <span className="font-semibold text-yellow-600">
+                          %{Math.round(analysisResults.modemStations.reduce((acc: number, s: any) => acc + s.networkLoad, 0) / analysisResults.modemStations.length)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Güvenlik Durumu:</span>
+                        <span className="font-semibold text-green-600">Güvenli</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center mb-6">
+                  <div className="text-center">
+                    <svg className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <p className="text-gray-500">İletişim Ağı Durumu Grafiği</p>
+                    <p className="text-sm text-gray-400">Analiz sonrası görüntülenecek</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -227,13 +270,69 @@ export default function CommunicationNetworkAnalyzer() {
                 />
               </div>
               
-              {/* Table Placeholder */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-center text-gray-500 py-8">
-                  <p>Cihaz listesi ve detayları burada görüntülenecek</p>
-                  <p className="text-sm text-gray-400">Tablo: Cihaz ID, Model, Firmware, Durum, Son Güncelleme</p>
+              {/* Station Details Table */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-white">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">İstasyon</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Durum</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Sinyal Gücü</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Veri Oranı</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Bağlı Cihaz</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Son Ping</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {analysisResults.modemStations.map((station: any) => (
+                          <tr key={station.id} className="bg-white hover:bg-gray-50">
+                            <td className="px-4 py-2 font-medium">{station.name}</td>
+                            <td className="px-4 py-2">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                station.status === 'active' ? 'bg-green-100 text-green-800' :
+                                station.status === 'inactive' ? 'bg-red-100 text-red-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {station.status === 'active' ? 'Aktif' :
+                                 station.status === 'inactive' ? 'İnaktif' : 'Bakım'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className={`font-medium ${
+                                station.signalStrength > 80 ? 'text-green-600' :
+                                station.signalStrength > 60 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {station.signalStrength}%
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className={`font-medium ${
+                                station.dataRate > 90 ? 'text-green-600' :
+                                station.dataRate > 70 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {station.dataRate}%
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">{station.connectedDevices}</td>
+                            <td className="px-4 py-2 text-gray-500 text-xs">{station.lastPing}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="text-center text-gray-500 py-8">
+                    <p>Cihaz listesi ve detayları burada görüntülenecek</p>
+                    <p className="text-sm text-gray-400">Tablo: Cihaz ID, Model, Firmware, Durum, Son Güncelleme</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

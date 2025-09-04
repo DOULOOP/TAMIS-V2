@@ -1,20 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+// Fetch from API instead of static JSON
+
+// Dynamically import the map component to avoid SSR issues
+const OpenLayersMap = dynamic(() => import('@/components/map/OpenLayersMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
+        <p className="text-gray-500">Harita yükleniyor...</p>
+      </div>
+    </div>
+  ),
+});
 
 export default function PopulationDensityAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState(null);
+  const [analysisResults, setAnalysisResults] = useState<any>(null);
   const router = useRouter();
+
+  // Load analysis from API
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/population-zones', { cache: 'no-store' });
+        const j = await res.json();
+        setAnalysisResults(j.populationDensityAnalysis);
+      } catch {}
+    })();
+  }, []);
 
   const startAnalysis = async () => {
     setIsAnalyzing(true);
-    // TODO: Implement actual analysis logic
-    setTimeout(() => {
+    try {
+      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch('/api/population-zones', { cache: 'no-store' });
+      const j = await res.json();
+      setAnalysisResults(j.populationDensityAnalysis);
+    } catch {
+    } finally {
       setIsAnalyzing(false);
-      // TODO: Set real analysis results
-    }, 3000);
+    }
   };
 
   return (
@@ -94,95 +124,145 @@ export default function PopulationDensityAnalyzer() {
             </div>
           </div>
 
-          {/* Analysis Parameters */}
-          <div className="bg-white shadow rounded-lg mb-6">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Parametreleri</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Analiz Yarıçapı (km)
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    defaultValue={5}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Minimum Nufüs Eşiği
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    defaultValue={100}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Veri Kaynağı
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
-                    <option>TÜİK Verileri</option>
-                    <option>Mahalli İdare Verileri</option>
-                    <option>Kombine Veriler</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Güncellik
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
-                    <option>Son 1 yıl</option>
-                    <option>Son 5 yıl</option>
-                    <option>Tüm veriler</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Results Section (Template) */}
+          {/* Results Section */}
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Analiz Sonuçları</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-purple-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-900">-</div>
-                  <div className="text-sm text-purple-700 font-medium">Toplam Nufüs</div>
+                  <div className="text-2xl font-bold text-purple-900">
+                    {analysisResults ? analysisResults.summary.totalPopulation.toLocaleString() : '-'}
+                  </div>
+                  <div className="text-sm text-purple-700 font-medium">Toplam Nüfus</div>
                   <div className="text-xs text-purple-600">Risk bölgesinde</div>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-900">-</div>
-                  <div className="text-sm text-purple-700 font-medium">Yoğunluk</div>
+                  <div className="text-2xl font-bold text-purple-900">
+                    {analysisResults ? analysisResults.summary.averageDensity : '-'}
+                  </div>
+                  <div className="text-sm text-purple-700 font-medium">Ortalama Yoğunluk</div>
                   <div className="text-xs text-purple-600">Kişi/km²</div>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-900">-</div>
+                  <div className="text-2xl font-bold text-purple-900">
+                    {analysisResults ? analysisResults.summary.riskScore : '-'}
+                  </div>
                   <div className="text-sm text-purple-700 font-medium">Risk Skoru</div>
                   <div className="text-xs text-purple-600">1-10 arası</div>
                 </div>
               </div>
               
-              {/* Map Placeholder */}
-              <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center mb-6">
-                <div className="text-center">
-                  <svg className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                  <p className="text-gray-500">Nufüs Yoğunluğu Haritası</p>
-                  <p className="text-sm text-gray-400">Analiz sonrası görüntülenecek</p>
-                </div>
+              {/* Map Section */}
+              <div className="rounded-lg overflow-hidden mb-6 aspect-square">
+                <OpenLayersMap showPopulationData={true} />
               </div>
 
-              {/* Data Table Placeholder */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-md font-medium text-gray-900 mb-3">Detaylı Veriler</h3>
-                <div className="text-center text-gray-500 py-8">
-                  <p>Analiz sonuçları burada görüntülenecek</p>
+              {/* Analysis Results Details */}
+              {analysisResults && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                  {/* Risk Assessment */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="text-md font-medium text-gray-900 mb-3">Risk Değerlendirmesi</h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-red-100 rounded-lg">
+                        <span className="font-medium text-red-800">Yüksek Risk</span>
+                        <span className="text-xl font-bold text-red-600">
+                          {analysisResults.populationData.filter((zone: any) => zone.riskLevel === 'high').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-yellow-100 rounded-lg">
+                        <span className="font-medium text-yellow-800">Orta Risk</span>
+                        <span className="text-xl font-bold text-yellow-600">
+                          {analysisResults.populationData.filter((zone: any) => zone.riskLevel === 'medium').length}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg">
+                        <span className="font-medium text-green-800">Düşük Risk</span>
+                        <span className="text-xl font-bold text-green-600">
+                          {analysisResults.populationData.filter((zone: any) => zone.riskLevel === 'low').length}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Demographics Summary */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="text-md font-medium text-gray-900 mb-3">Demografik Özet</h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Ortalama Yaş:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.populationData.reduce((acc: number, zone: any) => acc + (zone.demographics?.averageAge || 0), 0) / analysisResults.populationData.length)} yaş
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Çocuk Nüfusu:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.populationData.reduce((acc: number, zone: any) => acc + (zone.demographics?.children || 0), 0) / analysisResults.populationData.length)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Yaşlı Nüfusu:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.populationData.reduce((acc: number, zone: any) => acc + (zone.demographics?.elderly || 0), 0) / analysisResults.populationData.length)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Engelli Nüfusu:</span>
+                        <span className="font-semibold">
+                          {Math.round(analysisResults.populationData.reduce((acc: number, zone: any) => acc + (zone.demographics?.disabled || 0), 0) / analysisResults.populationData.length)}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Detailed Data Table */}
+              {analysisResults ? (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-md font-medium text-gray-900 mb-3">Bölge Detayları</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-white">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Bölge</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Nüfus</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Yoğunluk</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-900">Risk</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {analysisResults.populationData.map((zone: any, index: number) => (
+                          <tr key={index} className="bg-white hover:bg-gray-50">
+                            <td className="px-4 py-2 font-medium">{zone.name}</td>
+                            <td className="px-4 py-2">{zone.population.toLocaleString()}</td>
+                            <td className="px-4 py-2">{zone.density}/km²</td>
+                            <td className="px-4 py-2">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                zone.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
+                                zone.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-green-100 text-green-800'
+                              }`}>
+                                {zone.riskLevel === 'high' ? 'Yüksek' : 
+                                 zone.riskLevel === 'medium' ? 'Orta' : 
+                                 'Düşük'}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-md font-medium text-gray-900 mb-3">Detaylı Veriler</h3>
+                  <div className="text-center text-gray-500 py-8">
+                    <p>Analiz sonuçları burada görüntülenecek</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

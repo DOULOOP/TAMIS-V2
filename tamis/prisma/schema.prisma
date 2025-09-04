@@ -91,3 +91,210 @@ enum IncidentStatus {
   RESOLVED
   CLOSED
 }
+
+/// Safe Zones stored from safe-zone.json
+model SafeZone {
+  id                String   @id
+  name              String
+  type              String
+  lat               Float
+  lng               Float
+  address           String?
+  capacity          Int
+  currentOccupancy  Int
+  status            String
+  lastUpdated       DateTime?
+  facilities        Json?
+  accessRoutes      Json?
+  emergencyServices Json?
+  evacuationPlan    Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("safe_zones")
+}
+
+/// Population Zones stored from population-density.json
+model PopulationZone {
+  zoneId      String   @id
+  name        String
+  lat         Float
+  lng         Float
+  bounds      Json?
+  population  Int
+  area        Float
+  density     Int
+  riskLevel   String
+  demographics Json?
+  facilities   Json?
+  lastUpdated  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("population_zones")
+}
+
+/// Communication modem stations stored from communication-network.json
+model ModemStation {
+  id               String  @id
+  name             String
+  type             String
+  lat              Float
+  lng              Float
+  address          String?
+  elevation        Int?
+  status           String
+  signalStrength   Int
+  dataRate         Float
+  uptime           Float?
+  lastPing         DateTime?
+  batteryLevel     Int?
+  powerSource      String?
+  backupPower      String?
+  coverageRadius   Float?
+  connectedDevices Int?
+  networkLoad      Int?
+  frequency        String?
+  bandwidth        String?
+  technology       String?
+  manufacturer     String?
+  model            String?
+  firmware         String?
+  installDate      DateTime?
+  lastMaintenance  DateTime?
+  operatingTemp    Int?
+  humidity         Int?
+  alerts           Json[]
+
+  linksFrom NetworkLink[] @relation("fromStation")
+  linksTo   NetworkLink[] @relation("toStation")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("modem_stations")
+}
+
+model NetworkLink {
+  id       String @id @default(cuid())
+  fromId   String
+  toId     String
+  linkType String
+  bandwidth String?
+  latency  Int?
+  status   String?
+
+  from ModemStation @relation("fromStation", fields: [fromId], references: [id])
+  to   ModemStation @relation("toStation", fields: [toId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("network_links")
+}
+
+/// Field Units stored from field-units.json
+model FieldUnit {
+  id            String @id
+  name          String
+  location      String?
+  lat           Float
+  lng           Float
+  status        String
+  lastReport    String?
+  dataCount     Int?
+  areasCovered  Json?
+  batteryLevel  Int?
+  signalStrength Int?
+  teamLeader    String?
+  establishedTime String?
+  missionType   String?
+  personnel     Json?
+  equipment     Json?
+  communications Json?
+  vehicle       Json?
+  dataCollection Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("field_units")
+}
+
+model AreaData {
+  areaId         String @id
+  areaName       String
+  coordinates    String
+  currentOccupancy Int
+  maxCapacity    Int
+  lastUpdated    String?
+  reportingUnits Json?
+  dataPoints     Int?
+  status         String?
+  areaType       String?
+  facilityDetails Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("area_data")
+}
+
+/// Aid routes stored from aid-route.json
+model AidRoute {
+  id              String @id
+  name            String
+  type            String
+  status          String
+  priority        String?
+  startPoint      Json?
+  endPoint        Json?
+  waypoints       Json?
+  distance        Float?
+  estimatedTime   Int?
+  currentSpeed    Int?
+  trafficCondition String?
+  roadCondition   String?
+  weatherImpact   String?
+  supplies        Json?
+  vehicles        Json?
+  checkpoints     Json?
+  blockageReason  String?
+  estimatedClearTime String?
+  alternativeRoute String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("aid_routes")
+}
+
+/// Safe zones fetched from Google Places API
+model GoogleSafeZone {
+  /// Google place id
+  placeId              String   @id
+  /// Display name text
+  name                 String
+  /// Primary type display name (text)
+  primaryType          String?
+  /// All place types
+  types                String[]
+  formattedAddress     String?
+  shortFormattedAddress String?
+  lat                  Float
+  lng                  Float
+  directionsUri        String?
+  placeUri             String?
+  reviewsUri           String?
+  photosUri            String?
+  writeAReviewUri      String?
+  /// Full raw record for flexibility
+  raw                  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("google_safe_zones")
+}
