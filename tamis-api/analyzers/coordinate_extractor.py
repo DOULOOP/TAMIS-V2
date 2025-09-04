@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Coordinate Extractor for Hatay Earthquake Assessment
-Extracts precise coordinates from shapefile and raster data with multi-encoding support
+Hatay Deprem Değerlendirmesi için Koordinat Çıkarıcısı
+Çoklu kodlama desteği ile şekil dosyası ve raster verilerinden hassas koordinatları çıkarır
 """
 
 import geopandas as gpd
@@ -16,15 +16,15 @@ from datetime import datetime
 
 class CoordinateExtractor:
     """
-    Extracts coordinates and geographic information from Hatay dataset
+    Hatay veri setinden koordinatları ve coğrafi bilgileri çıkarır
     """
     
     def __init__(self, data_dir: str = "1c__Hatay_Enkaz_Bina_Etiketleme"):
         """
-        Initialize coordinate extractor
+        Koordinat çıkarıcıyı başlat
         
         Args:
-            data_dir (str): Directory containing satellite imagery data
+            data_dir (str): Uydu görüntüsü verilerini içeren dizin
         """
         self.data_dir = data_dir
         self.output_dir = "output"
@@ -41,21 +41,21 @@ class CoordinateExtractor:
         self.progress_callbacks = []
     
     def add_progress_callback(self, callback):
-        """Add a callback function for progress updates"""
+        """İlerleme güncellemeleri için geri çağırma fonksiyonu ekle"""
         self.progress_callbacks.append(callback)
     
     def _update_progress(self, progress: float, message: str):
-        """Update progress for all registered callbacks"""
+        """Kayıtlı tüm geri çağırma fonksiyonları için ilerlemeyi güncelle"""
         for callback in self.progress_callbacks:
             try:
                 callback(progress, message)
             except Exception as e:
-                print(f"Warning: Progress callback failed: {e}")
+                print(f"Uyarı: İlerleme geri çağırma fonksiyonu başarısız: {e}")
     
     def _locate_data_files(self):
-        """Locate shapefile and raster files in the data directory"""
+        """Veri dizininde şekil dosyası ve raster dosyalarını bul"""
         if not os.path.exists(self.data_dir):
-            raise FileNotFoundError(f"Data directory not found: {self.data_dir}")
+            raise FileNotFoundError(f"Veri dizini bulunamadı: {self.data_dir}")
         
         # Look for shapefile
         for file in os.listdir(self.data_dir):
@@ -73,13 +73,13 @@ class CoordinateExtractor:
     
     def load_shapefile_with_encoding(self) -> Optional[gpd.GeoDataFrame]:
         """
-        Load shapefile with multiple encoding attempts for Turkish data
+        Türkçe veriler için çoklu kodlama denemeleri ile şekil dosyasını yükle
         
         Returns:
-            GeoDataFrame or None if loading fails
+            GeoDataFrame veya yükleme başarısız olursa None
         """
         if not self.shapefile_path or not os.path.exists(self.shapefile_path):
-            print(f"Shapefile not found: {self.shapefile_path}")
+            print(f"Şekil dosyası bulunamadı: {self.shapefile_path}")
             return None
         
         encodings = [
@@ -94,38 +94,38 @@ class CoordinateExtractor:
             try:
                 if encoding is None:
                     shapefile = gpd.read_file(self.shapefile_path)
-                    print("Shapefile loaded successfully with default encoding")
+                    print("Şekil dosyası varsayılan kodlama ile başarıyla yüklendi")
                 else:
                     shapefile = gpd.read_file(self.shapefile_path, encoding=encoding)
-                    print(f"Shapefile loaded successfully with {encoding} encoding")
+                    print(f"Şekil dosyası {encoding} kodlaması ile başarıyla yüklendi")
                 return shapefile
             except (UnicodeDecodeError, Exception) as e:
                 if encoding is None:
-                    print(f"Default encoding failed: {e}")
+                    print(f"Varsayılan kodlama başarısız: {e}")
                 else:
-                    print(f"Encoding {encoding} failed: {e}")
+                    print(f"Kodlama {encoding} başarısız: {e}")
                 continue
         
-        print("Could not read shapefile with any encoding")
+        print("Herhangi bir kodlama ile şekil dosyası okunamadı")
         return None
     
     def extract_shapefile_coordinates(self) -> Dict[str, Any]:
         """
-        Extract coordinate information from shapefile
+        Şekil dosyasından koordinat bilgilerini çıkar
         
         Returns:
-            Dictionary containing coordinate data
+            Koordinat verilerini içeren sözlük
         """
-        self._update_progress(10, "Loading shapefile...")
+        self._update_progress(10, "Şekil dosyası yükleniyor...")
         
         shapefile = self.load_shapefile_with_encoding()
         if shapefile is None:
             return {
-                'error': 'Could not load shapefile',
+                'error': 'Şekil dosyası yüklenemedi',
                 'shapefile_path': self.shapefile_path
             }
         
-        self._update_progress(30, "Extracting shapefile coordinates...")
+        self._update_progress(30, "Şekil dosyası koordinatları çıkarılıyor...")
         
         # Basic information
         info = {
@@ -137,7 +137,7 @@ class CoordinateExtractor:
         }
         
         if len(shapefile) == 0:
-            return {'error': 'Shapefile contains no features', **info}
+            return {'error': 'Şekil dosyası hiçbir özellik içermiyor', **info}
         
         # Original bounds
         bounds_original = shapefile.bounds.iloc[0]
@@ -190,20 +190,20 @@ class CoordinateExtractor:
     
     def extract_raster_coordinates(self, year: str) -> Dict[str, Any]:
         """
-        Extract coordinate information from raster file
+        Raster dosyasından koordinat bilgilerini çıkar
         
         Args:
-            year: Year of the raster ('2015' or '2023')
+            year: Rasterin yılı ('2015' veya '2023')
             
         Returns:
-            Dictionary containing raster coordinate data
+            Raster koordinat verilerini içeren sözlük
         """
         if year not in self.raster_paths:
-            return {'error': f'No raster file found for year {year}'}
+            return {'error': f'{year} yılı için raster dosyası bulunamadı'}
         
         raster_path = self.raster_paths[year]
         
-        self._update_progress(50, f"Extracting {year} raster coordinates...")
+        self._update_progress(50, f"{year} raster koordinatları çıkarılıyor...")
         
         try:
             with raster_open(raster_path) as src:
@@ -264,19 +264,19 @@ class CoordinateExtractor:
                 
         except Exception as e:
             return {
-                'error': f'Could not read raster file {raster_path}: {str(e)}',
+                'error': f'Raster dosyası {raster_path} okunamadı: {str(e)}',
                 'file_path': raster_path,
                 'year': year
             }
     
     def extract_all_coordinates(self) -> Dict[str, Any]:
         """
-        Extract coordinates from all available data files
+        Mevcut tüm veri dosyalarından koordinatları çıkar
         
         Returns:
-            Complete coordinate information for the dataset
+            Veri seti için tüm koordinat bilgileri
         """
-        self._update_progress(0, "Starting coordinate extraction...")
+        self._update_progress(0, "Koordinat çıkarma başlatılıyor...")
         
         result = {
             'extraction_time': datetime.now().isoformat(),
@@ -295,13 +295,13 @@ class CoordinateExtractor:
         # Summary information
         if 'coordinates_wgs84' in result.get('shapefile', {}):
             result['summary'] = {
-                'region': 'Hatay, Turkey',
+                'region': 'Hatay, Türkiye',
                 'center_coordinates': result['shapefile']['coordinates_wgs84']['center'],
                 'available_years': list(result['rasters'].keys()),
                 'coordinate_system': 'WGS84 (EPSG:4326)'
             }
         
-        self._update_progress(90, "Saving coordinate data...")
+        self._update_progress(90, "Koordinat verileri kaydediliyor...")
         
         # Save to JSON file
         output_file = os.path.join(self.output_dir, 'hatay_coordinates.json')
@@ -310,16 +310,16 @@ class CoordinateExtractor:
         
         result['output_file'] = output_file
         
-        self._update_progress(100, "Coordinate extraction completed")
+        self._update_progress(100, "Koordinat çıkarma tamamlandı")
         
         return result
     
     def get_center_coordinates(self) -> Optional[Tuple[float, float]]:
         """
-        Get center coordinates (lat, lon) for the dataset
+        Veri seti için merkez koordinatlarını (lat, lon) al
         
         Returns:
-            Tuple of (latitude, longitude) or None if not available
+            (enlem, boylam) tuple'ı veya mevcut değilse None
         """
         coordinates = self.extract_all_coordinates()
         if 'summary' in coordinates and 'center_coordinates' in coordinates['summary']:
@@ -329,10 +329,10 @@ class CoordinateExtractor:
     
     def get_bounds_wgs84(self) -> Optional[Dict[str, float]]:
         """
-        Get WGS84 bounds for the dataset
+        Veri seti için WGS84 sınırlarını al
         
         Returns:
-            Dictionary with bounds or None if not available
+            Sınırları içeren sözlük veya mevcut değilse None
         """
         coordinates = self.extract_all_coordinates()
         if 'shapefile' in coordinates and 'coordinates_wgs84' in coordinates['shapefile']:
@@ -341,8 +341,8 @@ class CoordinateExtractor:
 
 
 def main():
-    """Main function for standalone execution"""
-    print("HATAY COORDINATE EXTRACTOR")
+    """Bağımsız çalıştırma için ana fonksiyon"""
+    print("HATAY KOORDİNAT ÇIKARICI")
     print("=" * 50)
     
     extractor = CoordinateExtractor()
@@ -357,33 +357,33 @@ def main():
     result = extractor.extract_all_coordinates()
     
     print("\n" + "=" * 50)
-    print("EXTRACTION RESULTS")
+    print("ÇIKARMA SONUÇLARI")
     print("=" * 50)
     
     # Display summary
     if 'summary' in result:
         summary = result['summary']
-        print(f"Region: {summary['region']}")
+        print(f"Bölge: {summary['region']}")
         center = summary['center_coordinates']
-        print(f"Center: {center['latitude']:.6f}°N, {center['longitude']:.6f}°E")
-        print(f"Available years: {', '.join(summary['available_years'])}")
-        print(f"Coordinate system: {summary['coordinate_system']}")
+        print(f"Merkez: {center['latitude']:.6f}°K, {center['longitude']:.6f}°D")
+        print(f"Mevcut yıllar: {', '.join(summary['available_years'])}")
+        print(f"Koordinat sistemi: {summary['coordinate_system']}")
     
     # Display shapefile info
     if 'shapefile' in result and 'error' not in result['shapefile']:
         shapefile = result['shapefile']
-        print(f"\nShapefile features: {shapefile['feature_count']}")
+        print(f"\nŞekil dosyası özellikleri: {shapefile['feature_count']}")
         if 'area_sq_km' in shapefile:
-            print(f"Area: {shapefile['area_sq_km']:.2f} km²")
+            print(f"Alan: {shapefile['area_sq_km']:.2f} km²")
     
     # Display raster info
     if 'rasters' in result:
         for year, raster in result['rasters'].items():
             if 'error' not in raster:
-                print(f"\n{year} Raster: {raster['width']}x{raster['height']} pixels, {raster['bands']} bands")
+                print(f"\n{year} Raster: {raster['width']}x{raster['height']} piksel, {raster['bands']} bant")
     
     if 'output_file' in result:
-        print(f"\nDetailed results saved to: {result['output_file']}")
+        print(f"\nDetaylı sonuçlar kaydedildi: {result['output_file']}")
     
     return result
 

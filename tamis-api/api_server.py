@@ -36,8 +36,8 @@ except ImportError as e:
     print(f"Warning: Could not import analysis modules: {e}")
 
 app = FastAPI(
-    title="Hatay Earthquake Damage Assessment API",
-    description="REST API for analyzing earthquake damage using satellite imagery",
+    title="Hatay Deprem Hasar Değerlendirme API",
+    description="Uydu görüntüleri kullanarak deprem hasarını analiz eden REST API",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -69,9 +69,9 @@ try:
     analyzer_manager = AnalyzerManager()
     # Add progress callback for real-time updates
     analyzer_manager.add_progress_callback(lambda aid, progress, msg: update_progress(aid, progress, msg))
-    print("Analyzer Manager initialized successfully")
+    print("Analiz Yöneticisi başarıyla başlatıldı")
 except Exception as e:
-    print(f"Failed to initialize Analyzer Manager: {e}")
+    print(f"Analiz Yöneticisi başlatılamadı: {e}")
     analyzer_manager = None
 
 # Global variables for tracking analysis status
@@ -89,17 +89,17 @@ analysis_status = {
 analysis_worker_running = False
 
 def update_progress(task_name: str, progress: int, details: str = ""):
-    """Update global analysis progress"""
+    """Genel analiz ilerlemesini güncelle"""
     global analysis_status
     analysis_status["current_task"] = task_name
     analysis_status["progress"] = min(100, max(0, progress))
     analysis_status["last_updated"] = datetime.now().isoformat()
     if details:
         analysis_status["details"] = details
-    print(f"Progress Update: {task_name} - {progress}% - {details}")
+    print(f"İlerleme Güncellemesi: {task_name} - %{progress} - {details}")
 
 def analysis_worker():
-    """Background worker to process analysis queue using AnalyzerManager"""
+    """AnalyzerManager kullanarak analiz kuyruğunu işleyen arka plan çalışanı"""
     global analysis_worker_running, analysis_status, analysis_queue, analysis_history, analyzer_manager
     
     while analysis_worker_running:
@@ -118,7 +118,7 @@ def analysis_worker():
                 analysis_status["current_analysis_id"] = analysis_id
                 analysis_status["queue_length"] = analysis_queue.qsize()
                 
-                update_progress(f"Starting {task_name}", 5)
+                update_progress(f"{task_name} başlatılıyor", 5)
                 
                 try:
                     # Use analyzer manager if available, fall back to script execution
@@ -140,12 +140,12 @@ def analysis_worker():
                     }
                     
                     if success:
-                        update_progress(f"Completed {task_name}", 100, "Analysis finished successfully")
+                        update_progress(f"{task_name} tamamlandı", 100, "Analiz başarıyla tamamlandı")
                     else:
-                        update_progress(f"Failed {task_name}", 0, "Analysis failed")
+                        update_progress(f"{task_name} başarısız", 0, "Analiz başarısız")
                         
                 except Exception as e:
-                    print(f"Error in analysis worker: {e}")
+                    print(f"Analiz çalışanında hata: {e}")
                     analysis_history[analysis_id] = {
                         "type": analysis_type,
                         "task_name": task_name,
@@ -155,7 +155,7 @@ def analysis_worker():
                         "error": str(e),
                         "duration_seconds": (datetime.now() - datetime.fromisoformat(timestamp)).total_seconds()
                     }
-                    update_progress(f"Error in {task_name}", 0, f"Error: {str(e)}")
+                    update_progress(f"{task_name} hatası", 0, f"Hata: {str(e)}")
                 
                 finally:
                     # Reset status
@@ -170,13 +170,13 @@ def analysis_worker():
                 time.sleep(1)
                 
         except Exception as e:
-            print(f"Worker thread error: {e}")
+            print(f"Çalışan thread hatası: {e}")
             time.sleep(1)
 
 def run_analysis_with_progress_fallback(analyzer_id: str, task_name: str, analysis_id: str) -> bool:
-    """Fallback method using subprocess when AnalyzerManager is not available"""
+    """AnalyzerManager mevcut olmadığında subprocess kullanan yedek yöntem"""
     try:
-        update_progress(task_name, 10, f"Initializing {analyzer_id}")
+        update_progress(task_name, 10, f"{analyzer_id} başlatılıyor")
         
         # Map analyzer IDs to script paths (fallback)
         script_mapping = {
@@ -198,7 +198,7 @@ def run_analysis_with_progress_fallback(analyzer_id: str, task_name: str, analys
         cmd = [sys.executable, script_file] + script_args
         timeout = 600  # 10 minutes max
         
-        update_progress(task_name, 20, f"Running {script_file}")
+        update_progress(task_name, 20, f"{script_file} çalıştırılıyor")
         
         # Run the process with timeout
         process = subprocess.run(
@@ -211,35 +211,35 @@ def run_analysis_with_progress_fallback(analyzer_id: str, task_name: str, analys
         
         # Check results
         if process.returncode == 0:
-            update_progress(task_name, 90, "Processing completed successfully")
+            update_progress(task_name, 90, "İşleme başarıyla tamamlandı")
             
             # Check for specific progress indicators in output
             if "visualize_hatay_data.py" in script_name:
                 if "comparison saved" in process.stdout.lower():
-                    update_progress(task_name, 95, "Visualization files generated")
+                    update_progress(task_name, 95, "Görselleştirme dosyaları oluşturuldu")
                     
             elif "disaster_labeling" in script_name:
                 if "damage assessment" in process.stdout.lower():
-                    update_progress(task_name, 95, "Damage assessment completed")
+                    update_progress(task_name, 95, "Hasar değerlendirmesi tamamlandı")
                     
             elif "create_web_map" in script_name:
                 if "interactive map" in process.stdout.lower():
-                    update_progress(task_name, 95, "Interactive map created")
+                    update_progress(task_name, 95, "Etkileşimli harita oluşturuldu")
             
             return True
         else:
-            error_msg = process.stderr[:200] if process.stderr else f"Process failed with code {process.returncode}"
-            update_progress(task_name, 0, f"Failed: {error_msg}")
-            print(f"Analysis failed: {error_msg}")
+            error_msg = process.stderr[:200] if process.stderr else f"İşlem {process.returncode} koduyla başarısız"
+            update_progress(task_name, 0, f"Başarısız: {error_msg}")
+            print(f"Analiz başarısız: {error_msg}")
             return False
             
     except subprocess.TimeoutExpired:
-        update_progress(task_name, 0, f"Timeout after {timeout} seconds")
-        print(f"Analysis timed out after {timeout} seconds")
+        update_progress(task_name, 0, f"{timeout} saniye sonra zaman aşımı")
+        print(f"Analiz {timeout} saniye sonra zaman aşımına uğradı")
         return False
     except Exception as e:
-        update_progress(task_name, 0, f"Error: {str(e)}")
-        print(f"Analysis error: {e}")
+        update_progress(task_name, 0, f"Hata: {str(e)}")
+        print(f"Analiz hatası: {e}")
         return False
 
 # Start the worker thread
@@ -280,22 +280,22 @@ class DamageReport(BaseModel):
 # Closed road zones data models
 # -----------------------------
 class ClosedZoneBase(BaseModel):
-    name: str = Field(..., description="Zone display name")
+    name: str = Field(..., description="Bölge görünen adı")
     # Polygon coordinates as list of [lat, lng]
-    polygon: List[List[float]] = Field(..., description="Polygon vertices [lat, lng] in order, at least 3 points")
+    polygon: List[List[float]] = Field(..., description="[lat, lng] sırasında polygon köşeleri, en az 3 nokta")
     notes: Optional[str] = None
-    detour_points: Optional[List[List[float]]] = Field(default=None, description="Preferred detour waypoints [lat, lng] outside the closed area")
+    detour_points: Optional[List[List[float]]] = Field(default=None, description="Kapalı alan dışında tercih edilen sapma yol noktaları [lat, lng]")
 
 class ClosedZone(ClosedZoneBase):
     id: str
 
 # Helper functions
 def get_data_dir():
-    """Get the data directory path"""
+    """Veri dizini yolunu al"""
     return "1c__Hatay_Enkaz_Bina_Etiketleme"
 
 def check_data_exists():
-    """Check if required data files exist"""
+    """Gerekli veri dosyalarının var olup olmadığını kontrol et"""
     data_dir = get_data_dir()
     required_files = [
         "HATAY MERKEZ-2 2015.tif",
@@ -305,12 +305,12 @@ def check_data_exists():
     
     for file in required_files:
         if not os.path.exists(os.path.join(data_dir, file)):
-            return False, f"Missing required file: {file}"
+            return False, f"Eksik gerekli dosya: {file}"
     
-    return True, "All required files found"
+    return True, "Tüm gerekli dosyalar bulundu"
 
 async def run_analysis_script(analyzer_id: str, task_name: str):
-    """Legacy function - now redirects to queue system"""
+    """Eski fonksiyon - şimdi kuyruk sistemine yönlendiriyor"""
     # This function is kept for compatibility but now uses the queue
     analysis_id = str(uuid.uuid4())
     timestamp = datetime.now().isoformat()
@@ -332,31 +332,31 @@ async def run_analysis_script(analyzer_id: str, task_name: str):
 
 @app.get("/api/")
 async def root():
-    """Root endpoint with API information"""
+    """API bilgileri ile kök endpoint"""
     return {
-        "message": "Hatay Earthquake Damage Assessment API",
+        "message": "Hatay Deprem Hasar Değerlendirme API",
         "version": "2.0.0",
         "features": [
-            "Class-based Analyzer Infrastructure",
-            "FIFO Analysis Queue System", 
-            "Real-time Progress Tracking",
-            "Background Processing",
-            "Queue Management"
+            "Sınıf Tabanlı Analiz Altyapısı",
+            "FIFO Analiz Kuyruğu Sistemi", 
+            "Gerçek Zamanlı İlerleme Takibi",
+            "Arka Plan İşleme",
+            "Kuyruk Yönetimi"
         ],
         "endpoints": {
-            "GET /": "API information",
-            "GET /health": "Health check",
-            "GET /data/info": "Dataset information",
-            "GET /data/status": "Data files status",
-            "GET /analysis/status": "Current analysis status",
-            "GET /analysis/queue": "Analysis queue status",
-            "GET /analysis/history": "Analysis history",
-            "POST /analysis/run": "Add analysis to queue",
-            "DELETE /analysis/queue/{id}": "Cancel queued analysis",
-            "GET /results/damage-report": "Get damage assessment report",
-            "GET /results/field-analysis": "Get field analysis data",
-            "GET /static/images/{filename}": "Get generated images",
-            "GET /static/maps/{filename}": "Get generated maps"
+            "GET /": "API bilgileri",
+            "GET /health": "Sağlık kontrolü",
+            "GET /data/info": "Veri seti bilgileri",
+            "GET /data/status": "Veri dosyaları durumu",
+            "GET /analysis/status": "Mevcut analiz durumu",
+            "GET /analysis/queue": "Analiz kuyruğu durumu",
+            "GET /analysis/history": "Analiz geçmişi",
+            "POST /analysis/run": "Kuyruğa analiz ekle",
+            "DELETE /analysis/queue/{id}": "Kuyruktaki analizi iptal et",
+            "GET /results/damage-report": "Hasar değerlendirme raporunu al",
+            "GET /results/field-analysis": "Saha analizi verilerini al",
+            "GET /static/images/{filename}": "Oluşturulan görselleri al",
+            "GET /static/maps/{filename}": "Oluşturulan haritaları al"
         }
     }
 
@@ -374,7 +374,7 @@ def load_closed_zones() -> List[ClosedZone]:
                 zones: List[ClosedZone] = [ClosedZone(**z) for z in data]
                 return [z.dict() for z in zones]  # return as dicts
     except Exception as e:
-        print(f"Failed to load zones: {e}")
+        print(f"Bölgeler yüklenemedi: {e}")
     return []
 
 def save_closed_zones(zones: List[Dict[str, Any]]):
@@ -383,7 +383,7 @@ def save_closed_zones(zones: List[Dict[str, Any]]):
         json.dump(zones, f, ensure_ascii=False, indent=2)
 
 def point_in_polygon(lat: float, lng: float, polygon: List[List[float]]) -> bool:
-    """Ray casting algorithm for point-in-polygon. Polygon: list of [lat, lng]."""
+    """Nokta-içinde-polygon için ışın yayılımı algoritması. Polygon: [lat, lng] listesi."""
     inside = False
     n = len(polygon)
     if n < 3:
@@ -406,7 +406,7 @@ def polygon_bbox(polygon: List[List[float]]) -> Tuple[float, float, float, float
     return min(lats), min(lngs), max(lats), max(lngs)
 
 def compute_detour_candidates(polygon: List[List[float]], margin: float = 0.001) -> List[List[float]]:
-    """Return 4 candidate detour points slightly outside polygon bbox: [lat, lng]."""
+    """Polygon kutusunun hafifçe dışında 4 aday sapma noktası döndür: [lat, lng]."""
     minLat, minLng, maxLat, maxLng = polygon_bbox(polygon)
     return [
         [minLat - margin, minLng - margin],
@@ -416,7 +416,7 @@ def compute_detour_candidates(polygon: List[List[float]], margin: float = 0.001)
     ]
 
 def compute_bbox_corners(polygon: List[List[float]], margin: float = 0.001) -> List[List[float]]:
-    """Return TL, TR, BR, BL corners of expanded bbox as [lat,lng]."""
+    """Genişletilmiş bbox'ın SL, SR, GR, GL köşelerini [lat,lng] olarak döndür."""
     minLat, minLng, maxLat, maxLng = polygon_bbox(polygon)
     top = maxLat + margin
     bottom = minLat - margin
@@ -436,7 +436,7 @@ def _on_segment(ax: float, ay: float, bx: float, by: float, cx: float, cy: float
     return min(ax, cx) - 1e-12 <= bx <= max(ax, cx) + 1e-12 and min(ay, cy) - 1e-12 <= by <= max(ay, cy) + 1e-12
 
 def segments_intersect(p1: List[float], p2: List[float], q1: List[float], q2: List[float]) -> bool:
-    """Segment intersection test using orientation, coordinates given as [lat,lng]."""
+    """Yönelim kullanarak segment kesişme testi, koordinatlar [lat,lng] olarak verilmiştir."""
     # Convert to x=lng, y=lat
     ax, ay = p1[1], p1[0]
     bx, by = p2[1], p2[0]
@@ -488,7 +488,7 @@ def choose_zone_detours(polygon: List[List[float]], start: List[float], end: Lis
 
 @app.get("/api/analyzers")
 async def get_available_analyzers():
-    """Get information about all available analyzers"""
+    """Mevcut tüm analizörlerin bilgilerini al"""
     if analyzer_manager:
         analyzers = analyzer_manager.list_analyzers()
         prerequisites = analyzer_manager.check_prerequisites()
@@ -502,7 +502,7 @@ async def get_available_analyzers():
     else:
         return {
             "success": False,
-            "error": "Analyzer manager not available",
+            "error": "Analiz yöneticisi mevcut değil",
             "analyzers": {},
             "prerequisites": {},
             "system_ready": False
@@ -510,17 +510,17 @@ async def get_available_analyzers():
 
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint"""
+    """Sağlık kontrolü endpoint'i"""
     data_exists, message = check_data_exists()
     return {
-        "status": "healthy" if data_exists else "warning",
+        "status": "sağlıklı" if data_exists else "uyarı",
         "timestamp": datetime.now().isoformat(),
         "data_status": message
     }
 
 @app.get("/api/data/info")
 async def get_data_info():
-    """Get comprehensive dataset information"""
+    """Kapsamlı veri seti bilgilerini al"""
     try:
         data_exists, message = check_data_exists()
         if not data_exists:
@@ -581,23 +581,23 @@ async def get_data_info():
             "data_directory": data_dir,
             "files": file_info,
             "analysis_capabilities": [
-                "Static visualization comparison",
-                "Interactive web mapping",
-                "AI-powered damage classification",
-                "Field-level damage assessment",
-                "Statistical analysis and reporting"
+                "Statik görselleştirme karşılaştırması",
+                "Etkileşimli web haritalama",
+                "AI destekli hasar sınıflandırması",
+                "Saha düzeyinde hasar değerlendirmesi",
+                "İstatistiksel analiz ve raporlama"
             ]
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error getting data info: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Veri bilgileri alınırken hata: {str(e)}")
 
 @app.get("/api/data/coordinates")
 async def get_coordinates():
-    """Extract and return coordinate information from the dataset"""
+    """Veri setinden koordinat bilgilerini çıkar ve döndür"""
     try:
         if not analyzer_manager:
-            raise HTTPException(status_code=500, detail="Analyzer Manager not available")
+            raise HTTPException(status_code=500, detail="Analiz Yöneticisi mevcut değil")
         
         # Check if coordinates have already been extracted
         coords_file = os.path.join("output", "hatay_coordinates.json")
@@ -611,14 +611,14 @@ async def get_coordinates():
         if result['status'] == 'completed' and 'analysis_result' in result:
             return result['analysis_result']
         else:
-            raise HTTPException(status_code=500, detail=f"Coordinate extraction failed: {result.get('message', 'Unknown error')}")
+            raise HTTPException(status_code=500, detail=f"Koordinat çıkarma başarısız: {result.get('message', 'Bilinmeyen hata')}")
             
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error extracting coordinates: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Koordinatlar çıkarılırken hata: {str(e)}")
 
 @app.get("/api/data/status")
 async def get_data_status():
-    """Get current status of data files"""
+    """Veri dosyalarının mevcut durumunu al"""
     data_dir = get_data_dir()
     
     files_status = {}
@@ -690,22 +690,22 @@ async def create_closed_zone(zone: ClosedZoneBase):
     return {"created": new_zone}
 
 @app.delete("/api/closed-zones/{zone_id}")
-async def delete_closed_zone(zone_id: str = ApiPath(..., description="Zone ID")):
+async def delete_closed_zone(zone_id: str = ApiPath(..., description="Bölge ID")):
     zones = load_closed_zones()
     new_zones = [z for z in zones if z.get("id") != zone_id]
     if len(new_zones) == len(zones):
-        raise HTTPException(status_code=404, detail="Zone not found")
+        raise HTTPException(status_code=404, detail="Bölge bulunamadı")
     save_closed_zones(new_zones)
     return {"deleted": zone_id}
 
 @app.get("/api/analysis/status", response_model=AnalysisStatus)
 async def get_analysis_status():
-    """Get current analysis status"""
+    """Mevcut analiz durumunu al"""
     return AnalysisStatus(**analysis_status)
 
 @app.get("/api/analysis/queue")
 async def get_analysis_queue():
-    """Get current analysis queue status"""
+    """Mevcut analiz kuyruğu durumunu al"""
     queue_list = []
     temp_queue = queue.Queue()
     
@@ -739,8 +739,8 @@ async def get_analysis_queue():
     }
 
 @app.get("/api/analysis/history")
-async def get_analysis_history(limit: int = Query(10, description="Number of recent analyses to return")):
-    """Get history of completed analyses"""
+async def get_analysis_history(limit: int = Query(10, description="Döndürülecek son analiz sayısı")):
+    """Tamamlanan analizlerin geçmişini al"""
     recent_history = list(analysis_history.items())[-limit:] if analysis_history else []
     
     return {
@@ -755,9 +755,9 @@ async def get_analysis_history(limit: int = Query(10, description="Number of rec
 
 @app.delete("/api/analysis/queue/{analysis_id}")
 async def cancel_queued_analysis(analysis_id: str):
-    """Cancel a queued analysis (cannot cancel running analysis)"""
+    """Kuyruktaki bir analizi iptal et (çalışan analiz iptal edilemez)"""
     if analysis_status.get("current_analysis_id") == analysis_id:
-        raise HTTPException(status_code=400, detail="Cannot cancel currently running analysis")
+        raise HTTPException(status_code=400, detail="Şu anda çalışan analiz iptal edilemez")
     
     # Find and remove from queue
     temp_queue = queue.Queue()
@@ -780,16 +780,16 @@ async def cancel_queued_analysis(analysis_id: str):
     analysis_status["queue_length"] = analysis_queue.qsize()
     
     if not found:
-        raise HTTPException(status_code=404, detail="Analysis not found in queue")
+        raise HTTPException(status_code=404, detail="Analiz kuyrukta bulunamadı")
     
     return {
-        "message": f"Analysis {analysis_id} cancelled",
+        "message": f"Analiz {analysis_id} iptal edildi",
         "remaining_queue_length": analysis_queue.qsize()
     }
 
 @app.post("/api/analysis/run")
 async def run_analysis(request: AnalysisRequest, background_tasks: BackgroundTasks):
-    """Add analysis to queue for processing"""
+    """İşleme için kuyruğa analiz ekle"""
     global analysis_status, analysis_queue
     
     data_exists, message = check_data_exists()
@@ -809,7 +809,7 @@ async def run_analysis(request: AnalysisRequest, background_tasks: BackgroundTas
     if analysis_type not in script_mapping:
         raise HTTPException(
             status_code=400,
-            detail=f"Invalid analysis type. Choose from: {list(script_mapping.keys())}"
+            detail=f"Geçersiz analiz türü. Şunlardan birini seçin: {list(script_mapping.keys())}"
         )
     
     analyzer_id = script_mapping[analysis_type]
@@ -817,9 +817,9 @@ async def run_analysis(request: AnalysisRequest, background_tasks: BackgroundTas
     # Get analyzer info for task name
     if analyzer_manager:
         analyzer_info = analyzer_manager.get_analyzer_info(analyzer_id)
-        task_name = analyzer_info['name'] if analyzer_info else f"Running {analysis_type} analysis"
+        task_name = analyzer_info['name'] if analyzer_info else f"{analysis_type} analizi çalıştırılıyor"
     else:
-        task_name = f"Running {analysis_type} analysis"
+        task_name = f"{analysis_type} analizi çalıştırılıyor"
     analysis_id = str(uuid.uuid4())
     timestamp = datetime.now().isoformat()
     
@@ -842,7 +842,7 @@ async def run_analysis(request: AnalysisRequest, background_tasks: BackgroundTas
         queue_position += 1
     
     return {
-        "message": f"Analysis queued: {task_name}",
+        "message": f"Analiz kuyruğa eklendi: {task_name}",
         "analysis_id": analysis_id,
         "analysis_type": analysis_type,
         "queue_position": queue_position,
@@ -853,13 +853,13 @@ async def run_analysis(request: AnalysisRequest, background_tasks: BackgroundTas
 
 @app.get("/api/results/damage-report")
 async def get_damage_report():
-    """Get the generated damage assessment report"""
+    """Oluşturulan hasar değerlendirme raporunu al"""
     report_path = os.path.join("output", "hatay_damage_report.json")
     
     if not os.path.exists(report_path):
         raise HTTPException(
             status_code=404,
-            detail="Damage report not found. Run damage labeling analysis first."
+            detail="Hasar raporu bulunamadı. Önce hasar etiketleme analizini çalıştırın."
         )
     
     try:
@@ -867,17 +867,17 @@ async def get_damage_report():
             report_data = json.load(f)
         return report_data
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error reading damage report: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Hasar raporu okunurken hata: {str(e)}")
 
 @app.get("/api/results/field-analysis")
 async def get_field_analysis():
-    """Get the field analysis data with coordinates"""
+    """Koordinatları içeren saha analizi verilerini al"""
     analysis_path = os.path.join("output", "hatay_field_analysis.json")
     
     if not os.path.exists(analysis_path):
         raise HTTPException(
             status_code=404,
-            detail="Field analysis not found. Run disaster labeling analysis first."
+            detail="Saha analizi bulunamadı. Önce afet etiketleme analizini çalıştırın."
         )
     
     try:
@@ -885,11 +885,11 @@ async def get_field_analysis():
             analysis_data = json.load(f)
         return analysis_data
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error reading field analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Saha analizi okunurken hata: {str(e)}")
 
 @app.get("/api/results/summary")
 async def get_analysis_summary():
-    """Get a summary of all available analysis results"""
+    """Tüm mevcut analiz sonuçlarının özetini al"""
     summary = {
         "timestamp": datetime.now().isoformat(),
         "available_results": {},
@@ -932,19 +932,19 @@ async def get_analysis_summary():
 
 @app.get("/api/images/{filename}")
 async def get_image(filename: str):
-    """Serve generated images"""
+    """Oluşturulan görselleri sun"""
     file_path = os.path.join("output", filename)
     if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Image not found")
+        raise HTTPException(status_code=404, detail="Görsel bulunamadı")
     
     return FileResponse(file_path)
 
 @app.get("/api/maps/{filename}")
 async def get_map(filename: str):
-    """Serve generated HTML maps"""
+    """Oluşturulan HTML haritalarını sun"""
     file_path = os.path.join("output", filename)
     if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Map not found")
+        raise HTTPException(status_code=404, detail="Harita bulunamadı")
     
     return FileResponse(file_path)
 
@@ -952,9 +952,9 @@ async def get_map(filename: str):
 
 @app.get("/api/damage/by-severity")
 async def get_damage_by_severity():
-    """Get damage statistics grouped by severity level"""
+    """Şiddet düzeyine göre gruplandırılmış hasar istatistiklerini al"""
     if not os.path.exists(os.path.join("output", "hatay_damage_report.json")):
-        raise HTTPException(status_code=404, detail="Damage report not found")
+        raise HTTPException(status_code=404, detail="Hasar raporu bulunamadı")
     
     try:
         with open(os.path.join("output", "hatay_damage_report.json"), 'r') as f:
@@ -973,18 +973,18 @@ async def get_damage_by_severity():
         
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing damage data: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Hasar verileri işlenirken hata: {str(e)}")
 
 @app.get("/api/fields/search")
 async def search_fields(
-    min_area: Optional[float] = Query(None, description="Minimum field area in m2"),
-    max_area: Optional[float] = Query(None, description="Maximum field area in m2"),
-    damage_level: Optional[str] = Query(None, description="Damage level filter"),
-    limit: Optional[int] = Query(100, description="Maximum number of results")
+    min_area: Optional[float] = Query(None, description="m2 cinsinden minimum saha alanı"),
+    max_area: Optional[float] = Query(None, description="m2 cinsinden maksimum saha alanı"),
+    damage_level: Optional[str] = Query(None, description="Hasar düzeyi filtresi"),
+    limit: Optional[int] = Query(100, description="Maksimum sonuç sayısı")
 ):
-    """Search and filter field analysis data"""
+    """Saha analizi verilerini ara ve filtrele"""
     if not os.path.exists(os.path.join("output", "hatay_field_analysis.json")):
-        raise HTTPException(status_code=404, detail="Field analysis not found")
+        raise HTTPException(status_code=404, detail="Saha analizi bulunamadı")
     
     try:
         with open(os.path.join("output", "hatay_field_analysis.json"), 'r') as f:
@@ -1019,7 +1019,7 @@ async def search_fields(
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error searching fields: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Sahalar aranırken hata: {str(e)}")
     
 @app.get("/api/findOptimalRoute")
 async def find_optimal_route(
@@ -1027,14 +1027,14 @@ async def find_optimal_route(
     start_lng: str,
     end_lat: str,
     end_lng: str,
-    avoid_closed_zones: Optional[bool] = Query(False, description="If true, compute alternatives to avoid closed zones"),
-    via: Optional[str] = Query(None, description="Pipe-separated additional waypoints 'lat,lng|lat,lng'")
+    avoid_closed_zones: Optional[bool] = Query(False, description="True ise, kapalı bölgelerden kaçınmak için alternatifler hesapla"),
+    via: Optional[str] = Query(None, description="Boru ile ayrılmış ek geçiş noktaları 'lat,lng|lat,lng'")
 ):
-    """Find the optimal route between two points.
+    """İki nokta arasında optimal rotayı bul.
 
-    - If `via` is provided, it will be inserted between start and end when calling the routing service.
-    - If `avoid_closed_zones` is true, we will check the base route against stored closed zones and compute
-      alternative routes by inserting detour points outside intersected zones.
+    - Eğer `via` sağlanırsa, yönlendirme servisi çağrılırken başlangıç ve bitiş arasına eklenecektir.
+    - Eğer `avoid_closed_zones` true ise, temel rotayı saklanan kapalı bölgelere karşı kontrol edeceğiz ve
+      kesişen bölgeler dışına sapma noktaları ekleyerek alternatif rotalar hesaplayacağız.
     """
 
     url = "https://route-and-directions.p.rapidapi.com/v1/routing"
@@ -1047,7 +1047,7 @@ async def find_optimal_route(
         qs = {"waypoints": waypoints_str, "mode": "drive"}
         resp = requests.get(url, headers=headers, params=qs)
         if resp.status_code != 200:
-            raise HTTPException(status_code=500, detail=f"Error fetching route data ({resp.status_code})")
+            raise HTTPException(status_code=500, detail=f"Rota verisi alınırken hata ({resp.status_code})")
         return resp.json()
 
     base_waypoints = f"{start_lat},{start_lng}"
@@ -1135,7 +1135,7 @@ async def find_optimal_route(
                     })
                     kept += 1
             except HTTPException as e:
-                print(f"Alternative candidate failed: {e.detail}")
+                print(f"Alternatif aday başarısız: {e.detail}")
 
     return {
         "start": {"lat": start_lat, "lon": start_lng},
@@ -1146,12 +1146,12 @@ async def find_optimal_route(
     }
 
 if __name__ == "__main__":
-    print("Starting Hatay Earthquake Damage Assessment API Server")
+    print("Hatay Deprem Hasar Değerlendirme API Sunucusu Başlatılıyor")
     print("=" * 60)
-    print("[API] Documentation: http://127.0.0.1:7887/docs")
+    print("[API] Belgeler: http://127.0.0.1:7887/docs")
     print("[API] ReDoc: http://127.0.0.1:7887/redoc")
-    print("[API] Health Check: http://127.0.0.1:7887/health")
-    print("[API] Data Info: http://127.0.0.1:7887/data/info")
+    print("[API] Sağlık Kontrolü: http://127.0.0.1:7887/health")
+    print("[API] Veri Bilgileri: http://127.0.0.1:7887/data/info")
     print("=" * 60)
     
     uvicorn.run(

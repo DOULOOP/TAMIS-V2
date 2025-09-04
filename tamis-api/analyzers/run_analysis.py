@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Quick start script for Hatay earthquake damage assessment analysis
-This script provides a menu to run different analysis options
+Hatay deprem hasar değerlendirme analizi için hızlı başlangıç betiği
+Bu betik farklı analiz seçeneklerini çalıştırmak için bir menü sağlar
 """
 
 import os
@@ -9,7 +9,7 @@ import sys
 import subprocess
 
 def check_dependencies():
-    """Check if required packages are installed"""
+    """Gerekli paketlerin yüklenip yüklenmediğini kontrol et"""
     try:
         import rasterio
         import geopandas
@@ -17,15 +17,15 @@ def check_dependencies():
         import folium
         return True
     except ImportError as e:
-        print(f"Missing dependency: {e}")
-        print("Please install required packages with: pip install -r requirements.txt")
+        print(f"Eksik bağımlılık: {e}")
+        print("Lütfen gerekli paketleri yükleyin: pip install -r requirements.txt")
         return False
 
 def run_script(script_name):
-    """Run a Python script and handle errors"""
+    """Python betiğini çalıştır ve hataları işle"""
     try:
         print(f"\n{'='*60}")
-        print(f"Running: {script_name}")
+        print(f"Çalıştırılıyor: {script_name}")
         print(f"{'='*60}")
         
         result = subprocess.run([sys.executable, script_name], 
@@ -33,52 +33,52 @@ def run_script(script_name):
                               text=True)
         
         if result.returncode == 0:
-            print(f"\nSUCCESS: {script_name} completed successfully!")
+            print(f"\nBAŞARILI: {script_name} başarıyla tamamlandı!")
         else:
-            print(f"\nFAILED: {script_name} failed with return code: {result.returncode}")
+            print(f"\nBAŞARISIZ: {script_name} dönüş kodu ile başarısız oldu: {result.returncode}")
             
     except Exception as e:
-        print(f"Error running {script_name}: {e}")
+        print(f"{script_name} çalıştırma hatası: {e}")
 
 def main(auto_run_all=False):
     """
-    Main function to run analysis toolkit
+    Analiz araç setini çalıştırmak için ana fonksiyon
     
     Args:
-        auto_run_all (bool): If True, automatically run all analyses without user interaction
+        auto_run_all (bool): True ise, kullanıcı etkileşimi olmadan otomatik olarak tüm analizleri çalıştır
     """
     
-    print("HATAY EARTHQUAKE DAMAGE ASSESSMENT TOOLKIT")
+    print("HATAY DEPREM HASAR DEĞERLENDİRME ARAÇ SETİ")
     print("=" * 60)
-    print("This toolkit helps analyze satellite imagery from Hatay, Turkey")
-    print("comparing pre-earthquake (2015) vs post-earthquake (2023) conditions.")
+    print("Bu araç seti Hatay, Türkiye'den uydu görüntülerini analiz etmeye yardımcı olur")
+    print("deprem öncesi (2015) ve deprem sonrası (2023) koşulları karşılaştırır.")
     print("=" * 60)
     
     # Check dependencies
     if not check_dependencies():
-        print("\nMissing required packages. Please run:")
+        print("\nGerekli paketler eksik. Lütfen çalıştırın:")
         print("   pip install -r requirements.txt")
         return
     
     # Check if data exists
     data_dir = "1c__Hatay_Enkaz_Bina_Etiketleme"
     if not os.path.exists(data_dir):
-        print(f"\nData directory not found: {data_dir}")
-        print("Please ensure your data is in the correct location.")
+        print(f"\nVeri dizini bulunamadı: {data_dir}")
+        print("Lütfen verilerinizin doğru konumda olduğundan emin olun.")
         return
     
-    print("\nDependencies and data directory found!")
+    print("\nBağımlılıklar ve veri dizini bulundu!")
     
     # Check if running in automated mode
     if auto_run_all:
-        print("Running in automated mode - executing all analyses...")
+        print("Otomatik modda çalışıyor - tüm analizler yürütülüyor...")
         # Run all analysis in order - use absolute paths from analyzers directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
         analyses = [
-            ("Checking data information...", os.path.join(current_dir, "check_data_info.py")),
-            ("Creating static visualization...", os.path.join(current_dir, "visualize_hatay_data.py")),
-            ("Creating interactive web map...", os.path.join(current_dir, "create_web_map.py")),
-            ("Running AI disaster size labeling...", os.path.join(current_dir, "disaster_labeling.py"))
+            ("Veri bilgileri kontrol ediliyor...", os.path.join(current_dir, "check_data_info.py")),
+            ("Statik görselleştirme oluşturuluyor...", os.path.join(current_dir, "visualize_hatay_data.py")),
+            ("Etkileşimli web haritası oluşturuluyor...", os.path.join(current_dir, "create_web_map.py")),
+            ("AI afet boyutu etiketleme çalışıyor...", os.path.join(current_dir, "disaster_labeling.py"))
         ]
         
         for desc, script in analyses:
@@ -87,101 +87,101 @@ def main(auto_run_all=False):
                 result = subprocess.run([sys.executable, script], 
                                       capture_output=True, text=True, timeout=300)
                 if result.returncode == 0:
-                    print(f"PASS {desc} completed successfully")
+                    print(f"BAŞARILI {desc} başarıyla tamamlandı")
                 else:
-                    print(f"FAIL {desc} failed: {result.stderr[:200]}")
+                    print(f"BAŞARISIZ {desc} başarısız: {result.stderr[:200]}")
             except subprocess.TimeoutExpired:
-                print(f"TIMEOUT {desc} timed out after 5 minutes")
+                print(f"ZAMAN AŞIMI {desc} 5 dakika sonra zaman aşımına uğradı")
             except Exception as e:
-                print(f"ERROR {desc}: {e}")
+                print(f"HATA {desc}: {e}")
         
-        print("\nAll automated analyses completed!")
+        print("\nTüm otomatik analizler tamamlandı!")
         return
     
     # Interactive mode
     while True:
         print(f"\n{'='*60}")
-        print("ANALYSIS OPTIONS")
+        print("ANALİZ SEÇENEKLERİ")
         print("=" * 60)
-        print("1. Check Data Information (Quick overview)")
-        print("2. Create Static Visualization (Recommended)")
-        print("3. Create Interactive Web Map")
-        print("4. AI Disaster Size Labeling (NEW!)")
-        print("5. Run All Analysis")
-        print("6. Show Help")
-        print("7. Exit")
+        print("1. Veri Bilgilerini Kontrol Et (Hızlı genel bakış)")
+        print("2. Statik Görselleştirme Oluştur (Önerilen)")
+        print("3. Etkileşimli Web Haritası Oluştur")
+        print("4. AI Afet Boyutu Etiketleme (YENİ!)")
+        print("5. Tüm Analizleri Çalıştır")
+        print("6. Yardımı Göster")
+        print("7. Çıkış")
         print("=" * 60)
         
-        choice = input("\nSelect an option (1-7): ").strip()
+        choice = input("\nBir seçenek seçin (1-7): ").strip()
         
         if choice == '1':
-            print("\nChecking data information...")
+            print("\nVeri bilgileri kontrol ediliyor...")
             run_script("check_data_info.py")
             
         elif choice == '2':
-            print("\nCreating static visualization...")
+            print("\nStatik görselleştirme oluşturuluyor...")
             run_script("visualize_hatay_data.py")
-            print("\nOutput: hatay_comparison.png")
+            print("\nÇıktı: hatay_comparison.png")
             
         elif choice == '3':
-            print("\nCreating interactive web map...")
+            print("\nEtkileşimli web haritası oluşturuluyor...")
             run_script("create_web_map.py")
-            print("\nOutput: hatay_interactive_map.html")
-            print("Open the HTML file in your web browser to view the map")
+            print("\nÇıktı: hatay_interactive_map.html")
+            print("Haritayı görüntülemek için HTML dosyasını web tarayıcınızda açın")
             
         elif choice == '4':
-            print("\nRunning AI Disaster Size Labeling...")
-            print("This will analyze satellite imagery to automatically detect and")
-            print("   classify earthquake damage into severity levels:")
-            print("   • Minimal (green) - < 10% change")
-            print("   • Moderate (yellow) - 10-30% change") 
-            print("   • Severe (orange) - 30-60% change")
-            print("   • Catastrophic (red) - > 60% change")
-            print("\nProcessing large images with optimized algorithms...")
+            print("\nAI Afet Boyutu Etiketleme çalışıyor...")
+            print("Bu, deprem hasarını otomatik olarak tespit etmek ve")
+            print("   hasar şiddet seviyelerine göre sınıflandırmak için uydu görüntülerini analiz edecek:")
+            print("   • Minimal (yeşil) - < %10 değişiklik")
+            print("   • Orta (sarı) - %10-30 değişiklik") 
+            print("   • Ciddi (turuncu) - %30-60 değişiklik")
+            print("   • Felaket (kırmızı) - > %60 değişiklik")
+            print("\nOptimize edilmiş algoritmalar ile büyük görüntüler işleniyor...")
             run_script("disaster_labeling.py")
-            print("\nAI Analysis outputs:")
-            print("   • hatay_damage_assessment.png (damage visualization)")
-            print("   • hatay_damage_report.json (detailed statistics)")
+            print("\nAI Analiz çıktıları:")
+            print("   • hatay_damage_assessment.png (hasar görselleştirmesi)")
+            print("   • hatay_damage_report.json (detaylı istatistikler)")
             
         elif choice == '5':
-            print("\nRunning complete analysis...")
+            print("\nKapsamlı analiz çalışıyor...")
             run_script("check_data_info.py")
             run_script("visualize_hatay_data.py") 
             run_script("create_web_map.py")
             run_script("disaster_labeling.py")
-            print("\nComplete analysis finished!")
-            print("Generated files:")
-            print("   • hatay_comparison.png (static visualization)")
-            print("   • hatay_interactive_map.html (web map)")
-            print("   • hatay_damage_assessment.png (AI damage analysis)")
-            print("   • hatay_damage_report.json (damage statistics)")
+            print("\nKapsamlı analiz tamamlandı!")
+            print("Oluşturulan dosyalar:")
+            print("   • hatay_comparison.png (statik görselleştirme)")
+            print("   • hatay_interactive_map.html (web haritası)")
+            print("   • hatay_damage_assessment.png (AI hasar analizi)")
+            print("   • hatay_damage_report.json (hasar istatistikleri)")
             
         elif choice == '6':
-            print("\nHELP & INFORMATION")
+            print("\nYARDIM VE BİLGİ")
             print("-" * 40)
-            print("Dataset: Hatay earthquake damage assessment")
-            print("Time period: 2015 (pre) vs 2023 (post-earthquake)")
-            print("Purpose: Building and infrastructure damage analysis")
-            print("Data format: GeoTIFF imagery + Shapefile boundaries")
-            print("\nAnalysis Options:")
-            print("• Option 1: Basic data overview and file information")
-            print("• Option 2: Side-by-side image comparison (best for analysis)")
-            print("• Option 3: Interactive web map (best for exploration)")
-            print("• Option 4: AI disaster labeling with damage severity classification")
-            print("• Option 5: Complete analysis pipeline (all tools)")
-            print("\nAI Features:")
-            print("• Automated change detection using SSIM, color, and edge analysis")
-            print("• Damage classification: Minimal, Moderate, Severe, Catastrophic")
-            print("• Performance optimized for large satellite imagery")
-            print("• Detailed statistics and visual overlays")
-            print("\nFor detailed documentation, see README.md")
+            print("Veri seti: Hatay deprem hasar değerlendirmesi")
+            print("Zaman periyodu: 2015 (öncesi) vs 2023 (deprem sonrası)")
+            print("Amaç: Bina ve altyapı hasar analizi")
+            print("Veri formatı: GeoTIFF görüntü + Shapefile sınırlar")
+            print("\nAnaliz Seçenekleri:")
+            print("• Seçenek 1: Temel veri genel bakış ve dosya bilgileri")
+            print("• Seçenek 2: Yan yana görüntü karşılaştırması (analiz için en iyi)")
+            print("• Seçenek 3: Etkileşimli web haritası (keşif için en iyi)")
+            print("• Seçenek 4: Hasar şiddeti sınıflandırması ile AI afet etiketleme")
+            print("• Seçenek 5: Kapsamlı analiz ardışık düzeni (tüm araçlar)")
+            print("\nAI Özellikleri:")
+            print("• SSIM, renk ve kenar analizi kullanarak otomatik değişiklik tespiti")
+            print("• Hasar sınıflandırması: Minimal, Orta, Ciddi, Felaket")
+            print("• Büyük uydu görüntüleri için performans optimize edildi")
+            print("• Detaylı istatistikler ve görsel katmanlar")
+            print("\nDetaylı dokümantasyon için README.md dosyasına bakın")
             
         elif choice == '7':
-            print("\nExiting toolkit. Thank you for using the analysis tools!")
+            print("\nAraç setinden çıkılıyor. Analiz araçlarını kullandığınız için teşekkürler!")
             break
             
         else:
-            print("\nInvalid option. Please select 1-7.")
+            print("\nGeçersiz seçenek. Lütfen 1-7 arası seçin.")
     
 if __name__ == "__main__":
     # Check if script should run in automated mode

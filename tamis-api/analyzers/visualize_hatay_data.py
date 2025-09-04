@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Hatay Earthquake Damage Assessment Data Visualization
-Compares satellite imagery from 2015 (pre-earthquake) and 2023 (post-earthquake)
+Hatay Deprem Hasar Değerlendirme Veri Görselleştirmesi
+2015 (deprem öncesi) ve 2023 (deprem sonrası) uydu görüntülerini karşılaştırır
 """
 
 import os
@@ -24,14 +24,14 @@ def main():
     files_to_check = [img_2015_path, img_2023_path, boundaries_path]
     for file_path in files_to_check:
         if not os.path.exists(file_path):
-            print(f"Error: File not found: {file_path}")
+            print(f"Hata: Dosya bulunamadı: {file_path}")
             return
     
-    print("Reading Hatay earthquake damage assessment data...")
+    print("Hatay deprem hasar değerlendirme verileri okunuyor...")
     print("=" * 60)
     
     # Read the boundary shapefile
-    print("Loading boundary data...")
+    print("Sınır verileri yükleniyor...")
     try:
         # Try different encodings for the shapefile
         for encoding in ['utf-8', 'latin1', 'cp1252', 'iso-8859-1']:
@@ -43,40 +43,40 @@ def main():
         else:
             # If all encodings fail, try without specifying encoding
             boundaries = gpd.read_file(boundaries_path)
-        print(f"✓ Boundary shapefile loaded successfully")
-        print(f"  - Number of features: {len(boundaries)}")
-        print(f"  - Geometry type: {boundaries.geom_type.iloc[0] if len(boundaries) > 0 else 'None'}")
+        print(f"✓ Sınır şekil dosyası başarıyla yüklendi")
+        print(f"  - Özellik sayısı: {len(boundaries)}")
+        print(f"  - Geometri türü: {boundaries.geom_type.iloc[0] if len(boundaries) > 0 else 'Hiçbiri'}")
         print(f"  - CRS: {boundaries.crs}")
-        print(f"  - Columns: {list(boundaries.columns)}")
+        print(f"  - Sütunlar: {list(boundaries.columns)}")
         
         if len(boundaries) > 0:
-            print("\nBoundary data preview:")
+            print("\nSınır veri önizlemesi:")
             print(boundaries.head())
             
     except Exception as e:
-        print(f"Error reading boundary file: {e}")
+        print(f"Sınır dosyası okuma hatası: {e}")
         boundaries = None
     
     # Read and display satellite imagery
     print(f"\n{'='*60}")
-    print("Loading satellite imagery...")
+    print("Uydu görüntüleri yükleniyor...")
     
     try:
         # Create figure for side-by-side comparison
         fig, axes = plt.subplots(1, 2, figsize=(16, 8))
-        fig.suptitle('Hatay Satellite Imagery Comparison: Pre vs Post Earthquake', fontsize=16, fontweight='bold')
+        fig.suptitle('Hatay Uydu Görüntüsü Karşılaştırması: Deprem Öncesi vs Sonrası', fontsize=16, fontweight='bold')
         
         # Display 2015 imagery (pre-earthquake)
-        print("Loading 2015 imagery (pre-earthquake)...")
+        print("2015 görüntüsü (deprem öncesi) yükleniyor...")
         with rasterio.open(img_2015_path) as src_2015:
-            print(f"  - Dimensions: {src_2015.width} x {src_2015.height}")
-            print(f"  - Bands: {src_2015.count}")
+            print(f"  - Boyutlar: {src_2015.width} x {src_2015.height}")
+            print(f"  - Bantlar: {src_2015.count}")
             print(f"  - CRS: {src_2015.crs}")
-            print(f"  - Bounds: {src_2015.bounds}")
+            print(f"  - Sınırlar: {src_2015.bounds}")
             
             # Read with downsampling if image is too large
             if src_2015.width * src_2015.height > 50_000_000:  # > 50M pixels
-                print("  - Large image detected, downsampling for display...")
+                print("  - Büyük görüntü algılandı, görüntüleme için örnekleme yapılıyor...")
                 downsample_factor = max(1, int(np.sqrt((src_2015.width * src_2015.height) / 10_000_000)))
                 data_2015 = src_2015.read(out_shape=(src_2015.count, 
                                                    src_2015.height // downsample_factor,
@@ -93,19 +93,19 @@ def main():
                 # Display the image normally
                 show(src_2015, ax=axes[0])
             
-            axes[0].set_title('2015 (Pre-Earthquake)', fontsize=14, fontweight='bold')
+            axes[0].set_title('2015 (Deprem Öncesi)', fontsize=14, fontweight='bold')
         
         # Display 2023 imagery (post-earthquake)
-        print("\nLoading 2023 imagery (post-earthquake)...")
+        print("\n2023 görüntüsü (deprem sonrası) yükleniyor...")
         with rasterio.open(img_2023_path) as src_2023:
-            print(f"  - Dimensions: {src_2023.width} x {src_2023.height}")
-            print(f"  - Bands: {src_2023.count}")
+            print(f"  - Boyutlar: {src_2023.width} x {src_2023.height}")
+            print(f"  - Bantlar: {src_2023.count}")
             print(f"  - CRS: {src_2023.crs}")
-            print(f"  - Bounds: {src_2023.bounds}")
+            print(f"  - Sınırlar: {src_2023.bounds}")
             
             # Read with downsampling if image is too large
             if src_2023.width * src_2023.height > 50_000_000:  # > 50M pixels
-                print("  - Large image detected, downsampling for display...")
+                print("  - Büyük görüntü algılandı, görüntüleme için örnekleme yapılıyor...")
                 downsample_factor = max(1, int(np.sqrt((src_2023.width * src_2023.height) / 10_000_000)))
                 data_2023 = src_2023.read(out_shape=(src_2023.count, 
                                                    src_2023.height // downsample_factor,
@@ -119,7 +119,7 @@ def main():
                 # Display the image normally
                 show(src_2023, ax=axes[1])
             
-            axes[1].set_title('2023 (Post-Earthquake)', fontsize=14, fontweight='bold')
+            axes[1].set_title('2023 (Deprem Sonrası)', fontsize=14, fontweight='bold')
         
         # Overlay boundaries if available and in compatible CRS
         if boundaries is not None:
@@ -129,7 +129,7 @@ def main():
                     raster_crs = src.crs
                 
                 if boundaries.crs != raster_crs:
-                    print(f"Converting boundaries from {boundaries.crs} to {raster_crs}")
+                    print(f"Sınırlar {boundaries.crs} sisteminden {raster_crs} sistemine dönüştürülüyor")
                     boundaries_proj = boundaries.to_crs(raster_crs)
                 else:
                     boundaries_proj = boundaries
@@ -137,10 +137,10 @@ def main():
                 # Plot boundaries on both images
                 boundaries_proj.plot(ax=axes[0], facecolor='none', edgecolor='red', linewidth=2, alpha=0.8)
                 boundaries_proj.plot(ax=axes[1], facecolor='none', edgecolor='red', linewidth=2, alpha=0.8)
-                print("✓ Boundaries overlaid on imagery")
+                print("✓ Sınırlar görüntülerin üzerine yerleştirildi")
                 
             except Exception as e:
-                print(f"Warning: Could not overlay boundaries: {e}")
+                print(f"Uyarı: Sınırlar yerleştirilemedi: {e}")
         
         # Improve plot appearance
         for ax in axes:
@@ -154,24 +154,24 @@ def main():
         os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, "hatay_comparison.png")
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
-        print(f"\n✓ Visualization saved as: {output_file}")
+        print(f"\n✓ Görselleştirme kaydedildi: {output_file}")
         
         # Show the plot
         plt.show()
         
     except Exception as e:
-        print(f"Error processing imagery: {e}")
+        print(f"Görüntü işleme hatası: {e}")
     
     print(f"\n{'='*60}")
-    print("Analysis complete!")
-    print("\nThis dataset appears to contain:")
-    print("• Pre-earthquake satellite imagery from 2015")
-    print("• Post-earthquake satellite imagery from 2023") 
-    print("• Administrative/study area boundaries")
-    print("\nUse this data to:")
-    print("• Identify damaged buildings and infrastructure")
-    print("• Assess earthquake impact on the urban environment")
-    print("• Plan recovery and reconstruction efforts")
+    print("Analiz tamamlandı!")
+    print("\nBu veri seti şunları içeriyor gibi görünüyor:")
+    print("• 2015'ten deprem öncesi uydu görüntüleri")
+    print("• 2023'ten deprem sonrası uydu görüntüleri") 
+    print("• İdari/çalışma alanı sınırları")
+    print("\nBu veriyi şunlar için kullanın:")
+    print("• Hasarlı binaları ve altyapıyı belirleyin")
+    print("• Depremin kentsel çevre üzerindeki etkisini değerlendirin")
+    print("• İyileştirme ve yeniden yapılanma çalışmalarını planlayın")
 
 if __name__ == "__main__":
     main()

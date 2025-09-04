@@ -4,7 +4,7 @@
     "image_dimensions": "11323 x 9015",
     "resolution_m_per_pixel": 0.2213599999999748,
     "total_area_km2": 5.001790883379374,
-    "analysis_method": "Multi-method change detection with SSIM, color difference, and edge detection"
+    "analysis_method": "SSIM, renk farkı ve kenar algılama ile çoklu yöntem değişiklik tespiti"
   },
   "damage_assessment": {
     "minimal": {
@@ -43,7 +43,7 @@
   "summary": {
     "total_damaged_area_km2": 2.817152,
     "percentage_area_affected": 56.32,
-    "most_common_damage_level": "severe",
+    "most_common_damage_level": "ciddi",
     "total_damage_regions": 4
   }
 }

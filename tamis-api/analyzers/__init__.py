@@ -1,20 +1,20 @@
 """
-Analyzers Package for Hatay Earthquake Damage Assessment
+Hatay Deprem Hasar Değerlendirmesi için Analizörler Paketi
 
-This package contains all the analysis tools for processing satellite imagery
-and generating damage assessments for the Hatay earthquake analysis.
+Bu paket, uydu görüntülerini işlemek ve Hatay deprem analizi için
+hasar değerlendirmeleri oluşturmak üzere tüm analiz araçlarını içerir.
 
-Available analyzers:
-- analyzer_manager: Centralized manager for all analysis tools (NEW!)
-- check_data_info: Data information and validation
-- visualize_hatay_data: Static visualization generation  
-- create_web_map: Interactive web map creation
-- disaster_labeling: Advanced AI damage classification
-- run_analysis: Complete analysis orchestrator
+Mevcut analizörler:
+- analyzer_manager: Tüm analiz araçları için merkezi yönetici (YENİ!)
+- check_data_info: Veri bilgileri ve doğrulama
+- visualize_hatay_data: Statik görselleştirme oluşturma  
+- create_web_map: Etkileşimli web haritası oluşturma
+- disaster_labeling: Gelişmiş AI hasar sınıflandırması
+- run_analysis: Tam analiz orkestratörü
 """
 
 __version__ = "2.0.0"
-__author__ = "Hatay Earthquake Analysis Team"
+__author__ = "Hatay Deprem Analiz Ekibi"
 
 # Import main analyzer manager and classes for easy access
 try:
@@ -28,7 +28,7 @@ try:
         run_full_analysis
     )
 except ImportError as e:
-    print(f"Warning: Could not import some analyzers: {e}")
+    print(f"Uyarı: Bazı analizörler içe aktarılamadı: {e}")
     # Handle import errors gracefully
     pass
 
