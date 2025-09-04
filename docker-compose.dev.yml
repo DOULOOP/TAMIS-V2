@@ -1,0 +1,74 @@
+services:
+  # PostgreSQL Database (same as production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: tamis-postgres-dev
+    environment:
+      POSTGRES_DB: tamis_dev
+      POSTGRES_USER: tamis_user
+      POSTGRES_PASSWORD: tamis_password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - tamis-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tamis_user -d tamis_dev"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Next.js Application (Development Mode)
+  tamis-web-dev:
+    build:
+      context: ./tamis
+      dockerfile: Dockerfile
+      target: base  # Use base stage for development
+    container_name: tamis-web-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://tamis_user:tamis_password@postgres:5432/tamis_dev
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=dev-secret-key
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tamis-network
+    volumes:
+      - ./tamis:/app
+      - /app/node_modules
+      - /app/.next
+    command: >
+      sh -c "
+        bunx prisma migrate deploy &&
+        bun run dev
+      "
+
+  # Python API Server (Development)
+  tamis-api-dev:
+    build:
+      context: ./tamis-api
+      dockerfile: Dockerfile
+    container_name: tamis-api-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - tamis-network
+    volumes:
+      - ./tamis-api:/app
+      - tamis_data:/app/1c__Hatay_Enkaz_Bina_Etiketleme
+    command: python -m uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_dev_data:
+  tamis_data:
+
+networks:
+  tamis-network:
+    driver: bridge

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "prisma": {
+    "prisma": {
     "seed": "tsx prisma/seed/seed.ts"
   },
   "scripts": {
