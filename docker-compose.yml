@@ -1,0 +1,79 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: tamis-postgres
+    environment:
+      POSTGRES_DB: tamis
+      POSTGRES_USER: tamis_user
+      POSTGRES_PASSWORD: tamis_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - tamis-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tamis_user -d tamis"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Next.js Application
+  tamis-web:
+    build:
+      context: ./tamis
+      dockerfile: Dockerfile
+    container_name: tamis-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://tamis_user:tamis_password@postgres:5432/tamis
+      - NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+      - JWT_SECRET=tamis-super-secret-jwt-key-2025-change-in-production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tamis-network
+    volumes:
+      - ./tamis/prisma:/app/prisma
+    command: >
+      sh -c "
+        bunx prisma db push && 
+        bunx prisma db seed &&
+        bunx prisma generate &&
+        node server.js
+      "
+
+  # Python API Server
+  tamis-api:
+    build:
+      context: ./tamis-api
+      dockerfile: Dockerfile
+    container_name: tamis-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - tamis-network
+    volumes:
+      - ./tamis-api/output:/app/output
+      - ./tamis-api/static:/app/static
+      - ./tamis-api/analyzers:/app/analyzers
+      - tamis_data:/app/1c__Hatay_Enkaz_Bina_Etiketleme
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  tamis_data:
+
+networks:
+  tamis-network:
+    driver: bridge
