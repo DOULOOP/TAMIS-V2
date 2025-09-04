@@ -26,7 +26,7 @@ Bu kılavuz, TAMIS uygulaması için detaylı Docker özel talimatları sağlar.
    NEXTAUTH_URL="http://localhost:3000"
    NEXTAUTH_SECRET="your-super-secret-key-here"
    JWT_SECRET="tamis-super-secret-jwt-key-2025-change-in-production"
-   NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+   NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
    EOF
    ```
 
@@ -37,8 +37,8 @@ Bu kılavuz, TAMIS uygulaması için detaylı Docker özel talimatları sağlar.
 
 4. **Uygulamaya erişin**:
    - **Web Uygulaması**: http://localhost:3000
-   - **API Dokümantasyonu**: http://localhost:8000/docs
-   - **API Sağlık**: http://localhost:8000/api/health
+   - **API Dokümantasyonu**: http://localhost:7887/docs
+   - **API Sağlık**: http://localhost:7887/api/health
    - **Veritabanı**: localhost:5432 (kullanıcı: tamis_user, şifre: tamis_password)
 
 ### Geliştirme Kurulumu
@@ -101,7 +101,7 @@ Docker kurulumu şu geliştirmelerle optimize edilmiştir:
 Container'lar artık bu önceden yapılandırılmış ortam değişkenlerini içeriyor:
 ```env
 NODE_ENV="production"
-NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
 JWT_SECRET="tamis-super-secret-jwt-key-2025-change-in-production"
 DATABASE_URL="postgresql://tamis_user:tamis_password@postgres:5432/tamis"
 ```
@@ -189,7 +189,7 @@ docker cp path/to/satellite-data/ tamis-api:/app/1c__Hatay_Enkaz_Bina_Etiketleme
 # - ./your-data-directory:/app/1c__Hatay_Enkaz_Bina_Etiketleme
 
 # API veri durumunu kontrol et
-curl http://localhost:8000/api/data/status
+curl http://localhost:7887/api/data/status
 ```
 
 Beklenen veri yapısı:

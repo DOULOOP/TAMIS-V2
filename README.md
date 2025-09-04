@@ -37,8 +37,8 @@ Tercih ettiğiniz kurulum yöntemini seçin:
 
 3. **Servislere erişin**:
    - **Web Uygulaması**: http://localhost:3000
-   - **API Dokümantasyonu**: http://localhost:8000/docs
-   - **API Durum Kontrolü**: http://localhost:8000/api/health
+   - **API Dokümantasyonu**: http://localhost:7887/docs
+   - **API Durum Kontrolü**: http://localhost:7887/api/health
 
 ### Docker Servisleri
 
@@ -52,7 +52,7 @@ Kurulum üç konteynerli servisi içerir:
 - **Veritabanı**: Prisma ORM ile PostgreSQL
 
 #### 🐍 Python API Sunucusu (`tamis-api`)
-- **Port**: 8000
+- **Port**: 7887
 - **Framework**: Python 3.11 ile FastAPI
 - **Özellikler**: 
   - Uydu görüntüsü analizi
@@ -101,7 +101,7 @@ NEXTAUTH_SECRET="your-super-secret-key-here"
 JWT_SECRET="tamis-super-secret-jwt-key-2025-change-in-production"
 
 # API Yapılandırması
-NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
 
 # Geliştirme
 NODE_ENV="development"
@@ -206,7 +206,7 @@ conda install -c conda-forge gdal geopandas
    python api_server.py
 
    # Veya uvicorn'u doğrudan kullanarak
-   uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
+   uvicorn api_server:app --host 0.0.0.0 --port 7887 --reload
    ```
 
 ### Veritabanı Kurulumu (PostgreSQL)
@@ -306,7 +306,7 @@ NEXTAUTH_SECRET="your-super-secret-key"
 JWT_SECRET="your-jwt-secret"
 
 # API Yapılandırması
-NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
 
 # Geliştirme ayarları
 NODE_ENV="development"
@@ -316,7 +316,7 @@ SKIP_ENV_VALIDATION="false"
 #### Python API (Ortam)
 Python API ortam değişkenlerini kullanır veya FastAPI ayarları aracılığıyla yapılandırılabilir. Ana yapılandırmalar:
 
-- **Host/Port**: Varsayılan `0.0.0.0:8000`
+- **Host/Port**: Varsayılan `0.0.0.0:7887`
 - **Veri Dizini**: `1c__Hatay_Enkaz_Bina_Etiketleme/` (uydu görüntüleri için)
 - **Çıktı Dizini**: `output/` (oluşturulan analiz için)
 
@@ -352,9 +352,9 @@ Python API ortam değişkenlerini kullanır veya FastAPI ayarları aracılığı
 
 API sunucusu çalıştığında şunlara erişebilirsiniz:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
+- **Swagger UI**: http://localhost:7887/docs
+- **ReDoc**: http://localhost:7887/redoc
+- **OpenAPI JSON**: http://localhost:7887/openapi.json
 
 ### Ana Endpoint'ler
 

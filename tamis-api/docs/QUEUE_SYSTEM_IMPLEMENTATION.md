@@ -175,7 +175,7 @@ python test_queue_system.py
 
 ### Environment Variables
 ```env
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_API_URL=http://127.0.0.1:7887
 ```
 
 ### API Server Configuration
