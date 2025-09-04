@@ -1,61 +1,61 @@
-# Hatay Earthquake Damage Assessment API
+# Hatay Deprem Hasar Değerlendirme API
 
-## 🌍 Overview
+## 🌍 Genel Bakış
 
-This FastAPI server provides REST API endpoints to access the Hatay earthquake damage assessment functionality. It exposes all analysis capabilities through HTTP endpoints, making it easy to integrate with web applications like Next.js.
+Bu FastAPI sunucusu, Hatay deprem hasar değerlendirme işlevselliğine erişim için REST API uç noktaları sağlar. Tüm analiz yeteneklerini HTTP uç noktaları aracılığıyla açığa çıkararak Next.js gibi web uygulamalarıyla entegrasyonu kolaylaştırır.
 
-## 🚀 Quick Start
+## 🚀 Hızlı Başlangıç
 
-### Installation & Setup
+### Kurulum ve Ayar
 
-1. **Install dependencies:**
+1. **Bağımlılıkları yükle:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Start the server:**
+2. **Sunucuyu başlat:**
    ```bash
    python start_api_server.py
-   # or
+   # veya
    python api_server.py
-   # or (Windows PowerShell)
+   # veya (Windows PowerShell)
    .\start_api_server.ps1
    ```
 
-3. **Access the API:**
-   - API Documentation: http://127.0.0.1:7887/docs
-   - Alternative Docs: http://127.0.0.1:7887/redoc
-   - Health Check: http://127.0.0.1:7887/health
+3. **API'ye erişim:**
+   - API Dokümantasyonu: http://127.0.0.1:7887/docs
+   - Alternatif Dokümanlar: http://127.0.0.1:7887/redoc
+   - Sağlık Kontrolü: http://127.0.0.1:7887/health
 
-## 📡 API Endpoints
+## 📡 API Uç Noktaları
 
-### 🔧 System Endpoints
+### 🔧 Sistem Uç Noktaları
 
 #### `GET /`
-- **Description**: API information and available endpoints
-- **Response**: JSON with API metadata and endpoint list
+- **Açıklama**: API bilgileri ve mevcut uç noktalar
+- **Yanıt**: API meta verileri ve uç nokta listesi ile JSON
 
 #### `GET /health`
-- **Description**: Health check and data status
-- **Response**: 
+- **Açıklama**: Sağlık kontrolü ve veri durumu
+- **Yanıt**: 
   ```json
   {
     "status": "healthy|warning",
     "timestamp": "2025-08-28T...",
-    "data_status": "All required files found"
+    "data_status": "Tüm gerekli dosyalar bulundu"
   }
   ```
 
 #### `GET /data/status`
-- **Description**: Detailed status of all data files
-- **Response**: JSON with file existence, sizes, and modification dates
+- **Açıklama**: Tüm veri dosyalarının detaylı durumu
+- **Yanıt**: Dosya varlığı, boyutları ve değişiklik tarihleri ile JSON
 
-### 📊 Data Information
+### 📊 Veri Bilgileri
 
 #### `GET /data/info`
-- **Description**: Comprehensive dataset information
-- **Response**: JSON with imagery metadata, file sizes, coordinate systems, etc.
-- **Example Response**:
+- **Açıklama**: Kapsamlı veri kümesi bilgileri
+- **Yanıt**: Görüntü meta verileri, dosya boyutları, koordinat sistemleri vb. ile JSON
+- **Örnek Yanıt**:
   ```json
   {
     "timestamp": "2025-08-28T...",
@@ -81,11 +81,11 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
   }
   ```
 
-### 🤖 Analysis Execution
+### 🤖 Analiz Yürütme
 
 #### `GET /analysis/status`
-- **Description**: Current analysis status
-- **Response**:
+- **Açıklama**: Mevcut analiz durumu
+- **Yanıt**:
   ```json
   {
     "running": false,
@@ -96,34 +96,34 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
   ```
 
 #### `POST /analysis/run`
-- **Description**: Start analysis process
-- **Request Body**:
+- **Açıklama**: Analiz sürecini başlat
+- **İstek Gövdesi**:
   ```json
   {
     "analysis_type": "data_info|visualization|web_map|damage_labeling|all",
     "options": {}
   }
   ```
-- **Analysis Types**:
-  - `data_info`: Quick data overview
-  - `visualization`: Static comparison image
-  - `web_map`: Interactive HTML map
-  - `damage_labeling`: AI damage classification
-  - `all`: Complete analysis pipeline
+- **Analiz Türleri**:
+  - `data_info`: Hızlı veri genel bakış
+  - `visualization`: Statik karşılaştırma görüntüsü
+  - `web_map`: Etkileşimli HTML haritası
+  - `damage_labeling`: AI hasar sınıflandırması
+  - `all`: Tam analiz ardışık düzeni
 
-### 📈 Results & Reports
+### 📈 Sonuçlar ve Raporlar
 
 #### `GET /results/damage-report`
-- **Description**: Get AI damage assessment report
-- **Response**: Complete damage analysis with statistics
-- **Example Response**:
+- **Açıklama**: AI hasar değerlendirme raporunu al
+- **Yanıt**: İstatistiklerle tam hasar analizi
+- **Örnek Yanıt**:
   ```json
   {
     "analysis_metadata": {
       "timestamp": "2025-08-28T...",
       "image_dimensions": "11323 x 9015",
       "total_area_km2": 5.002,
-      "analysis_method": "Multi-method change detection"
+      "analysis_method": "Çok yöntemli değişiklik algılama"
     },
     "damage_assessment": {
       "minimal": {
@@ -143,32 +143,32 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
   ```
 
 #### `GET /results/field-analysis`
-- **Description**: Get field-level analysis data
-- **Response**: Individual field statistics and damage assessments
+- **Açıklama**: Alan düzeyinde analiz verilerini al
+- **Yanıt**: Bireysel alan istatistikleri ve hasar değerlendirmeleri
 
 #### `GET /results/summary`
-- **Description**: Summary of all available analysis results
-- **Response**: Overview of generated outputs and key statistics
+- **Açıklama**: Mevcut tüm analiz sonuçlarının özeti
+- **Yanıt**: Oluşturulan çıktılar ve anahtar istatistiklerin genel bakışı
 
-### 🎨 Visual Outputs
+### 🎨 Görsel Çıktılar
 
 #### `GET /images/{filename}`
-- **Description**: Serve generated images
-- **Parameters**: 
-  - `filename`: Image filename (e.g., "hatay_comparison.png")
-- **Response**: Image file
+- **Açıklama**: Oluşturulan resimleri sun
+- **Parametreler**: 
+  - `filename`: Resim dosya adı (örn. "hatay_comparison.png")
+- **Yanıt**: Resim dosyası
 
 #### `GET /maps/{filename}` 
-- **Description**: Serve generated HTML maps
-- **Parameters**:
-  - `filename`: Map filename (e.g., "hatay_interactive_map.html")
-- **Response**: HTML file
+- **Açıklama**: Oluşturulan HTML haritalarını sun
+- **Parametreler**:
+  - `filename`: Harita dosya adı (örn. "hatay_interactive_map.html")
+- **Yanıt**: HTML dosyası
 
-### 🔍 Advanced Queries
+### 🔍 Gelişmiş Sorgular
 
 #### `GET /damage/by-severity`
-- **Description**: Get damage statistics grouped by severity
-- **Response**: 
+- **Açıklama**: Şiddete göre gruplandırılmış hasar istatistiklerini al
+- **Yanıt**: 
   ```json
   {
     "minimal": {
@@ -187,36 +187,36 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
   ```
 
 #### `GET /fields/search`
-- **Description**: Search and filter field data
-- **Query Parameters**:
-  - `min_area`: Minimum field area in m²
-  - `max_area`: Maximum field area in m²
-  - `damage_level`: Filter by damage level
-  - `limit`: Maximum results (default: 100)
-- **Example**: `/fields/search?damage_level=severe&min_area=1000&limit=50`
+- **Açıklama**: Alan verilerini ara ve filtrele
+- **Sorgu Parametreleri**:
+  - `min_area`: m² cinsinden minimum alan boyutu
+  - `max_area`: m² cinsinden maksimum alan boyutu
+  - `damage_level`: Hasar seviyesine göre filtrele
+  - `limit`: Maksimum sonuç (varsayılan: 100)
+- **Örnek**: `/fields/search?damage_level=severe&min_area=1000&limit=50`
 
-## 🔧 Integration with Next.js
+## 🔧 Next.js ile Entegrasyon
 
-### Basic Setup
+### Temel Kurulum
 
 ```javascript
 // lib/api.js
 const API_BASE_URL = 'http://127.0.0.1:7887';
 
 export const api = {
-  // Get system health
+  // Sistem sağlığını al
   async getHealth() {
     const response = await fetch(`${API_BASE_URL}/health`);
     return response.json();
   },
 
-  // Get dataset information
+  // Veri kümesi bilgilerini al
   async getDataInfo() {
     const response = await fetch(`${API_BASE_URL}/data/info`);
     return response.json();
   },
 
-  // Start analysis
+  // Analizi başlat
   async startAnalysis(analysisType, options = {}) {
     const response = await fetch(`${API_BASE_URL}/analysis/run`, {
       method: 'POST',
@@ -229,25 +229,25 @@ export const api = {
     return response.json();
   },
 
-  // Get analysis status
+  // Analiz durumunu al
   async getAnalysisStatus() {
     const response = await fetch(`${API_BASE_URL}/analysis/status`);
     return response.json();
   },
 
-  // Get damage report
+  // Hasar raporunu al
   async getDamageReport() {
     const response = await fetch(`${API_BASE_URL}/results/damage-report`);
     return response.json();
   },
 
-  // Get damage by severity
+  // Şiddete göre hasarı al
   async getDamageBySeverity() {
     const response = await fetch(`${API_BASE_URL}/damage/by-severity`);
     return response.json();
   },
 
-  // Search fields
+  // Alanları ara
   async searchFields(filters = {}) {
     const params = new URLSearchParams(filters);
     const response = await fetch(`${API_BASE_URL}/fields/search?${params}`);
@@ -256,7 +256,7 @@ export const api = {
 };
 ```
 
-### React Component Example
+### React Bileşen Örneği
 
 ```jsx
 // components/DashboardComponent.jsx
@@ -269,11 +269,11 @@ export default function DashboardComponent() {
   const [analysisStatus, setAnalysisStatus] = useState(null);
 
   useEffect(() => {
-    // Load initial data
+    // Başlangıç verilerini yükle
     api.getDataInfo().then(setDataInfo);
     api.getDamageReport().then(setDamageReport).catch(() => {});
     
-    // Poll analysis status
+    // Analiz durumunu yokla
     const interval = setInterval(() => {
       api.getAnalysisStatus().then(setAnalysisStatus);
     }, 2000);
@@ -284,60 +284,60 @@ export default function DashboardComponent() {
   const startAnalysis = async (type) => {
     try {
       await api.startAnalysis(type);
-      // Status will be updated by polling
+      // Durum yoklama ile güncellenecek
     } catch (error) {
-      console.error('Failed to start analysis:', error);
+      console.error('Analiz başlatılamadı:', error);
     }
   };
 
   return (
     <div className="dashboard">
-      <h1>Hatay Earthquake Damage Assessment</h1>
+      <h1>Hatay Deprem Hasar Değerlendirmesi</h1>
       
-      {/* Data Info Section */}
+      {/* Veri Bilgi Bölümü */}
       {dataInfo && (
         <div className="data-info">
-          <h2>Dataset Information</h2>
-          <p>Total Area: {dataInfo.files?.boundaries?.total_area_km2} km²</p>
-          <p>2015 Image: {dataInfo.files?.image_2015?.size_gb} GB</p>
-          <p>2023 Image: {dataInfo.files?.image_2023?.size_gb} GB</p>
+          <h2>Veri Kümesi Bilgileri</h2>
+          <p>Toplam Alan: {dataInfo.files?.boundaries?.total_area_km2} km²</p>
+          <p>2015 Görüntüsü: {dataInfo.files?.image_2015?.size_gb} GB</p>
+          <p>2023 Görüntüsü: {dataInfo.files?.image_2023?.size_gb} GB</p>
         </div>
       )}
 
-      {/* Analysis Controls */}
+      {/* Analiz Kontrolleri */}
       <div className="analysis-controls">
-        <h2>Analysis Tools</h2>
+        <h2>Analiz Araçları</h2>
         <button onClick={() => startAnalysis('visualization')}>
-          Create Comparison
+          Karşılaştırma Oluştur
         </button>
         <button onClick={() => startAnalysis('damage_labeling')}>
-          Run AI Analysis
+          AI Analizi Çalıştır
         </button>
         <button onClick={() => startAnalysis('web_map')}>
-          Generate Map
+          Harita Oluştur
         </button>
       </div>
 
-      {/* Analysis Status */}
+      {/* Analiz Durumu */}
       {analysisStatus?.running && (
         <div className="analysis-status">
-          <h3>Analysis Running...</h3>
-          <p>Task: {analysisStatus.current_task}</p>
-          <p>Progress: {analysisStatus.progress}%</p>
+          <h3>Analiz Çalışıyor...</h3>
+          <p>Görev: {analysisStatus.current_task}</p>
+          <p>İlerleme: {analysisStatus.progress}%</p>
         </div>
       )}
 
-      {/* Damage Report */}
+      {/* Hasar Raporu */}
       {damageReport && (
         <div className="damage-report">
-          <h2>Damage Assessment Results</h2>
-          <p>Total Area Analyzed: {damageReport.analysis_metadata.total_area_km2} km²</p>
+          <h2>Hasar Değerlendirme Sonuçları</h2>
+          <p>Analiz Edilen Toplam Alan: {damageReport.analysis_metadata.total_area_km2} km²</p>
           
           {Object.entries(damageReport.damage_assessment).map(([severity, stats]) => (
             <div key={severity} className={`damage-${severity}`}>
-              <h3>{severity.charAt(0).toUpperCase() + severity.slice(1)} Damage</h3>
-              <p>Area: {stats.total_area_km2} km² ({stats.percentage_of_total_area}%)</p>
-              <p>Regions: {stats.region_count}</p>
+              <h3>{severity.charAt(0).toUpperCase() + severity.slice(1)} Hasar</h3>
+              <p>Alan: {stats.total_area_km2} km² ({stats.percentage_of_total_area}%)</p>
+              <p>Bölgeler: {stats.region_count}</p>
             </div>
           ))}
         </div>
@@ -347,91 +347,91 @@ export default function DashboardComponent() {
 }
 ```
 
-## ⚡ Performance Considerations
+## ⚡ Performans Hususları
 
-### Server Optimization
-- Analysis runs in background tasks to avoid blocking
-- Large images processed in memory-efficient tiles
-- Progress tracking for long-running operations
-- Proper error handling and status reporting
+### Sunucu Optimizasyonu
+- Analiz, bloklama yapmamak için arka plan görevlerinde çalışır
+- Büyük görüntüler bellek verimli döşemelerde işlenir
+- Uzun süren işlemler için ilerleme takibi
+- Uygun hata işleme ve durum raporlama
 
-### Client Integration
-- Use polling for analysis status updates
-- Implement loading states during analysis
-- Cache results to avoid repeated API calls
-- Handle errors gracefully with user feedback
+### İstemci Entegrasyonu
+- Analiz durumu güncellemeleri için yoklama kullan
+- Analiz sırasında yükleniyor durumlarını uygula
+- Tekrarlanan API çağrılarını önlemek için sonuçları önbelleğe al
+- Kullanıcı geri bildirimi ile hataları zarif bir şekilde işle
 
-## 🔒 CORS Configuration
+## 🔒 CORS Yapılandırması
 
-The API is configured with CORS for local development:
-- Allowed origins: `http://localhost:3000`, `http://127.0.0.1:3000`
-- All HTTP methods and headers allowed
-- Credentials supported
+API yerel geliştirme için CORS ile yapılandırılmıştır:
+- İzin verilen kaynaklar: `http://localhost:3000`, `http://127.0.0.1:3000`
+- Tüm HTTP yöntemleri ve başlıkları izin verilir
+- Kimlik bilgileri desteklenir
 
-For production, update the CORS settings in `api_server.py`:
+Üretim için `api_server.py` içindeki CORS ayarlarını güncelle:
 
 ```python
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://your-domain.com"],  # Update for production
+    allow_origins=["https://your-domain.com"],  # Üretim için güncelle
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 ```
 
-## 🐛 Troubleshooting
+## 🐛 Sorun Giderme
 
-### Common Issues
+### Yaygın Sorunlar
 
-1. **Port 7887 already in use**
-   - Change port in `api_server.py`: `uvicorn.run(..., port=8001)`
+1. **Port 7887 zaten kullanımda**
+   - `api_server.py` içinde portu değiştir: `uvicorn.run(..., port=8001)`
 
-2. **Missing dependencies**
-   - Run: `pip install -r requirements.txt`
+2. **Eksik bağımlılıklar**
+   - Çalıştır: `pip install -r requirements.txt`
 
-3. **Data files not found**
-   - Ensure data directory exists: `1c__Hatay_Enkaz_Bina_Etiketleme/`
-   - Check file paths in API responses
+3. **Veri dosyaları bulunamadı**
+   - Veri dizininin var olduğundan emin ol: `1c__Hatay_Enkaz_Bina_Etiketleme/`
+   - API yanıtlarında dosya yollarını kontrol et
 
-4. **CORS errors in browser**
-   - Verify Next.js is running on allowed ports (3000)
-   - Check browser console for specific CORS messages
+4. **Tarayıcıda CORS hataları**
+   - Next.js'in izin verilen portlarda (3000) çalıştığını doğrula
+   - Belirli CORS mesajları için tarayıcı konsolunu kontrol et
 
-5. **Analysis fails**
-   - Check server logs for specific errors
-   - Verify all input files are accessible
-   - Ensure sufficient disk space and memory
+5. **Analiz başarısız**
+   - Belirli hatalar için sunucu loglarını kontrol et
+   - Tüm giriş dosyalarının erişilebilir olduğunu doğrula
+   - Yeterli disk alanı ve bellek olduğundan emin ol
 
-### API Testing
+### API Testi
 
-Use the built-in documentation:
-- Interactive API docs: http://127.0.0.1:7887/docs
-- Try endpoints directly in the browser
-- Use curl or Postman for testing:
+Dahili dokümantasyonu kullan:
+- Etkileşimli API dokümanları: http://127.0.0.1:7887/docs
+- Uç noktaları doğrudan tarayıcıda dene
+- Test için curl veya Postman kullan:
 
 ```bash
-# Health check
+# Sağlık kontrolü
 curl http://127.0.0.1:7887/health
 
-# Get data info
+# Veri bilgilerini al
 curl http://127.0.0.1:7887/data/info
 
-# Start analysis
+# Analizi başlat
 curl -X POST http://127.0.0.1:7887/analysis/run \
   -H "Content-Type: application/json" \
   -d '{"analysis_type": "visualization"}'
 ```
 
-## 📚 Next Steps
+## 📚 Sonraki Adımlar
 
-1. **Integrate with Next.js**: Use the provided code examples
-2. **Add authentication**: Implement API keys or JWT tokens if needed
-3. **Deploy to production**: Consider Docker containerization
-4. **Add rate limiting**: Prevent API abuse
-5. **Implement caching**: Redis for frequently accessed data
-6. **Add monitoring**: Logging and metrics collection
+1. **Next.js ile entegre et**: Sağlanan kod örneklerini kullan
+2. **Kimlik doğrulama ekle**: Gerekirse API anahtarları veya JWT tokenları uygula
+3. **Üretime dağıt**: Docker konteynerleştirmesi düşün
+4. **Oran sınırlandırma ekle**: API kötüye kullanımını önle
+5. **Önbelleğe alma uygula**: Sık erişilen veriler için Redis
+6. **İzleme ekle**: Log toplama ve metrik koleksiyonu
 
 ---
 
-*The API server provides a complete REST interface to all earthquake damage assessment capabilities, making it easy to build interactive web applications.*
+*API sunucusu, etkileşimli web uygulamaları oluşturmayı kolaylaştıran tüm deprem hasar değerlendirme yeteneklerine tam REST arayüzü sağlar.*

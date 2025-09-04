@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-High-Performance Disaster Size Labeling System for Hatay Earthquake Assessment
-Uses optimized image processing techniques for change detection and damage classification
+Hatay Deprem Değerlendirmesi için Yüksek Performanslı Afet Boyutu Etiketleme Sistemi
+Değişiklik tespiti ve hasar sınıflandırması için optimize edilmiş görüntü işleme teknikleri kullanır
 """
 
 import os
@@ -33,16 +33,16 @@ except ImportError:
             sys.path.append(os.path.dirname(os.path.abspath(__file__)))
             from coordinate_extractor import CoordinateExtractor
         except ImportError:
-            print("Warning: CoordinateExtractor not available")
+            print("Uyarı: CoordinateExtractor mevcut değil")
             CoordinateExtractor = None
 
 class DisasterLabeler:
     def __init__(self, data_dir="1c__Hatay_Enkaz_Bina_Etiketleme"):
         """
-        Initialize the disaster labeling system
+        Afet etiketleme sistemini başlat
         
         Args:
-            data_dir (str): Directory containing the satellite imagery
+            data_dir (str): Uydu görüntülerini içeren dizin
         """
         self.data_dir = data_dir
         self.img_2015_path = os.path.join(data_dir, "HATAY MERKEZ-2 2015.tif")
@@ -66,19 +66,19 @@ class DisasterLabeler:
             try:
                 self.coordinate_extractor = CoordinateExtractor(data_dir)
                 self.coordinates_data = None
-                print("Coordinate extractor initialized successfully")
+                print("Koordinat çıkarıcı başarıyla başlatıldı")
             except Exception as e:
-                print(f"Warning: Could not initialize coordinate extractor: {e}")
+                print(f"Uyarı: Koordinat çıkarıcı başlatılamadı: {e}")
                 self.coordinate_extractor = None
                 self.coordinates_data = None
         else:
-            print("Warning: CoordinateExtractor not available - geographic coordinates will not be included")
+            print("Uyarı: CoordinateExtractor mevcut değil - coğrafi koordinatlar dahil edilmeyecek")
             self.coordinate_extractor = None
             self.coordinates_data = None
         
     def get_memory_efficient_dimensions(self, src):
         """
-        Calculate memory-efficient dimensions based on available system memory
+        Mevcut sistem belleğine göre bellek verimli boyutları hesapla
         """
         import psutil
         
@@ -108,18 +108,18 @@ class DisasterLabeler:
             new_width = original_width // downsample_factor
             new_height = original_height // downsample_factor
             
-            print(f"  Memory optimization: Downsampling by factor {downsample_factor}")
-            print(f"  Original: {original_width} x {original_height} = {total_pixels:,} pixels")
-            print(f"  Optimized: {new_width} x {new_height} = {new_width*new_height:,} pixels")
+            print(f"  Bellek optimizasyonu: {downsample_factor} faktörüyle örnekleme")
+            print(f"  Orijinal: {original_width} x {original_height} = {total_pixels:,} piksel")
+            print(f"  Optimize: {new_width} x {new_height} = {new_width*new_height:,} piksel")
             
             return new_width, new_height, downsample_factor
 
     def load_and_align_images(self):
         """
-        Load and align the 2015 and 2023 images for comparison with memory optimization
-        Returns aligned image arrays and metadata
+        Karşılaştırma için 2015 ve 2023 görüntülerini bellek optimizasyonuyla yükle ve hizala
+        Hizalanmış görüntü dizilerini ve meta verileri döndürür
         """
-        print("Loading and aligning satellite imagery...")
+        print("Uydu görüntüleri yükleniyor ve hizalanıyor...")
         
         with rasterio.open(self.img_2015_path) as src_2015:
             with rasterio.open(self.img_2023_path) as src_2023:
@@ -137,8 +137,8 @@ class DisasterLabeler:
                     0, -new_pixel_size, original_transform[5]
                 )
                 
-                print(f"  Optimized dimensions: {opt_width} x {opt_height}")
-                print(f"  Effective resolution: {new_pixel_size:.3f} m/pixel")
+                print(f"  Optimize boyutlar: {opt_width} x {opt_height}")
+                print(f"  Etkili çözünürlük: {new_pixel_size:.3f} m/piksel")
                 
                 # Read images with windowing and resampling for memory efficiency
                 window_2015 = Window(0, 0, src_2015.width, src_2015.height)
@@ -195,37 +195,37 @@ class DisasterLabeler:
     
     def initialize_coordinates(self, metadata):
         """
-        Initialize coordinate system for pixel-to-geographic conversion
+        Piksel-coğrafi koordinat dönüşümü için koordinat sistemini başlat
         
         Args:
-            metadata: Image metadata containing transform and CRS information
+            metadata: Dönüşüm ve CRS bilgilerini içeren görüntü meta verileri
         """
         if self.coordinate_extractor:
             try:
                 # Extract coordinate data if not already available
                 if self.coordinates_data is None:
-                    print("Extracting coordinate reference data...")
+                    print("Koordinat referans verileri çıkarılıyor...")
                     self.coordinates_data = self.coordinate_extractor.extract_all_coordinates()
                 
                 # Store transformation info for pixel-to-coordinate conversion
                 self.transform = metadata['transform']
                 self.crs = metadata['crs']
                 
-                print(f"Coordinate system initialized: {self.crs}")
+                print(f"Koordinat sistemi başlatıldı: {self.crs}")
                 
             except Exception as e:
-                print(f"Warning: Could not initialize coordinate system: {e}")
+                print(f"Uyarı: Koordinat sistemi başlatılamadı: {e}")
                 self.coordinates_data = None
     
     def pixel_to_geographic(self, pixel_x, pixel_y):
         """
-        Convert pixel coordinates to geographic coordinates (WGS84)
+        Piksel koordinatlarını coğrafi koordinatlara (WGS84) dönüştür
         
         Args:
-            pixel_x, pixel_y: Pixel coordinates
+            pixel_x, pixel_y: Piksel koordinatları
             
         Returns:
-            Tuple of (longitude, latitude) in WGS84 or None if conversion fails
+            WGS84'te (boylam, enlem) tuple'ı veya dönüştürme başarısız olursa None
         """
         if not hasattr(self, 'transform') or self.transform is None:
             return None
@@ -251,21 +251,21 @@ class DisasterLabeler:
                 return float(map_x), float(map_y)
                 
         except Exception as e:
-            print(f"Warning: Could not convert pixel ({pixel_x}, {pixel_y}) to coordinates: {e}")
+            print(f"Uyarı: Piksel ({pixel_x}, {pixel_y}) koordinatlara dönüştürülemedi: {e}")
             return None
     
     def compute_change_detection_fast(self, img1, img2):
         """
-        Fast change detection using optimized algorithms
+        Optimize edilmiş algoritmalar kullanarak hızlı değişiklik tespiti
         
         Args:
-            img1, img2: Input images (3D arrays: channels, height, width)
+            img1, img2: Giriş görüntüleri (3D diziler: kanallar, yükseklik, genişlik)
             
         Returns:
-            change_map: Change intensity map
-            change_binary: Binary change mask
+            change_map: Değişiklik yoğunluğu haritası
+            change_binary: İkili değişiklik maskesi
         """
-        print("Starting optimized change detection...")
+        print("Optimize edilmiş değişiklik tespiti başlatılıyor...")
         
         # Convert to HWC format for processing
         img1_hwc = np.transpose(img1, (1, 2, 0))
@@ -323,7 +323,7 @@ class DisasterLabeler:
 
     def compute_change_detection(self, img1, img2):
         """
-        Compute change detection with automatic method selection based on image size
+        Görüntü boyutuna göre otomatik yöntem seçimi ile değişiklik tespiti hesapla
         """
         total_pixels = img1.shape[1] * img1.shape[2]
         
@@ -335,9 +335,9 @@ class DisasterLabeler:
     
     def compute_change_detection_accurate(self, img1, img2):
         """
-        Original accurate change detection method (kept for small images)
+        Orijinal hassas değişiklik tespit yöntemi (küçük görüntüler için saklandı)
         """
-        print("Starting accurate change detection...")
+        print("Hassas değişiklik tespiti başlatılıyor...")
         
         # Convert to HWC format for OpenCV
         img1_hwc = np.transpose(img1, (1, 2, 0))
@@ -379,9 +379,9 @@ class DisasterLabeler:
     
     def classify_damage_regions_fast(self, change_map, change_binary):
         """
-        Fast damage region classification with vectorized operations
+        Vektörleştirilmiş işlemlerle hızlı hasar bölgesi sınıflandırması
         """
-        print("Classifying damage severity with optimized algorithms...")
+        print("Optimize algoritmaları ile hasar şiddeti sınıflandırılıyor...")
         
         # Find connected components
         num_labels, labels = cv2.connectedComponents(change_binary.astype(np.uint8))
@@ -431,7 +431,7 @@ class DisasterLabeler:
             'metadata': {
                 'total_fields': len(region_props),
                 'analysis_timestamp': datetime.now().isoformat(),
-                'analysis_method': 'Optimized multi-algorithm change detection',
+                'analysis_method': 'Optimize çoklu algoritma değişiklik tespiti',
                 'coordinate_system': {
                     'has_geographic_coords': hasattr(self, 'transform') and self.transform is not None
                 }
@@ -501,7 +501,7 @@ class DisasterLabeler:
 
     def classify_damage_regions(self, change_map, change_binary):
         """
-        Classify damage regions with automatic method selection
+        Otomatik yöntem seçimi ile hasar bölgelerini sınıflandır
         """
         total_regions = np.max(change_binary) if change_binary.size > 0 else 0
         
@@ -512,9 +512,9 @@ class DisasterLabeler:
     
     def classify_damage_regions_accurate(self, change_map, change_binary):
         """
-        Original accurate damage region classification (kept for smaller datasets)
+        Orijinal hassas hasar bölgesi sınıflandırması (daha küçük veri kümeleri için saklandı)
         """
-        print("Classifying damage severity with full accuracy...")
+        print("Tam doğrulukla hasar şiddeti sınıflandırılıyor...")
         
         # Find connected components in the binary change mask
         num_labels, labels = cv2.connectedComponents(change_binary.astype(np.uint8))
@@ -528,17 +528,17 @@ class DisasterLabeler:
             'metadata': {
                 'total_fields': num_labels - 1,  # Subtract background
                 'analysis_timestamp': datetime.now().isoformat(),
-                'analysis_method': 'Multi-algorithm change detection (SSIM + Color + Edge)',
+                'analysis_method': 'Çoklu algoritma değişiklik tespiti (SSIM + Renk + Kenar)',
                 'damage_thresholds': {
-                    'minimal': '< 10% change',
-                    'moderate': '10-30% change',
-                    'severe': '30-60% change',
-                    'catastrophic': '> 60% change'
+                    'minimal': '< %10 değişiklik',
+                    'moderate': '%10-30 değişiklik',
+                    'severe': '%30-60 değişiklik',
+                    'catastrophic': '> %60 değişiklik'
                 },
                 'coordinate_system': {
-                    'pixel_coordinates': 'Image pixel coordinates (origin: top-left)',
-                    'geographic_coordinates': 'WGS84 (EPSG:4326) longitude, latitude',
-                    'crs_original': str(getattr(self, 'crs', 'Unknown')) if hasattr(self, 'crs') else 'Unknown',
+                    'pixel_coordinates': 'Görüntü piksel koordinatları (başlangıç: sol-üst)',
+                    'geographic_coordinates': 'WGS84 (EPSG:4326) boylam, enlem',
+                    'crs_original': str(getattr(self, 'crs', 'Bilinmiyor')) if hasattr(self, 'crs') else 'Bilinmiyor',
                     'has_geographic_coords': hasattr(self, 'transform') and self.transform is not None
                 }
             },
@@ -689,13 +689,13 @@ class DisasterLabeler:
         field_data_path = os.path.join(output_dir, "hatay_field_analysis.json")
         with open(field_data_path, 'w') as f:
             json.dump(field_data, f, indent=2)
-        print(f"Field-level analysis saved to: {field_data_path}")
+        print(f"Alan seviyesi analiz kaydedildi: {field_data_path}")
         
         return damage_labels, damage_stats, field_data
     
     def calculate_optimal_tile_size(self, img_shape):
         """
-        Calculate optimal tile size based on image dimensions and available memory
+        Görüntü boyutları ve mevcut belleğe göre optimal kutucuk boyutunu hesapla
         """
         import psutil
         
@@ -713,24 +713,24 @@ class DisasterLabeler:
         # Constrain to reasonable bounds
         optimal_tile_size = max(256, min(max_tile_side, self.base_tile_size))
         
-        print(f"  Calculated optimal tile size: {optimal_tile_size}x{optimal_tile_size}")
+        print(f"  Hesaplanan optimal kutucuk boyutu: {optimal_tile_size}x{optimal_tile_size}")
         return optimal_tile_size
 
     def process_in_tiles(self, img1, img2, metadata):
         """
-        Process large images in tiles for memory efficiency
+        Bellek verimliliği için büyük görüntüleri kutucuklarda işle
         
         Args:
-            img1, img2: Input images
-            metadata: Image metadata
+            img1, img2: Giriş görüntüleri
+            metadata: Görüntü meta verileri
             
         Returns:
-            Full change map and damage labels
+            Tam değişiklik haritası ve hasar etiketleri
         """
         # Calculate optimal tile size for current memory conditions
         tile_size = self.calculate_optimal_tile_size(img1.shape)
         
-        print(f"Processing in {tile_size}x{tile_size} tiles...")
+        print(f"{tile_size}x{tile_size} kutucuklarla işleniyor...")
         
         height, width = img1.shape[1], img1.shape[2]
         full_change_map = np.zeros((height, width), dtype=np.float32)
@@ -740,7 +740,7 @@ class DisasterLabeler:
         tiles_y = (height + tile_size - 1) // tile_size
         tiles_x = (width + tile_size - 1) // tile_size
         
-        print(f"  Processing {tiles_x * tiles_y} tiles...")
+        print(f"  {tiles_x * tiles_y} kutucuk işleniyor...")
         
         def process_tile(args):
             i, j = args
@@ -795,7 +795,7 @@ class DisasterLabeler:
                 
                 # Progress indicator
                 processed = min(i + batch_size, len(tile_coords))
-                print(f"  Progress: {processed}/{len(tile_coords)} tiles processed ({processed/len(tile_coords)*100:.1f}%)")
+                print(f"  İlerleme: {processed}/{len(tile_coords)} kutucuk işlendi ({processed/len(tile_coords)*100:.1f}%)")
         
         # Combine results
         for result in results:
@@ -820,17 +820,17 @@ class DisasterLabeler:
             'metadata': {
                 'total_fields': 0,
                 'analysis_timestamp': datetime.now().isoformat(),
-                'analysis_method': 'Multi-algorithm change detection (SSIM + Color + Edge)',
+                'analysis_method': 'Çoklu algoritma değişiklik tespiti (SSIM + Renk + Kenar)',
                 'damage_thresholds': {
-                    'minimal': '< 10% change',
-                    'moderate': '10-30% change',
-                    'severe': '30-60% change',
-                    'catastrophic': '> 60% change'
+                    'minimal': '< %10 değişiklik',
+                    'moderate': '%10-30 değişiklik',
+                    'severe': '%30-60 değişiklik',
+                    'catastrophic': '> %60 değişiklik'
                 },
                 'coordinate_system': {
-                    'pixel_coordinates': 'Image pixel coordinates (origin: top-left)',
-                    'geographic_coordinates': 'WGS84 (EPSG:4326) longitude, latitude',
-                    'crs_original': str(getattr(self, 'crs', 'Unknown')) if hasattr(self, 'crs') else 'Unknown',
+                    'pixel_coordinates': 'Görüntü piksel koordinatları (başlangıç: sol-üst)',
+                    'geographic_coordinates': 'WGS84 (EPSG:4326) boylam, enlem',
+                    'crs_original': str(getattr(self, 'crs', 'Bilinmiyor')) if hasattr(self, 'crs') else 'Bilinmiyor',
                     'has_geographic_coords': hasattr(self, 'transform') and self.transform is not None
                 }
             },
@@ -901,15 +901,15 @@ class DisasterLabeler:
     
     def create_damage_visualization(self, img_2023, damage_labels, metadata, output_path):
         """
-        Create visualization of damage assessment results
+        Hasar değerlendirme sonuçlarının görselleştirmesini oluştur
         
         Args:
-            img_2023: 2023 satellite image
-            damage_labels: Classified damage regions
-            metadata: Image metadata
-            output_path: Output file path
+            img_2023: 2023 uydu görüntüsü
+            damage_labels: Sınıflandırılmış hasar bölgeleri
+            metadata: Görüntü meta verileri
+            output_path: Çıktı dosya yolu
         """
-        print("Creating damage visualization...")
+        print("Hasar görselleştirmesi oluşturuluyor...")
         
         # Convert image to display format
         img_display = np.transpose(img_2023, (1, 2, 0))
@@ -934,13 +934,13 @@ class DisasterLabeler:
         
         # Original 2023 image
         ax1.imshow(img_display)
-        ax1.set_title('2023 Post-Earthquake Imagery', fontsize=14, fontweight='bold')
+        ax1.set_title('2023 Deprem Sonrası Görüntüsü', fontsize=14, fontweight='bold')
         ax1.axis('off')
         
         # Damage overlay
         ax2.imshow(img_display)
         ax2.imshow(overlay, alpha=0.6)
-        ax2.set_title('Damage Assessment Overlay', fontsize=14, fontweight='bold')
+        ax2.set_title('Hasar Değerlendirme Katmanı', fontsize=14, fontweight='bold')
         ax2.axis('off')
         
         # Damage classification only
@@ -951,36 +951,36 @@ class DisasterLabeler:
                 damage_rgb[mask] = color[:3]
         
         ax3.imshow(damage_rgb)
-        ax3.set_title('Damage Classification', fontsize=14, fontweight='bold')
+        ax3.set_title('Hasar Sınıflandırması', fontsize=14, fontweight='bold')
         ax3.axis('off')
         
         # Add legend
         legend_elements = [
-            patches.Patch(color='green', alpha=0.7, label='Minimal Damage'),
-            patches.Patch(color='yellow', alpha=0.7, label='Moderate Damage'),
-            patches.Patch(color='orange', alpha=0.7, label='Severe Damage'),
-            patches.Patch(color='red', alpha=0.7, label='Catastrophic Damage')
+            patches.Patch(color='green', alpha=0.7, label='Minimal Hasar'),
+            patches.Patch(color='yellow', alpha=0.7, label='Orta Hasar'),
+            patches.Patch(color='orange', alpha=0.7, label='Ciddi Hasar'),
+            patches.Patch(color='red', alpha=0.7, label='Felaket Hasar')
         ]
         ax3.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(1.3, 1))
         
-        plt.suptitle('Hatay Earthquake Damage Assessment with AI Labeling', 
+        plt.suptitle('AI Etiketleme ile Hatay Deprem Hasar Değerlendirmesi', 
                      fontsize=16, fontweight='bold')
         plt.tight_layout()
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
         plt.close()
         
-        print(f"Damage visualization saved to: {output_path}")
+        print(f"Hasar görselleştirmesi kaydedildi: {output_path}")
     
     def generate_damage_report(self, damage_stats, metadata, output_path):
         """
-        Generate detailed damage assessment report
+        Detaylı hasar değerlendirme raporu oluştur
         
         Args:
-            damage_stats: Statistics for each damage level
-            metadata: Image metadata
-            output_path: Output JSON file path
+            damage_stats: Her hasar seviyesi için istatistikler
+            metadata: Görüntü meta verileri
+            output_path: Çıktı JSON dosya yolu
         """
-        print("Generating damage assessment report...")
+        print("Hasar değerlendirme raporu oluşturuluyor...")
         
         # Calculate total areas and percentages
         total_pixels = metadata['width'] * metadata['height']
@@ -993,7 +993,7 @@ class DisasterLabeler:
                 'image_dimensions': f"{metadata['width']} x {metadata['height']}",
                 'resolution_m_per_pixel': metadata['resolution'],
                 'total_area_km2': total_area_m2 / 1_000_000,
-                'analysis_method': 'Multi-method change detection with SSIM, color difference, and edge detection'
+                'analysis_method': 'SSIM, renk farkı ve kenar algılama ile çoklu yöntem değişiklik tespiti'
             },
             'damage_assessment': {}
         }
@@ -1029,32 +1029,32 @@ class DisasterLabeler:
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=2)
         
-        print(f"Damage report saved to: {output_path}")
+        print(f"Hasar raporu kaydedildi: {output_path}")
         
         # Print summary to console
         print("\n" + "="*60)
-        print("DAMAGE ASSESSMENT SUMMARY")
+        print("HASAR DEĞERLENDİRME ÖZETİ")
         print("="*60)
-        print(f"Total area analyzed: {report['analysis_metadata']['total_area_km2']:.3f} km²")
-        print(f"Total damaged area: {total_damaged_area_km2:.6f} km²")
-        print(f"Percentage affected: {report['summary']['percentage_area_affected']:.2f}%")
-        print(f"Total damage regions: {report['summary']['total_damage_regions']}")
-        print(f"Most common damage: {report['summary']['most_common_damage_level'].title()}")
+        print(f"Toplam analiz edilen alan: {report['analysis_metadata']['total_area_km2']:.3f} km²")
+        print(f"Toplam hasarlı alan: {total_damaged_area_km2:.6f} km²")
+        print(f"Etkilenen yüzde: {report['summary']['percentage_area_affected']:.2f}%")
+        print(f"Toplam hasar bölgesi: {report['summary']['total_damage_regions']}")
+        print(f"En yaygın hasar: {report['summary']['most_common_damage_level'].title()}")
         
-        print(f"\nDAMAGE BREAKDOWN:")
+        print(f"\nHASAR DAĞILIMI:")
         for level, data in report['damage_assessment'].items():
             if data['region_count'] > 0:
-                print(f"  {level.title():12}: {data['region_count']:3} regions, "
+                print(f"  {level.title():12}: {data['region_count']:3} bölge, "
                       f"{data['total_area_km2']:.6f} km² ({data['percentage_of_total_area']:.2f}%)")
     
     def run_analysis(self, force_downsample=False):
         """
-        Run complete disaster labeling analysis with automatic memory optimization
+        Otomatik bellek optimizasyonu ile tam afet etiketleme analizi çalıştır
         
         Args:
-            force_downsample (bool): Whether to force additional downsampling
+            force_downsample (bool): Ek örnekleme zorlanıp zorlanmayacağı
         """
-        print("Starting Disaster Size Labeling Analysis")
+        print("Afet Boyutu Etiketleme Analizi Başlatılıyor")
         print("="*60)
         
         # Load and align images with automatic memory optimization
@@ -1065,7 +1065,7 @@ class DisasterLabeler:
         
         # Optional additional downsampling for faster processing
         if force_downsample and 'downsample_factor' in metadata and metadata['downsample_factor'] == 1:
-            print(f"Applying additional downsampling by factor {self.downsample_factor}...")
+            print(f"{self.downsample_factor} faktörüyle ek örnekleme uygulanıyor...")
             img_2015 = img_2015[:, ::self.downsample_factor, ::self.downsample_factor]
             img_2023 = img_2023[:, ::self.downsample_factor, ::self.downsample_factor]
             metadata['width'] = img_2015.shape[2]
@@ -1102,34 +1102,34 @@ class DisasterLabeler:
             self.create_damage_visualization(img_2023, damage_labels, metadata, output_viz)
             self.generate_damage_report(damage_stats, metadata, output_report)
             
-            print("\nAnalysis Complete!")
-            print(f"Generated files:")
-            print(f"  • {output_viz} - Damage visualization")
-            print(f"  • {output_report} - Detailed assessment report")
-            print(f"  • {output_fields} - Field-level analysis data")
+            print("\nAnaliz Tamamlandı!")
+            print(f"Oluşturulan dosyalar:")
+            print(f"  • {output_viz} - Hasar görselleştirmesi")
+            print(f"  • {output_report} - Detaylı değerlendirme raporu")
+            print(f"  • {output_fields} - Alan seviyesi analiz verileri")
             
             # Print field analysis summary
-            print("\nFIELD ANALYSIS SUMMARY")
+            print("\nALAN ANALİZ ÖZETİ")
             print("=" * 60)
-            print(f"Total fields analyzed: {len(field_data['fields'])}")
-            print("\nDamage distribution:")
+            print(f"Toplam analiz edilen alan: {len(field_data['fields'])}")
+            print("\nHasar dağılımı:")
             for level, count in field_data['metadata']['field_statistics']['damage_distribution'].items():
-                print(f"  {level.title():12}: {count:3} fields")
+                print(f"  {level.title():12}: {count:3} alan")
             
-            print("\nField size metrics:")
+            print("\nAlan boyut ölçütleri:")
             size_stats = field_data['metadata']['field_statistics']['size_distribution']
-            print(f"  Average area: {size_stats['avg_area']:.1f} pixels")
-            print(f"  Size range: {size_stats['min_area']} to {size_stats['max_area']} pixels")
+            print(f"  Ortalama alan: {size_stats['avg_area']:.1f} piksel")
+            print(f"  Boyut aralığı: {size_stats['min_area']} ile {size_stats['max_area']} piksel")
             
-            print("\nShape analysis:")
+            print("\nŞekil analizi:")
             shape_stats = field_data['metadata']['field_statistics']['shape_metrics']
-            print(f"  Average compactness: {shape_stats['avg_compactness']:.3f}")
-            print(f"  Average regularity: {shape_stats['avg_regularity']:.3f}")
+            print(f"  Ortalama sıkılık: {shape_stats['avg_compactness']:.3f}")
+            print(f"  Ortalama düzenlilik: {shape_stats['avg_regularity']:.3f}")
             
             return damage_labels, damage_stats, metadata
 
 def main():
-    """Main function to run disaster labeling analysis"""
+    """Afet etiketleme analizi çalıştırmak için ana fonksiyon"""
     try:
         # Create labeler instance
         labeler = DisasterLabeler()
@@ -1137,10 +1137,10 @@ def main():
         # Run analysis with automatic memory optimization
         damage_labels, damage_stats, metadata = labeler.run_analysis(force_downsample=False)
         
-        print("\nDisaster labeling analysis completed successfully!")
+        print("\nAfet etiketleme analizi başarıyla tamamlandı!")
         
     except Exception as e:
-        print(f"Error during analysis: {e}")
+        print(f"Analiz sırasında hata: {e}")
         import traceback
         traceback.print_exc()
 

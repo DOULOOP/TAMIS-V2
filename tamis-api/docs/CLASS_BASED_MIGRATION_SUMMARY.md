@@ -1,156 +1,156 @@
-# Class-Based Infrastructure Migration Summary
+# Sınıf Tabanlı Altyapı Geçiş Özeti
 
-## ✅ **COMPLETED TRANSFORMATION**
+## ✅ **TAMAMLANMIŞ DÖNÜŞÜM**
 
-We have successfully transformed the Hatay Earthquake Analysis system from a script-based architecture to a modern **class-based infrastructure** with the following improvements:
+Hatay Deprem Analiz sistemini betik tabanlı mimariden modern **sınıf tabanlı altyapıya** aşağıdaki iyileştirmelerle başarıyla dönüştürdük:
 
-## 🏗️ **New Architecture**
+## 🏗️ **Yeni Mimari**
 
-### **1. Centralized AnalyzerManager Class**
+### **1. Merkezi AnalyzerManager Sınıfı**
 ```python
 from analyzers import AnalyzerManager
 
-# Create manager instance
+# Yönetici örneği oluştur
 manager = AnalyzerManager()
 
-# Run any analyzer
+# Herhangi bir analizör çalıştır
 result = manager.run_analyzer('damage_labeling')
 ```
 
-**Key Features:**
-- ✅ Unified interface for all analyzers
-- ✅ Automatic dependency checking  
-- ✅ Progress tracking with callbacks
-- ✅ Error handling and timeout protection
-- ✅ Both class-based and script fallback modes
+**Temel Özellikler:**
+- ✅ Tüm analizörler için birleşik arayüz
+- ✅ Otomatik bağımlılık kontrolü  
+- ✅ Geri aramalarla ilerleme takibi
+- ✅ Hata işleme ve zaman aşımı koruması
+- ✅ Hem sınıf tabanlı hem de betik yedek modları
 
-### **2. Available Analyzers**
-| Analyzer ID | Name | Description | Est. Time |
-|-------------|------|-------------|-----------|
-| `data_info` | Data Information Check | Analyze satellite imagery metadata | 10s |
-| `visualization` | Static Visualization | Generate comparison images | 60s |
-| `web_map` | Interactive Web Map | Create interactive HTML map | 45s |
-| `damage_labeling` | AI Damage Assessment | AI-powered damage classification | 180s |
-| `full_analysis` | Complete Pipeline | Run all analyses in sequence | 300s |
+### **2. Mevcut Analizörler**
+| Analizör ID | İsim | Açıklama | Tahmini Süre |
+|-------------|------|----------|-------------|
+| `data_info` | Veri Bilgisi Kontrolü | Uydu görüntü meta verilerini analiz et | 10s |
+| `visualization` | Statik Görselleştirme | Karşılaştırma görüntüleri oluştur | 60s |
+| `web_map` | Etkileşimli Web Haritası | Etkileşimli HTML haritası oluştur | 45s |
+| `damage_labeling` | AI Hasar Değerlendirmesi | AI destekli hasar sınıflandırması | 180s |
+| `full_analysis` | Tam Ardışık Düzen | Tüm analizleri sırayla çalıştır | 300s |
 
-### **3. Simplified API Integration**
-The API Server now uses the AnalyzerManager directly instead of subprocess calls:
+### **3. Basitleştirilmiş API Entegrasyonu**
+API Sunucusu artık subprocess çağrıları yerine AnalyzerManager'ı doğrudan kullanır:
 
 ```python
-# OLD: subprocess-based
+# ESKİ: subprocess tabanlı
 subprocess.run([sys.executable, "analyzers/disaster_labeling.py"])
 
-# NEW: class-based  
+# YENİ: sınıf tabanlı  
 result = analyzer_manager.run_analyzer('damage_labeling', analysis_id)
 ```
 
-## 🔧 **Infrastructure Improvements**
+## 🔧 **Altyapı İyileştirmeleri**
 
-### **Removed Components:**
-- ❌ `disaster_labeling_api.py` - Removed (original `disaster_labeling.py` is more successful)
-- ❌ Interactive user input in `run_analysis.py` - Now fully automated with `--auto` flag
+### **Kaldırılan Bileşenler:**
+- ❌ `disaster_labeling_api.py` - Kaldırıldı (orijinal `disaster_labeling.py` daha başarılı)
+- ❌ `run_analysis.py` içinde etkileşimli kullanıcı girişi - Artık `--auto` bayrağı ile tamamen otomatik
 
-### **Enhanced Components:**
-- ✅ **analyzer_manager.py** - New centralized management class
-- ✅ **analyzers/__init__.py** - Updated package structure with exports
-- ✅ **api_server.py** - Updated to use AnalyzerManager with progress callbacks  
-- ✅ **run_analysis.py** - Fully automated mode, no user input required
+### **Geliştirilmiş Bileşenler:**
+- ✅ **analyzer_manager.py** - Yeni merkezi yönetim sınıfı
+- ✅ **analyzers/__init__.py** - Dışa aktarmalarla güncellenmiş paket yapısı
+- ✅ **api_server.py** - İlerleme geri aramalarıyla AnalyzerManager kullanacak şekilde güncellendi  
+- ✅ **run_analysis.py** - Tamamen otomatik mod, kullanıcı girişi gerekli değil
 
-## 📋 **API Endpoints**
+## 📋 **API Uç Noktaları**
 
-### **New Endpoints:**
-- `GET /analyzers` - List all available analyzers with metadata
-- Enhanced progress tracking through AnalyzerManager callbacks
+### **Yeni Uç Noktalar:**
+- `GET /analyzers` - Meta verilerle tüm mevcut analizörleri listele
+- AnalyzerManager geri aramaları yoluyla gelişmiş ilerleme takibi
 
-### **Updated Endpoints:**
-- All analysis endpoints now use analyzer IDs instead of script paths
-- Real-time progress updates via class-based callbacks
+### **Güncellenmiş Uç Noktalar:**
+- Tüm analiz uç noktaları artık betik yolları yerine analizör ID'lerini kullanır
+- Sınıf tabanlı geri aramalar aracılığıyla gerçek zamanlı ilerleme güncellemeleri
 
-## 🎯 **Benefits of Class-Based Approach**
+## 🎯 **Sınıf Tabanlı Yaklaşımın Faydaları**
 
-### **For Developers:**
-1. **Cleaner Code**: Single entry point via AnalyzerManager
-2. **Better Testing**: Each analyzer can be unit tested as a class
-3. **Reusable Components**: Analyzers can be imported and used directly
-4. **Type Safety**: Better IDE support and error detection
+### **Geliştiriciler İçin:**
+1. **Daha Temiz Kod**: AnalyzerManager aracılığıyla tek giriş noktası
+2. **Daha İyi Test**: Her analizör sınıf olarak birim test edilebilir
+3. **Yeniden Kullanılabilir Bileşenler**: Analizörler doğrudan içe aktarılabilir ve kullanılabilir
+4. **Tip Güvenliği**: Daha iyi IDE desteği ve hata algılama
 
-### **For API Integration:**  
-1. **Direct Class Calls**: No subprocess overhead for simple operations
-2. **Real-time Progress**: Direct callback integration
-3. **Better Error Handling**: Exception-based error management
-4. **Memory Efficiency**: Avoid process spawning when possible
+### **API Entegrasyonu İçin:**  
+1. **Doğrudan Sınıf Çağrıları**: Basit işlemler için subprocess ek yükü yok
+2. **Gerçek Zamanlı İlerleme**: Doğrudan geri arama entegrasyonu
+3. **Daha İyi Hata İşleme**: İstisna tabanlı hata yönetimi
+4. **Bellek Verimliliği**: Mümkün olduğunda süreç oluşturmaktan kaçın
 
-### **For Automation:**
-1. **Scriptable Interface**: Easy to automate from Python scripts
-2. **Programmatic Control**: Full control over analysis parameters
-3. **Batch Processing**: Can run multiple analyses programmatically
-4. **Resource Management**: Better control over memory and processing
+### **Otomasyon İçin:**
+1. **Betiklenebilir Arayüz**: Python betiklerinden otomatik hale getirmesi kolay
+2. **Programatik Kontrol**: Analiz parametreleri üzerinde tam kontrol
+3. **Toplu İşlem**: Birden fazla analizi programatik olarak çalıştırabilir
+4. **Kaynak Yönetimi**: Bellek ve işleme üzerinde daha iyi kontrol
 
-## 🚀 **Usage Examples**
+## 🚀 **Kullanım Örnekleri**
 
-### **Direct Class Usage:**
+### **Doğrudan Sınıf Kullanımı:**
 ```python
 from analyzers import AnalyzerManager, DisasterLabeler
 
-# Method 1: Using AnalyzerManager (Recommended)
+# Yöntem 1: AnalyzerManager Kullanma (Önerilen)
 manager = AnalyzerManager()
 result = manager.run_analyzer('damage_labeling')
 
-# Method 2: Direct class instantiation
+# Yöntem 2: Doğrudan sınıf örnekleme
 labeler = DisasterLabeler()
 labeler.run_analysis()
 
-# Method 3: Convenience functions
+# Yöntem 3: Kolaylık fonksiyonları
 from analyzers import run_damage_labeling
 result = run_damage_labeling()
 ```
 
-### **API Integration:**
+### **API Entegrasyonu:**
 ```python
-# The API server can now call analyzers directly:
+# API sunucusu artık analizörleri doğrudan çağırabilir:
 if analyzer_manager:
     result = analyzer_manager.run_analyzer(analyzer_id, analysis_id)
     success = result['status'] == 'completed'
 else:
-    # Fallback to subprocess method
+    # Subprocess yöntemine geri dön
     success = run_analysis_with_progress_fallback(analyzer_id, task_name, analysis_id)
 ```
 
-## 🔍 **System Status**
+## 🔍 **Sistem Durumu**
 
-### **Prerequisites Check:**
-- ✅ Data directory exists
-- ✅ Required satellite imagery files present  
-- ✅ Core Python packages available
-- ⚠️ Some optional packages missing (opencv-python, scikit-image, scikit-learn)
+### **Ön Koşul Kontrolü:**
+- ✅ Veri dizini var
+- ✅ Gerekli uydu görüntü dosyaları mevcut  
+- ✅ Temel Python paketleri kullanılabilir
+- ⚠️ Bazı isteğe bağlı paketler eksik (opencv-python, scikit-image, scikit-learn)
 
-### **Current Status:**
-- ✅ AnalyzerManager successfully initialized
-- ✅ All 5 analyzers registered and available
-- ✅ API server compatible with new structure
-- ✅ Backward compatibility maintained
-- ✅ Queue system integrated with new architecture
+### **Mevcut Durum:**
+- ✅ AnalyzerManager başarıyla başlatıldı
+- ✅ Tüm 5 analizör kayıtlı ve kullanılabilir
+- ✅ API sunucusu yeni yapıyla uyumlu
+- ✅ Geriye dönük uyumluluk korundu
+- ✅ Kuyruk sistemi yeni mimariyle entegre edildi
 
-## 📝 **Migration Notes**
+## 📝 **Geçiş Notları**
 
-### **What Changed:**
-1. **Script Execution**: Now managed through AnalyzerManager class
-2. **Progress Updates**: Direct callback integration instead of log parsing
-3. **Error Handling**: Exception-based instead of return code checking
-4. **Queue System**: Updated to use analyzer IDs instead of script paths
+### **Nelerin Değiştiği:**
+1. **Betik Yürütme**: Artık AnalyzerManager sınıfı aracılığıyla yönetiliyor
+2. **İlerleme Güncellemeleri**: Log ayrıştırma yerine doğrudan geri arama entegrasyonu
+3. **Hata İşleme**: Dönüş kodu kontrolü yerine istisna tabanlı
+4. **Kuyruk Sistemi**: Betik yolları yerine analizör ID'lerini kullanacak şekilde güncellendi
 
-### **What Stayed the Same:**
-1. **API Endpoints**: Same external interface for clients
-2. **Output Files**: Same output file locations and formats
-3. **Queue Behavior**: FIFO processing with real-time updates
-4. **Analysis Results**: Same analysis algorithms and outputs
+### **Aynı Kalanlar:**
+1. **API Uç Noktaları**: İstemciler için aynı harici arayüz
+2. **Çıktı Dosyaları**: Aynı çıktı dosya konumları ve formatları
+3. **Kuyruk Davranışı**: Gerçek zamanlı güncellemelerle FIFO işleme
+4. **Analiz Sonuçları**: Aynı analiz algoritmaları ve çıktıları
 
-## 🏆 **Success Metrics**
+## 🏆 **Başarı Metrikleri**
 
-- ✅ **100% API Compatibility**: Existing Next.js client works unchanged
-- ✅ **Cleaner Codebase**: Reduced from script-based to class-based architecture
-- ✅ **Better Performance**: Direct class calls eliminate subprocess overhead
-- ✅ **Enhanced Maintainability**: Centralized management and error handling
-- ✅ **Future-Ready**: Easy to extend with new analyzers
+- ✅ **%100 API Uyumluluğu**: Mevcut Next.js istemcisi değişiklik olmadan çalışır
+- ✅ **Daha Temiz Kod Tabanı**: Betik tabanlıdan sınıf tabanlı mimariye indirgendi
+- ✅ **Daha İyi Performans**: Doğrudan sınıf çağrıları subprocess ek yükünü ortadan kaldırır
+- ✅ **Gelişmiş Sürdürülebilirlik**: Merkezi yönetim ve hata işleme
+- ✅ **Geleceğe Hazır**: Yeni analizörlerle genişletmesi kolay
 
-**You were absolutely right** - the class-based infrastructure is much better for API integration, automation, and maintainability! 🎯
+**Kesinlikle haklıydınız** - sınıf tabanlı altyapı API entegrasyonu, otomasyon ve sürdürülebilirlik için çok daha iyi! 🎯

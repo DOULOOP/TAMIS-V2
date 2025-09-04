@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Create an interactive web map for the Hatay earthquake damage assessment data
+Hatay deprem hasar değerlendirme verileri için etkileşimli web haritası oluştur
 """
 
 import os
@@ -11,16 +11,16 @@ from rasterio.warp import transform_bounds
 import numpy as np
 
 def create_web_map():
-    """Create an interactive web map of the Hatay dataset"""
+    """Hatay veri seti için etkileşimli web haritası oluştur"""
     
     data_dir = "1c__Hatay_Enkaz_Bina_Etiketleme"
     boundaries_path = os.path.join(data_dir, "HATAY MERKEZ-2 SINIR.shp")
     
-    print("Creating interactive web map for Hatay earthquake damage assessment...")
+    print("Hatay deprem hasar değerlendirmesi için etkileşimli web haritası oluşturuluyor...")
     print("=" * 70)
     
     # Start with a base map
-    print("Initializing map...")
+    print("Harita başlatılıyor...")
     
     # Default center for Hatay, Turkey
     hatay_center = [36.2012, 36.1611]  # Approximate center of Hatay
@@ -33,15 +33,15 @@ def create_web_map():
     # Add different base map options
     folium.TileLayer(
         tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr='Esri World Imagery',
-        name='Satellite',
+        attr='Esri Dünya Görüntüleri',
+        name='Uydu',
         overlay=False,
         control=True
     ).add_to(m)
     
     folium.TileLayer(
         tiles='OpenStreetMap',
-        name='Street Map',
+        name='Sokak Haritası',
         overlay=False,
         control=True
     ).add_to(m)
@@ -49,7 +49,7 @@ def create_web_map():
     # Add boundaries if available
     if os.path.exists(boundaries_path):
         try:
-            print("Loading boundary data...")
+            print("Sınır verileri yükleniyor...")
             # Try different encodings for the shapefile
             for encoding in ['utf-8', 'latin1', 'cp1252', 'iso-8859-1']:
                 try:
@@ -63,7 +63,7 @@ def create_web_map():
             
             # Convert to WGS84 for web mapping
             if boundaries.crs != 'EPSG:4326':
-                print(f"Converting boundaries from {boundaries.crs} to WGS84...")
+                print(f"Sınırlar {boundaries.crs} sisteminden WGS84'e dönüştürülüyor...")
                 boundaries_wgs84 = boundaries.to_crs('EPSG:4326')
             else:
                 boundaries_wgs84 = boundaries
@@ -71,7 +71,7 @@ def create_web_map():
             # Add boundaries to map
             folium.GeoJson(
                 boundaries_wgs84,
-                name="Study Area Boundaries",
+                name="Çalışma Alanı Sınırları",
                 style_function=lambda x: {
                     'fillColor': 'red',
                     'color': 'darkred',
@@ -79,18 +79,18 @@ def create_web_map():
                     'fillOpacity': 0.1,
                     'opacity': 0.8
                 },
-                popup=folium.Popup("Hatay Study Area", parse_html=True),
-                tooltip="Study Area Boundary"
+                popup=folium.Popup("Hatay Çalışma Alanı", parse_html=True),
+                tooltip="Çalışma Alanı Sınırı"
             ).add_to(m)
             
             # Fit map to boundaries
             bounds = boundaries_wgs84.total_bounds
             m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
             
-            print(f"✓ Added {len(boundaries_wgs84)} boundary feature(s)")
+            print(f"✓ {len(boundaries_wgs84)} sınır özelliği eklendi")
             
         except Exception as e:
-            print(f"Warning: Could not load boundaries: {e}")
+            print(f"Uyarı: Sınırlar yüklenemedi: {e}")
     
     # Add raster information as popups
     raster_info = {}
@@ -116,32 +116,32 @@ def create_web_map():
                         bounds=[[bounds_wgs84[1], bounds_wgs84[0]], 
                                [bounds_wgs84[3], bounds_wgs84[2]]],
                         popup=f"""
-                        <b>{year} Satellite Imagery</b><br>
-                        Resolution: {abs(src.transform[0]):.1f}m<br>
-                        Dimensions: {src.width} x {src.height}<br>
-                        Bands: {src.count}<br>
-                        Size: {os.path.getsize(img_path)/(1024**3):.2f} GB
+                        <b>{year} Uydu Görüntüsü</b><br>
+                        Çözünürlük: {abs(src.transform[0]):.1f}m<br>
+                        Boyutlar: {src.width} x {src.height}<br>
+                        Bantlar: {src.count}<br>
+                        Boyut: {os.path.getsize(img_path)/(1024**3):.2f} GB
                         """,
-                        tooltip=f"{year} Imagery Extent",
+                        tooltip=f"{year} Görüntü Kapsamı",
                         color='blue' if year == '2015' else 'orange',
                         fill=True,
                         fillOpacity=0.1,
                         weight=2
                     ).add_to(m)
                     
-                print(f"✓ Added {year} imagery extent")
+                print(f"✓ {year} görüntü kapsamı eklendi")
                 
             except Exception as e:
-                print(f"Warning: Could not process {year} imagery: {e}")
+                print(f"Uyarı: {year} görüntüsü işlenemedi: {e}")
     
     # Add markers for key locations in Hatay
     key_locations = [
-        {"name": "Antakya (Hatay Center)", "coords": [36.2012, 36.1611], 
-         "description": "Provincial capital and main urban center"},
+        {"name": "Antakya (Hatay Merkezi)", "coords": [36.2012, 36.1611], 
+         "description": "İl merkezi ve ana şehir merkezi"},
         {"name": "İskenderun", "coords": [36.5877, 36.1704], 
-         "description": "Major port city"},
+         "description": "Büyük liman şehri"},
         {"name": "Reyhanlı", "coords": [36.2669, 36.5666], 
-         "description": "Border town with Syria"}
+         "description": "Suriye ile sınır kasabası"}
     ]
     
     for location in key_locations:
@@ -155,20 +155,20 @@ def create_web_map():
     # Add earthquake information
     earthquake_info = """
     <div style='width: 300px;'>
-    <h4>February 6, 2023 Earthquakes</h4>
-    <p><strong>Magnitude 7.8</strong> - 04:17 local time<br>
-    Epicenter: Pazarcık, Kahramanmaraş</p>
-    <p><strong>Magnitude 7.5</strong> - 13:24 local time<br>
-    Epicenter: Elbistan, Kahramanmaraş</p>
-    <p>These earthquakes severely affected Hatay Province, 
-    causing widespread damage to buildings and infrastructure.</p>
+    <h4>6 Şubat 2023 Depremleri</h4>
+    <p><strong>Büyüklük 7.8</strong> - 04:17 yerel saat<br>
+    Episantr: Pazarcık, Kahramanmaraş</p>
+    <p><strong>Büyüklük 7.5</strong> - 13:24 yerel saat<br>
+    Episantr: Elbistan, Kahramanmaraş</p>
+    <p>Bu depremler Hatay İli'ni ciddi şekilde etkileyerek, 
+    binalarda ve altyapıda yaygın hasara neden olmuştur.</p>
     </div>
     """
     
     folium.Marker(
         location=[36.0, 36.5],  # Approximate epicenter region
         popup=folium.Popup(earthquake_info, max_width=300),
-        tooltip="2023 Earthquake Information",
+        tooltip="2023 Deprem Bilgileri",
         icon=folium.Icon(color='black', icon='warning-sign')
     ).add_to(m)
     
@@ -181,9 +181,9 @@ def create_web_map():
                 top: 10px; left: 50px; width: 400px; height: 90px; 
                 background-color: white; border:2px solid grey; z-index:9999; 
                 font-size:14px; padding: 10px;">
-    <h4 style="margin: 0;">Hatay Earthquake Damage Assessment</h4>
-    <p style="margin: 5px 0;">Satellite imagery comparison: 2015 vs 2023<br>
-    <small>Blue: 2015 imagery extent | Orange: 2023 imagery extent</small></p>
+    <h4 style="margin: 0;">Hatay Deprem Hasar Değerlendirmesi</h4>
+    <p style="margin: 5px 0;">Uydu görüntüsü karşılaştırması: 2015 vs 2023<br>
+    <small>Mavi: 2015 görüntü kapsamı | Turuncu: 2023 görüntü kapsamı</small></p>
     </div>
     '''
     m.get_root().html.add_child(folium.Element(title_html))
@@ -194,12 +194,12 @@ def create_web_map():
                 bottom: 50px; left: 50px; width: 200px; height: 120px; 
                 background-color: white; border:2px solid grey; z-index:9999; 
                 font-size:12px; padding: 10px;">
-    <h5 style="margin: 0;">Legend</h5>
-    <p style="margin: 3px 0;"><span style="color: darkred;">■</span> Study Area</p>
-    <p style="margin: 3px 0;"><span style="color: blue;">■</span> 2015 Imagery</p>
-    <p style="margin: 3px 0;"><span style="color: orange;">■</span> 2023 Imagery</p>
-    <p style="margin: 3px 0;"><span style="color: red;">📍</span> Cities</p>
-    <p style="margin: 3px 0;"><span style="color: black;">⚠</span> Earthquake Info</p>
+    <h5 style="margin: 0;">Lejant</h5>
+    <p style="margin: 3px 0;"><span style="color: darkred;">■</span> Çalışma Alanı</p>
+    <p style="margin: 3px 0;"><span style="color: blue;">■</span> 2015 Görüntüsü</p>
+    <p style="margin: 3px 0;"><span style="color: orange;">■</span> 2023 Görüntüsü</p>
+    <p style="margin: 3px 0;"><span style="color: red;">📍</span> Şehirler</p>
+    <p style="margin: 3px 0;"><span style="color: black;">⚠</span> Deprem Bilgisi</p>
     </div>
     '''
     m.get_root().html.add_child(folium.Element(legend_html))
@@ -211,22 +211,22 @@ def create_web_map():
     output_file = os.path.join(output_dir, "hatay_interactive_map.html")
     m.save(output_file)
     
-    print(f"\n✓ Interactive map saved as: {output_file}")
-    print(f"\nOpen {output_file} in your web browser to view the interactive map.")
+    print(f"\n✓ Etkileşimli harita kaydedildi: {output_file}")
+    print(f"\nEtkileşimli haritayı görüntülemek için {output_file} dosyasını web tarayıcınızda açın.")
     
     # Print summary
     print(f"\n{'='*70}")
-    print("MAP FEATURES:")
-    print("• Study area boundaries")
-    print("• Satellite imagery extents (2015 vs 2023)")
-    print("• Key cities and earthquake epicenter information")
-    print("• Multiple base map layers (Street map, Satellite)")
-    print("• Interactive popups with detailed information")
+    print("HARİTA ÖZELLİKLERİ:")
+    print("• Çalışma alanı sınırları")
+    print("• Uydu görüntü kapsamları (2015 vs 2023)")
+    print("• Önemli şehirler ve deprem episantr bilgileri")
+    print("• Çoklu temel harita katmanları (Sokak haritası, Uydu)")
+    print("• Detaylı bilgilerle etkileşimli açılır pencereler")
     
     if raster_info:
-        print(f"\nIMAGERY COVERAGE:")
+        print(f"\nGÖRÜNTÜ KAPSAMI:")
         for year, info in raster_info.items():
-            print(f"• {year}: {info['width']}x{info['height']} pixels, {info['resolution']:.1f}m resolution")
+            print(f"• {year}: {info['width']}x{info['height']} piksel, {info['resolution']:.1f}m çözünürlük")
     
     return output_file
 

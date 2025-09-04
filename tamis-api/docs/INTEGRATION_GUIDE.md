@@ -1,106 +1,106 @@
-# Hatay Earthquake Assessment - Complete Integration Guide
+# Hatay Deprem Değerlendirmesi - Tam Entegrasyon Kılavuzu
 
-## 🌍 Overview
+## 🌍 Genel Bakış
 
-This guide shows you how to set up and run the complete Hatay Earthquake Damage Assessment system with both the FastAPI backend and Next.js frontend.
+Bu kılavuz, hem FastAPI backend'i hem de Next.js frontend'i ile tam Hatay Deprem Hasar Değerlendirme sistemini nasıl kuracağınızı ve çalıştıracağınızı gösterir.
 
-## 📦 System Components
+## 📦 Sistem Bileşenleri
 
-### 1. **Python Analysis Backend** (`api_server.py`)
-- FastAPI REST API server
-- Satellite imagery processing
-- AI damage classification
-- Analysis result generation
+### 1. **Python Analiz Backend'i** (`api_server.py`)
+- FastAPI REST API sunucusu
+- Uydu görüntü işleme
+- AI hasar sınıflandırması
+- Analiz sonucu oluşturma
 
-### 2. **Next.js Web Dashboard** (`nextjs-client-example/`)
-- React-based user interface
-- Real-time analysis monitoring
-- Interactive damage visualizations
-- Responsive design
+### 2. **Next.js Web Panosu** (`nextjs-client-example/`)
+- React tabanlı kullanıcı arayüzü
+- Gerçek zamanlı analiz izleme
+- Etkileşimli hasar görselleştirmeleri
+- Duyarlı tasarım
 
-## 🚀 Complete Setup Instructions
+## 🚀 Tam Kurulum Talimatları
 
-### Step 1: Backend Setup
+### Adım 1: Backend Kurulumu
 
-1. **Install Python dependencies:**
+1. **Python bağımlılıklarını yükle:**
    ```bash
    cd "C:\Users\furka\Downloads\1c__Hatay_Enkaz_Bina_Etiketleme"
    pip install -r requirements.txt
    ```
 
-2. **Start the API server:**
+2. **API sunucusunu başlat:**
    ```bash
    python start_api_server.py
-   # or
+   # veya
    python api_server.py
    ```
 
-3. **Verify API is running:**
-   - Open: http://127.0.0.1:7887/health
-   - Check: http://127.0.0.1:7887/docs (API documentation)
+3. **API'nin çalıştığını doğrula:**
+   - Aç: http://127.0.0.1:7887/health
+   - Kontrol et: http://127.0.0.1:7887/docs (API dokümantasyonu)
 
-### Step 2: Frontend Setup
+### Adım 2: Frontend Kurulumu
 
-1. **Navigate to client directory:**
+1. **İstemci dizinine git:**
    ```bash
    cd nextjs-client-example
    ```
 
-2. **Install Node.js dependencies:**
+2. **Node.js bağımlılıklarını yükle:**
    ```bash
    npm install
    ```
 
-3. **Start the Next.js development server:**
+3. **Next.js geliştirme sunucusunu başlat:**
    ```bash
    npm run dev
    ```
 
-4. **Open the dashboard:**
-   - Navigate to: http://localhost:3000
+4. **Panoyu aç:**
+   - Şuraya git: http://localhost:3000
 
-### Step 3: Test the Integration
+### Adım 3: Entegrasyonu Test Et
 
-1. **Check system health:**
-   - Dashboard should show dataset information
-   - Green status indicators for API connection
+1. **Sistem sağlığını kontrol et:**
+   - Pano veri kümesi bilgilerini göstermeli
+   - API bağlantısı için yeşil durum göstergeleri
 
-2. **Run analysis:**
-   - Click "AI Damage Analysis" button
-   - Monitor progress in real-time
-   - View results when complete
+2. **Analizi çalıştır:**
+   - "AI Hasar Analizi" düğmesine tıkla
+   - Gerçek zamanlı ilerlemeyi izle
+   - Tamamlandığında sonuçları görüntüle
 
-## 💻 Usage Workflow
+## 💻 Kullanım İş Akışı
 
-### 1. **Data Overview** 📊
-- View satellite imagery metadata
-- Check dataset availability
-- See analysis capabilities
+### 1. **Veri Genel Bakış** 📊
+- Uydu görüntü meta verilerini görüntüle
+- Veri kümesi kullanılabilirliğini kontrol et
+- Analiz yeteneklerini gör
 
-### 2. **Run Analysis** 🤖
-- **Static Comparison**: Creates side-by-side imagery
-- **AI Damage Assessment**: Classifies damage severity
-- **Interactive Map**: Generates web-based map
-- **Complete Analysis**: Runs all tools
+### 2. **Analizi Çalıştır** 🤖
+- **Statik Karşılaştırma**: Yan yana görüntü oluşturur
+- **AI Hasar Değerlendirmesi**: Hasar şiddetini sınıflandırır
+- **Etkileşimli Harita**: Web tabanlı harita oluşturur
+- **Tam Analiz**: Tüm araçları çalıştırır
 
-### 3. **View Results** 📈
-- Real-time progress monitoring
-- Damage statistics by severity
-- Generated visualizations
-- Downloadable reports
+### 3. **Sonuçları Görüntüle** 📈
+- Gerçek zamanlı ilerleme izleme
+- Şiddete göre hasar istatistikleri
+- Oluşturulan görselleştirmeler
+- İndirilebilir raporlar
 
-## 🛠️ API Integration Examples
+## 🛠️ API Entegrasyon Örnekleri
 
-### Basic JavaScript Integration
+### Temel JavaScript Entegrasyonu
 ```javascript
-// Connect to API
+// API'ye bağlan
 const apiUrl = 'http://127.0.0.1:7887';
 
-// Check health
+// Sağlığı kontrol et
 const health = await fetch(`${apiUrl}/health`);
 console.log(await health.json());
 
-// Start analysis
+// Analizi başlat
 const analysis = await fetch(`${apiUrl}/analysis/run`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
@@ -109,12 +109,12 @@ const analysis = await fetch(`${apiUrl}/analysis/run`, {
   })
 });
 
-// Get results
+// Sonuçları al
 const results = await fetch(`${apiUrl}/results/damage-report`);
 const damageData = await results.json();
 ```
 
-### React Hook Example
+### React Hook Örneği
 ```jsx
 import { useState, useEffect } from 'react';
 
@@ -129,13 +129,13 @@ function useAnalysis() {
       setStatus(statusData);
       
       if (!statusData.running && statusData.last_updated) {
-        // Load results when analysis completes
+        // Analiz tamamlandığında sonuçları yükle
         try {
           const resultsResponse = await fetch('http://127.0.0.1:7887/results/damage-report');
           const resultsData = await resultsResponse.json();
           setResults(resultsData);
         } catch (error) {
-          console.log('No results available yet');
+          console.log('Henüz sonuç mevcut değil');
         }
       }
     }, 2000);
@@ -147,9 +147,9 @@ function useAnalysis() {
 }
 ```
 
-## 📊 Data Structure Examples
+## 📊 Veri Yapısı Örnekleri
 
-### Dataset Information Response
+### Veri Kümesi Bilgi Yanıtı
 ```json
 {
   "timestamp": "2025-08-28T...",
@@ -170,12 +170,12 @@ function useAnalysis() {
 }
 ```
 
-### Damage Assessment Results
+### Hasar Değerlendirme Sonuçları
 ```json
 {
   "analysis_metadata": {
     "total_area_km2": 5.002,
-    "analysis_method": "Multi-method change detection"
+    "analysis_method": "Çok yöntemli değişiklik algılama"
   },
   "damage_assessment": {
     "minimal": {
@@ -190,27 +190,27 @@ function useAnalysis() {
 }
 ```
 
-## 🎨 UI Components Available
+## 🎨 Mevcut UI Bileşenleri
 
-### Dashboard Components
-- **DataInfoCard**: Displays satellite imagery metadata
-- **AnalysisControls**: Buttons to start different analyses
-- **StatusMonitor**: Real-time progress tracking
-- **DamageVisualization**: Color-coded damage severity display
-- **ImageGallery**: Generated comparison and assessment images
+### Pano Bileşenleri
+- **DataInfoCard**: Uydu görüntü meta verilerini gösterir
+- **AnalysisControls**: Farklı analizleri başlatmak için düğmeler
+- **StatusMonitor**: Gerçek zamanlı ilerleme takibi
+- **DamageVisualization**: Renk kodlu hasar şiddeti gösterimi
+- **ImageGallery**: Oluşturulan karşılaştırma ve değerlendirme resimleri
 
-### Styling Features
-- **Responsive Design**: Mobile-first layout
-- **Loading States**: Smooth user feedback
-- **Error Handling**: Graceful error messages
-- **Color Coding**: Damage severity visualization
-- **Real-time Updates**: Live status monitoring
+### Stil Özellikleri
+- **Duyarlı Tasarım**: Mobil öncelikli düzen
+- **Yükleniyor Durumları**: Düzgün kullanıcı geri bildirimi
+- **Hata İşleme**: Zarif hata mesajları
+- **Renk Kodlama**: Hasar şiddeti görselleştirmesi
+- **Gerçek Zamanlı Güncellemeler**: Canlı durum izleme
 
-## 🔧 Advanced Configuration
+## 🔧 Gelişmiş Yapılandırma
 
-### Custom Analysis Parameters
+### Özel Analiz Parametreleri
 ```javascript
-// Start analysis with custom options
+// Özel seçeneklerle analizi başlat
 await fetch('http://127.0.0.1:7887/analysis/run', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
@@ -225,40 +225,40 @@ await fetch('http://127.0.0.1:7887/analysis/run', {
 });
 ```
 
-### Environment Configuration
+### Ortam Yapılandırması
 ```bash
 # .env.local (Next.js)
 NEXT_PUBLIC_API_URL=http://127.0.0.1:7887
 NEXT_PUBLIC_POLLING_INTERVAL=3000
 
-# Python environment
+# Python ortamı
 export HATAY_DATA_DIR="custom/path/to/data"
 export HATAY_OUTPUT_DIR="custom/output/path"
 ```
 
-## 🚀 Production Deployment
+## 🚀 Üretim Dağıtımı
 
-### Backend Deployment
+### Backend Dağıtımı
 ```bash
-# Using Uvicorn in production
+# Üretimde Uvicorn kullanma
 uvicorn api_server:app --host 0.0.0.0 --port 7887 --workers 4
 
-# Using Docker
+# Docker kullanma
 docker build -t hatay-api .
 docker run -p 7887:7887 hatay-api
 ```
 
-### Frontend Deployment
+### Frontend Dağıtımı
 ```bash
-# Build Next.js app
+# Next.js uygulamasını derleme
 npm run build
 npm run start
 
-# Using PM2
+# PM2 kullanma
 pm2 start npm --name "hatay-dashboard" -- start
 ```
 
-### Nginx Configuration
+### Nginx Yapılandırması
 ```nginx
 # API proxy
 location /api/ {
@@ -275,72 +275,72 @@ location / {
 }
 ```
 
-## 📈 Performance Optimization
+## 📈 Performans Optimizasyonu
 
-### Backend Optimizations
-- **Memory Management**: Tile-based processing for large images
-- **Parallel Processing**: Multi-threaded analysis
-- **Caching**: Results caching for repeated requests
-- **Background Tasks**: Non-blocking analysis execution
+### Backend Optimizasyonları
+- **Bellek Yönetimi**: Büyük görüntüler için döşeme tabanlı işleme
+- **Paralel İşleme**: Çok iş parçacıklı analiz
+- **Önbelleğe Alma**: Tekrarlanan istekler için sonuç önbelleğe alma
+- **Arka Plan Görevleri**: Bloklama yapmayan analiz yürütme
 
-### Frontend Optimizations
-- **Code Splitting**: Lazy loading components
-- **Image Optimization**: Next.js image optimization
-- **API Caching**: Cache analysis results
-- **Polling Optimization**: Efficient status checking
+### Frontend Optimizasyonları
+- **Kod Bölme**: Bileşenlerin tembel yüklenmesi
+- **Görüntü Optimizasyonu**: Next.js görüntü optimizasyonu
+- **API Önbelleğe Alma**: Analiz sonuçlarını önbelleğe al
+- **Yoklama Optimizasyonu**: Verimli durum kontrolü
 
-## 🐛 Troubleshooting
+## 🐛 Sorun Giderme
 
-### Common Issues
+### Yaygın Sorunlar
 
-1. **API Connection Failed**
+1. **API Bağlantısı Başarısız**
    ```bash
-   # Check if API server is running
+   # API sunucusunun çalışıp çalışmadığını kontrol et
    curl http://127.0.0.1:7887/health
    
-   # Check CORS configuration
-   # Verify Next.js is running on port 3000
+   # CORS yapılandırmasını kontrol et
+   # Next.js'in port 3000'de çalıştığını doğrula
    ```
 
-2. **Analysis Fails**
+2. **Analiz Başarısız**
    ```bash
-   # Check data directory
+   # Veri dizinini kontrol et
    ls -la 1c__Hatay_Enkaz_Bina_Etiketleme/
    
-   # Check Python dependencies
+   # Python bağımlılıklarını kontrol et
    pip list | grep rasterio
    
-   # View API logs
+   # API loglarını görüntüle
    python api_server.py --log-level debug
    ```
 
-3. **Images Not Loading**
+3. **Resimler Yüklenmiyor**
    ```javascript
-   // Check image URLs
+   // Resim URL'lerini kontrol et
    console.log(apiService.getImageUrl('hatay_comparison.png'));
    
-   // Verify in browser network tab
-   // Check file permissions
+   // Tarayıcı ağ sekmesinde doğrula
+   // Dosya izinlerini kontrol et
    ```
 
-### Development Tips
+### Geliştirme İpuçları
 
-1. **Use API Documentation**: http://127.0.0.1:7887/docs
-2. **Monitor Browser Console**: Check for JavaScript errors
-3. **Check Network Tab**: Verify API requests
-4. **Use React DevTools**: Inspect component state
-5. **Check API Logs**: Monitor backend processing
+1. **API Dokümantasyonunu Kullan**: http://127.0.0.1:7887/docs
+2. **Tarayıcı Konsolunu İzle**: JavaScript hatalarını kontrol et
+3. **Ağ Sekmesini Kontrol Et**: API isteklerini doğrula
+4. **React DevTools Kullan**: Bileşen durumunu incele
+5. **API Loglarını Kontrol Et**: Backend işlemeyi izle
 
-## 🔒 Security Considerations
+## 🔒 Güvenlik Hususları
 
-### Development
-- CORS configured for localhost only
-- No authentication required
-- File serving from specific directories
+### Geliştirme
+- CORS yalnızca localhost için yapılandırılmış
+- Kimlik doğrulama gerekli değil
+- Belirli dizinlerden dosya sunma
 
-### Production
+### Üretim
 ```python
-# Update CORS for production
+# Üretim için CORS'u güncelle
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://your-domain.com"],
@@ -349,31 +349,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add API authentication
-# Implement rate limiting
-# Use HTTPS
+# API kimlik doğrulaması ekle
+# Oran sınırlandırma uygula
+# HTTPS kullan
 ```
 
-## 📚 Next Steps
+## 📚 Sonraki Adımlar
 
-### Extending the System
+### Sistemi Genişletme
 
-1. **Add Authentication**: JWT tokens, user management
-2. **Database Integration**: PostgreSQL, user data storage
-3. **Real-time Features**: WebSocket notifications
-4. **File Upload**: Allow users to upload imagery
-5. **Export Features**: PDF reports, data downloads
-6. **Batch Processing**: Multiple area analysis
-7. **Historical Tracking**: Analysis version history
+1. **Kimlik Doğrulama Ekle**: JWT tokenları, kullanıcı yönetimi
+2. **Veritabanı Entegrasyonu**: PostgreSQL, kullanıcı veri depolama
+3. **Gerçek Zamanlı Özellikler**: WebSocket bildirimleri
+4. **Dosya Yükleme**: Kullanıcıların görüntü yüklemesine izin ver
+5. **Dışa Aktarma Özellikleri**: PDF raporlar, veri indirmeleri
+6. **Toplu İşlem**: Çoklu alan analizi
+7. **Geçmiş Takip**: Analiz versiyon geçmişi
 
-### Integration with Other Systems
+### Diğer Sistemlerle Entegrasyon
 
-1. **GIS Integration**: ArcGIS, QGIS plugins
-2. **Emergency Response**: Alert systems
-3. **Insurance Systems**: Damage assessment APIs
-4. **Government Portals**: Public data sharing
-5. **Mobile Apps**: React Native version
+1. **GIS Entegrasyonu**: ArcGIS, QGIS eklentileri
+2. **Acil Durum Müdahalesi**: Alarm sistemleri
+3. **Sigorta Sistemleri**: Hasar değerlendirme API'leri
+4. **Devlet Portalları**: Kamu veri paylaşımı
+5. **Mobil Uygulamalar**: React Native versiyonu
 
 ---
 
-This integration provides a complete, production-ready earthquake damage assessment system with web-based interface and comprehensive API access. The system is designed for scalability, reliability, and ease of use.
+Bu entegrasyon, web tabanlı arayüz ve kapsamlı API erişimi ile tam, üretime hazır deprem hasar değerlendirme sistemi sağlar. Sistem ölçeklenebilirlik, güvenilirlik ve kullanım kolaylığı için tasarlanmıştır.

@@ -1,215 +1,215 @@
-# Hatay Earthquake Analysis System - Queue & Progress Tracking Implementation
+# Hatay Deprem Analiz Sistemi - Kuyruk ve İlerleme Takip Uygulaması
 
-## 🚀 New Features Implemented
+## 🚀 Uygulanan Yeni Özellikler
 
-### 1. **FIFO Analysis Queue System**
-- **Background Processing**: All analyses now run in a dedicated worker thread
-- **Queue Management**: Multiple analysis requests are automatically queued and processed in FIFO order
-- **No Blocking**: Users can submit multiple analyses without waiting for previous ones to complete
-- **Queue Status**: Real-time queue length and position tracking
+### 1. **FIFO Analiz Kuyruk Sistemi**
+- **Arka Plan İşleme**: Tüm analizler artık özel bir çalışan iş parçacığında çalışır
+- **Kuyruk Yönetimi**: Birden fazla analiz isteği otomatik olarak kuyruğa alınır ve FIFO sırasında işlenir
+- **Bloklama Yok**: Kullanıcılar öncekiler tamamlanmayı beklemeden birden fazla analiz gönderebilir
+- **Kuyruk Durumu**: Gerçek zamanlı kuyruk uzunluğu ve pozisyon takibi
 
-### 2. **Enhanced Real-Time Progress Tracking**
-- **Detailed Progress Updates**: Shows current task, progress percentage, and detailed status messages
-- **Time-Based Progress**: Intelligent progress estimation based on analysis type and elapsed time
-- **Stage-Based Updates**: Different progress stages with descriptive messages
-- **Completion Estimates**: Estimated completion time based on analysis type
+### 2. **Gelişmiş Gerçek Zamanlı İlerleme Takibi**
+- **Detaylı İlerleme Güncellemeleri**: Mevcut görev, ilerleme yüzdesi ve detaylı durum mesajlarını gösterir
+- **Zaman Tabanlı İlerleme**: Analiz türü ve geçen süreye dayalı akıllı ilerleme tahmini
+- **Aşama Tabanlı Güncellemeler**: Açıklayıcı mesajlarla farklı ilerleme aşamaları
+- **Tamamlanma Tahminleri**: Analiz türüne dayalı tahmini tamamlanma süresi
 
-### 3. **Improved User Interface**
-- **Dynamic Status Display**: Shows both running analysis and queue status
-- **Queue Visualization**: Expandable queue view with individual analysis details
-- **Cancel Functionality**: Users can cancel queued analyses before they start
-- **Smart Polling**: Faster updates (2s) when active, slower (10s) when idle
-- **Better Error Handling**: More informative error messages and retry mechanisms
+### 3. **Geliştirilmiş Kullanıcı Arayüzü**
+- **Dinamik Durum Gösterimi**: Hem çalışan analiz hem de kuyruk durumunu gösterir
+- **Kuyruk Görselleştirmesi**: Bireysel analiz detayları ile genişletilebilir kuyruk görünümü
+- **İptal İşlevi**: Kullanıcılar başlamadan önce kuyrukta bekleyen analizleri iptal edebilir
+- **Akıllı Yoklama**: Aktifken daha hızlı güncellemeler (2s), boştayken daha yavaş (10s)
+- **Daha İyi Hata İşleme**: Daha bilgilendirici hata mesajları ve yeniden deneme mekanizmaları
 
-### 4. **New API Endpoints**
+### 4. **Yeni API Uç Noktaları**
 
-#### Queue Management
-- `GET /analysis/queue` - Get current queue status with detailed analysis list
-- `DELETE /analysis/queue/{id}` - Cancel a specific queued analysis
-- `GET /analysis/history` - View completed analysis history
+#### Kuyruk Yönetimi
+- `GET /analysis/queue` - Detaylı analiz listesi ile mevcut kuyruk durumunu al
+- `DELETE /analysis/queue/{id}` - Belirli bir kuyrukta bekleyen analizi iptal et
+- `GET /analysis/history` - Tamamlanmış analiz geçmişini görüntüle
 
-#### Enhanced Status
-- Enhanced `GET /analysis/status` - Now includes queue length, current analysis ID, completion estimates
-- Enhanced `POST /analysis/run` - Returns queue position and analysis ID
+#### Gelişmiş Durum
+- Gelişmiş `GET /analysis/status` - Artık kuyruk uzunluğu, mevcut analiz ID'si, tamamlanma tahminleri dahil
+- Gelişmiş `POST /analysis/run` - Kuyruk pozisyonu ve analiz ID'si döndürür
 
-## 🏗️ Technical Implementation
+## 🏗️ Teknik Uygulama
 
-### Backend Changes (`api_server.py`)
+### Backend Değişiklikleri (`api_server.py`)
 
-#### Queue System Components:
+#### Kuyruk Sistemi Bileşenleri:
 ```python
-# Global queue and status tracking
-analysis_queue = queue.Queue()  # FIFO queue for analysis requests
-analysis_history = {}           # Completed analysis history
-analysis_worker_running = True  # Worker thread control
+# Global kuyruk ve durum takibi
+analysis_queue = queue.Queue()  # Analiz istekleri için FIFO kuyruk
+analysis_history = {}           # Tamamlanmış analiz geçmişi
+analysis_worker_running = True  # Çalışan iş parçacığı kontrolü
 ```
 
-#### Background Worker Thread:
+#### Arka Plan Çalışan İş Parçacığı:
 ```python
 def analysis_worker():
-    """Background worker to process analysis queue"""
-    # Continuously processes queue items in FIFO order
-    # Updates real-time progress during analysis
-    # Stores completion history
+    """Analiz kuyruğunu işlemek için arka plan çalışanı"""
+    # FIFO sırasında kuyruk öğelerini sürekli işler
+    # Analiz sırasında gerçek zamanlı ilerlemeyi günceller
+    # Tamamlanma geçmişini depolar
 ```
 
-#### Progress Tracking:
+#### İlerleme Takibi:
 ```python
 def update_progress(task_name: str, progress: int, details: str = ""):
-    """Update global analysis progress with detailed information"""
-    # Updates status immediately
-    # Provides console logging
-    # Stores timestamps
+    """Global analiz ilerlemesini detaylı bilgilerle güncelle"""
+    # Durumu hemen günceller
+    # Konsol günlüğü sağlar
+    # Zaman damgalarını depolar
 ```
 
-#### Enhanced Analysis Execution:
+#### Gelişmiş Analiz Yürütme:
 ```python
 def run_analysis_with_progress(script_name: str, task_name: str, analysis_id: str):
-    """Run analysis with detailed progress updates"""
-    # Stage-based progress updates
-    # Time-based progress estimation
-    # Detailed error handling and reporting
+    """Detaylı ilerleme güncellemeleri ile analiz çalıştır"""
+    # Aşama tabanlı ilerleme güncellemeleri
+    # Zaman tabanlı ilerleme tahmini
+    # Detaylı hata işleme ve raporlama
 ```
 
-### Frontend Changes
+### Frontend Değişiklikleri
 
-#### Enhanced API Service (`api.ts`):
+#### Gelişmiş API Servisi (`api.ts`):
 ```typescript
-// New interfaces for queue and history
+// Kuyruk ve geçmiş için yeni arayüzler
 interface AnalysisQueueStatus { ... }
 interface AnalysisHistory { ... }
 
-// New API methods
+// Yeni API metotları
 async getAnalysisQueue(): Promise<AnalysisQueueStatus>
 async getAnalysisHistory(limit: number): Promise<AnalysisHistory>
 async cancelQueuedAnalysis(analysisId: string)
 ```
 
-#### Improved Analysis Controls (`AnalysisControls.tsx`):
-- **Queue Visualization**: Shows queued analyses with cancel options
-- **Real-Time Updates**: Fetches queue status every 3 seconds when active
-- **Enhanced Progress Display**: Shows detailed progress with time updates
-- **User-Friendly Interface**: Clear status indicators and actionable buttons
+#### Gelişmiş Analiz Kontrolleri (`AnalysisControls.tsx`):
+- **Kuyruk Görselleştirmesi**: İptal seçenekleri ile kuyrukta bekleyen analizleri gösterir
+- **Gerçek Zamanlı Güncellemeler**: Aktifken her 3 saniyede kuyruk durumunu getirir
+- **Gelişmiş İlerleme Gösterimi**: Zaman güncellemeleri ile detaylı ilerleme gösterir
+- **Kullanıcı Dostu Arayüz**: Net durum göstergeleri ve eyleme dönüştürülebilir düğmeler
 
-#### Smart Polling (`page.tsx`):
-- **Dynamic Intervals**: 2-second updates when active, 10-second when idle
-- **Status-Based Logic**: Different polling strategies based on current state
-- **Efficient Resource Usage**: Reduces unnecessary API calls
+#### Akıllı Yoklama (`page.tsx`):
+- **Dinamik Aralıklar**: Aktifken 2 saniyelik güncellemeler, boştayken 10 saniye
+- **Durum Tabanlı Mantık**: Mevcut duruma dayalı farklı yoklama stratejileri
+- **Verimli Kaynak Kullanımı**: Gereksiz API çağrılarını azaltır
 
-## 📊 Analysis Flow
+## 📊 Analiz Akışı
 
-### Before (Single Analysis):
-1. User clicks analysis button
-2. If analysis running → Error message
-3. If available → Start analysis
-4. User waits for completion
-5. Results displayed
+### Öncesi (Tek Analiz):
+1. Kullanıcı analiz düğmesine tıklar
+2. Analiz çalışıyorsa → Hata mesajı
+3. Müsaitse → Analizi başlat
+4. Kullanıcı tamamlanmayı bekler
+5. Sonuçlar gösterilir
 
-### After (Queue System):
-1. User clicks analysis button
-2. Analysis added to FIFO queue
-3. User receives queue position and analysis ID
-4. Analysis processes in background when ready
-5. Real-time progress updates
-6. User can submit more analyses (they queue automatically)
-7. User can cancel queued analyses
-8. Results displayed when complete
-9. Analysis history maintained
+### Sonrası (Kuyruk Sistemi):
+1. Kullanıcı analiz düğmesine tıklar
+2. Analiz FIFO kuyruğuna eklenir
+3. Kullanıcı kuyruk pozisyonu ve analiz ID'si alır
+4. Analiz hazır olduğunda arka planda işlenir
+5. Gerçek zamanlı ilerleme güncellemeleri
+6. Kullanıcı daha fazla analiz gönderebilir (otomatik kuyruğa alınır)
+7. Kullanıcı kuyrukta bekleyen analizleri iptal edebilir
+8. Tamamlandığında sonuçlar gösterilir
+9. Analiz geçmişi korunur
 
-## 🎯 User Experience Improvements
+## 🎯 Kullanıcı Deneyimi İyileştirmeleri
 
-### 1. **No More Waiting**
-- Users can submit multiple analyses immediately
-- No need to wait for previous analysis to complete
-- Queue system handles everything automatically
+### 1. **Artık Bekleme Yok**
+- Kullanıcılar hemen birden fazla analiz gönderebilir
+- Önceki analizin tamamlanmasını beklemeye gerek yok
+- Kuyruk sistemi her şeyi otomatik olarak halleder
 
-### 2. **Real-Time Feedback**
-- Detailed progress updates every 2 seconds
-- Current task and completion percentage
-- Estimated completion times
-- Queue position and length
+### 2. **Gerçek Zamanlı Geri Bildirim**
+- Her 2 saniyede detaylı ilerleme güncellemeleri
+- Mevcut görev ve tamamlanma yüzdesi
+- Tahmini tamamlanma süreleri
+- Kuyruk pozisyonu ve uzunluğu
 
-### 3. **Better Control**
-- View all queued analyses
-- Cancel queued analyses before they start
-- Monitor analysis history
-- Clear status indicators
+### 3. **Daha İyi Kontrol**
+- Kuyrukta bekleyen tüm analizleri görüntüle
+- Başlamadan önce kuyrukta bekleyen analizleri iptal et
+- Analiz geçmişini izle
+- Net durum göstergeleri
 
-### 4. **Improved Error Handling**
-- Detailed error messages
-- Retry mechanisms
-- Connection status monitoring
-- Graceful degradation
+### 4. **Gelişmiş Hata İşleme**
+- Detaylı hata mesajları
+- Yeniden deneme mekanizmaları
+- Bağlantı durumu izleme
+- Zarif bozulma
 
-## 🧪 Testing
+## 🧪 Test
 
-### Queue System Test Script (`test_queue_system.py`)
-- Submits multiple analyses to test FIFO behavior
-- Monitors real-time progress updates
-- Displays queue status and completion history
-- Verifies proper error handling
+### Kuyruk Sistemi Test Betiği (`test_queue_system.py`)
+- FIFO davranışını test etmek için birden fazla analiz gönderir
+- Gerçek zamanlı ilerleme güncellemelerini izler
+- Kuyruk durumu ve tamamlanma geçmişini gösterir
+- Uygun hata işlemeyi doğrular
 
-### Usage:
+### Kullanım:
 ```bash
 python test_queue_system.py
 ```
 
-## 📈 Performance Optimizations
+## 📈 Performans Optimizasyonları
 
-### 1. **Efficient Polling**
-- Smart polling intervals based on activity
-- Reduced API calls during idle periods
-- Optimized queue status checks
+### 1. **Verimli Yoklama**
+- Aktiviteye dayalı akıllı yoklama aralıkları
+- Boş dönemlerde azaltılmış API çağrıları
+- Optimize edilmiş kuyruk durumu kontrolleri
 
-### 2. **Background Processing**
-- Non-blocking analysis execution
-- Dedicated worker thread for queue processing
-- Proper resource management
+### 2. **Arka Plan İşleme**
+- Bloklama yapmayan analiz yürütme
+- Kuyruk işleme için özel çalışan iş parçacığı
+- Uygun kaynak yönetimi
 
-### 3. **Memory Management**
-- Queue size monitoring
-- Analysis history cleanup
-- Efficient data structures
+### 3. **Bellek Yönetimi**
+- Kuyruk boyutu izleme
+- Analiz geçmişi temizleme
+- Verimli veri yapıları
 
-## 🔧 Configuration
+## 🔧 Yapılandırma
 
-### Environment Variables
+### Ortam Değişkenleri
 ```env
 NEXT_PUBLIC_API_URL=http://127.0.0.1:7887
 ```
 
-### API Server Configuration
-- Queue worker thread runs continuously
-- Progress updates every 2 seconds during analysis
-- History maintains last 100 completed analyses
-- Automatic cleanup of old queue items
+### API Sunucu Yapılandırması
+- Kuyruk çalışan iş parçacığı sürekli çalışır
+- Analiz sırasında her 2 saniyede ilerleme güncellemeleri
+- Geçmiş son 100 tamamlanmış analizi tutar
+- Eski kuyruk öğelerinin otomatik temizlenmesi
 
-## 🚦 Status Indicators
+## 🚦 Durum Göstergeleri
 
-### API Connection Status:
-- 🟢 **Connected**: API healthy and responsive
-- 🟡 **Checking**: Health check in progress
-- 🔴 **Disconnected**: API unavailable
+### API Bağlantı Durumu:
+- 🟢 **Bağlı**: API sağlıklı ve yanıt veriyor
+- 🟡 **Kontrol Ediliyor**: Sağlık kontrolü devam ediyor
+- 🔴 **Bağlantı Kesildi**: API kullanılamıyor
 
-### Analysis Status:
-- 🔄 **Running**: Analysis currently executing with progress %
-- ⏳ **Queued**: Analysis waiting in queue with position
-- ✅ **Completed**: Analysis finished successfully
-- ❌ **Failed**: Analysis encountered an error
+### Analiz Durumu:
+- 🔄 **Çalışıyor**: Analiz şu anda ilerleme % ile yürütülüyor
+- ⏳ **Kuyrukta**: Analiz pozisyonla birlikte kuyrukta bekliyor
+- ✅ **Tamamlandı**: Analiz başarıyla tamamlandı
+- ❌ **Başarısız**: Analiz bir hatayla karşılaştı
 
-### Queue Status:
-- 📊 **Queue Length**: Number of analyses waiting
-- 📍 **Position**: User's position in queue
-- ⏱️ **Estimated Time**: Estimated start time based on queue
+### Kuyruk Durumu:
+- 📊 **Kuyruk Uzunluğu**: Bekleyen analiz sayısı
+- 📍 **Pozisyon**: Kullanıcının kuyruktaki pozisyonu
+- ⏱️ **Tahmini Süre**: Kuyruk durumuna dayalı tahmini başlama süresi
 
-## 🎉 Result
+## 🎉 Sonuç
 
-The system now provides a seamless, professional experience where:
-1. **Multiple analyses can be submitted simultaneously**
-2. **Real-time progress tracking shows detailed status**
-3. **FIFO queue ensures fair processing order**
-4. **Users have full visibility and control over their analyses**
-5. **The interface is responsive and user-friendly**
-6. **Error handling is robust and informative**
+Sistem artık şunları sağlayan kusursuz, profesyonel bir deneyim sunuyor:
+1. **Birden fazla analiz aynı anda gönderilebilir**
+2. **Gerçek zamanlı ilerleme takibi detaylı durumu gösterir**
+3. **FIFO kuyruk adil işleme sırası sağlar**
+4. **Kullanıcılar analizleri üzerinde tam görünürlük ve kontrole sahip**
+5. **Arayüz duyarlı ve kullanıcı dostu**
+6. **Hata işleme sağlam ve bilgilendirici**
 
-This implementation transforms the single-analysis system into a production-ready, multi-user capable platform with professional queue management and real-time monitoring capabilities.
+Bu uygulama, tek analizli sistemi profesyonel kuyruk yönetimi ve gerçek zamanlı izleme yetenekleri ile üretime hazır, çok kullanıcılı bir platforma dönüştürür.
