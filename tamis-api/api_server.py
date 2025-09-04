@@ -1148,16 +1148,16 @@ async def find_optimal_route(
 if __name__ == "__main__":
     print("Starting Hatay Earthquake Damage Assessment API Server")
     print("=" * 60)
-    print("[API] Documentation: http://127.0.0.1:8000/docs")
-    print("[API] ReDoc: http://127.0.0.1:8000/redoc")
-    print("[API] Health Check: http://127.0.0.1:8000/health")
-    print("[API] Data Info: http://127.0.0.1:8000/data/info")
+    print("[API] Documentation: http://127.0.0.1:7887/docs")
+    print("[API] ReDoc: http://127.0.0.1:7887/redoc")
+    print("[API] Health Check: http://127.0.0.1:7887/health")
+    print("[API] Data Info: http://127.0.0.1:7887/data/info")
     print("=" * 60)
     
     uvicorn.run(
         "api_server:app",
         host="0.0.0.0",
-        port=8000,
+        port=7887,
         reload=True,
         log_level="info"
     )

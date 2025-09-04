@@ -23,9 +23,9 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
    ```
 
 3. **Access the API:**
-   - API Documentation: http://127.0.0.1:8000/docs
-   - Alternative Docs: http://127.0.0.1:8000/redoc
-   - Health Check: http://127.0.0.1:8000/health
+   - API Documentation: http://127.0.0.1:7887/docs
+   - Alternative Docs: http://127.0.0.1:7887/redoc
+   - Health Check: http://127.0.0.1:7887/health
 
 ## 📡 API Endpoints
 
@@ -201,7 +201,7 @@ This FastAPI server provides REST API endpoints to access the Hatay earthquake d
 
 ```javascript
 // lib/api.js
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:7887';
 
 export const api = {
   // Get system health
@@ -384,7 +384,7 @@ app.add_middleware(
 
 ### Common Issues
 
-1. **Port 8000 already in use**
+1. **Port 7887 already in use**
    - Change port in `api_server.py`: `uvicorn.run(..., port=8001)`
 
 2. **Missing dependencies**
@@ -406,19 +406,19 @@ app.add_middleware(
 ### API Testing
 
 Use the built-in documentation:
-- Interactive API docs: http://127.0.0.1:8000/docs
+- Interactive API docs: http://127.0.0.1:7887/docs
 - Try endpoints directly in the browser
 - Use curl or Postman for testing:
 
 ```bash
 # Health check
-curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:7887/health
 
 # Get data info
-curl http://127.0.0.1:8000/data/info
+curl http://127.0.0.1:7887/data/info
 
 # Start analysis
-curl -X POST http://127.0.0.1:8000/analysis/run \
+curl -X POST http://127.0.0.1:7887/analysis/run \
   -H "Content-Type: application/json" \
   -d '{"analysis_type": "visualization"}'
 ```

@@ -39,7 +39,7 @@
 
 ### 🚀 **Current System Status:**
 
-**API Server**: ✅ Running at `http://127.0.0.1:8000`
+**API Server**: ✅ Running at `http://127.0.0.1:7887`
 - Background worker thread active
 - Queue system operational  
 - Real-time progress tracking working

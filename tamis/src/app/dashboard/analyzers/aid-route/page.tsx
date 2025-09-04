@@ -52,7 +52,7 @@ export default function AidRouteAnalyzer() {
 
   async function loadZones() {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/closed-zones');
+      const res = await fetch('http://127.0.0.1:7887/api/closed-zones');
       if (res.ok) {
         const j = await res.json();
         setClosedZones(j.zones || []);
@@ -96,7 +96,7 @@ export default function AidRouteAnalyzer() {
         end_lng: String(endPoint[0]),
         avoid_closed_zones: String(avoidClosed),
       });
-      const res = await fetch(`http://127.0.0.1:8000/api/findOptimalRoute?${params.toString()}`, {
+      const res = await fetch(`http://127.0.0.1:7887/api/findOptimalRoute?${params.toString()}`, {
         headers: { accept: 'application/json' },
       });
       if (!res.ok) throw new Error(`API ${res.status}`);
@@ -163,7 +163,7 @@ export default function AidRouteAnalyzer() {
   async function handleClosedZoneComplete(poly: [number, number][]) {
     try {
       const name = typeof window !== 'undefined' ? (prompt('Bölge adı (opsiyonel):') || `Kapalı Bölge ${closedZones.length + 1}`) : `Kapalı Bölge ${closedZones.length + 1}`;
-      const res = await fetch('http://127.0.0.1:8000/api/closed-zones', {
+      const res = await fetch('http://127.0.0.1:7887/api/closed-zones', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, polygon: poly }),
@@ -178,7 +178,7 @@ export default function AidRouteAnalyzer() {
   async function deleteZone(id?: string) {
     if (!id) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/closed-zones/${id}`, { method: 'DELETE' });
+      const res = await fetch(`http://127.0.0.1:7887/api/closed-zones/${id}`, { method: 'DELETE' });
       if (res.ok) await loadZones();
     } catch {}
   }

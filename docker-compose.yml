@@ -30,7 +30,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://tamis_user:tamis_password@postgres:5432/tamis
-      - NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+      - NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
       - JWT_SECRET=tamis-super-secret-jwt-key-2025-change-in-production
     depends_on:
       postgres:
@@ -54,7 +54,7 @@ services:
       dockerfile: Dockerfile
     container_name: tamis-api
     ports:
-      - "8000:8000"
+      - "7887:7887"
     environment:
       - PYTHONPATH=/app
     networks:
@@ -65,7 +65,7 @@ services:
       - ./tamis-api/analyzers:/app/analyzers
       - tamis_data:/app/1c__Hatay_Enkaz_Bina_Etiketleme
     healthcheck:
-      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/api/health')"]
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:7887/api/health')"]
       interval: 30s
       timeout: 10s
       retries: 3

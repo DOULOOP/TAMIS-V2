@@ -36,8 +36,8 @@ This guide shows you how to set up and run the complete Hatay Earthquake Damage 
    ```
 
 3. **Verify API is running:**
-   - Open: http://127.0.0.1:8000/health
-   - Check: http://127.0.0.1:8000/docs (API documentation)
+   - Open: http://127.0.0.1:7887/health
+   - Check: http://127.0.0.1:7887/docs (API documentation)
 
 ### Step 2: Frontend Setup
 
@@ -94,7 +94,7 @@ This guide shows you how to set up and run the complete Hatay Earthquake Damage 
 ### Basic JavaScript Integration
 ```javascript
 // Connect to API
-const apiUrl = 'http://127.0.0.1:8000';
+const apiUrl = 'http://127.0.0.1:7887';
 
 // Check health
 const health = await fetch(`${apiUrl}/health`);
@@ -124,14 +124,14 @@ function useAnalysis() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const response = await fetch('http://127.0.0.1:8000/analysis/status');
+      const response = await fetch('http://127.0.0.1:7887/analysis/status');
       const statusData = await response.json();
       setStatus(statusData);
       
       if (!statusData.running && statusData.last_updated) {
         // Load results when analysis completes
         try {
-          const resultsResponse = await fetch('http://127.0.0.1:8000/results/damage-report');
+          const resultsResponse = await fetch('http://127.0.0.1:7887/results/damage-report');
           const resultsData = await resultsResponse.json();
           setResults(resultsData);
         } catch (error) {
@@ -211,7 +211,7 @@ function useAnalysis() {
 ### Custom Analysis Parameters
 ```javascript
 // Start analysis with custom options
-await fetch('http://127.0.0.1:8000/analysis/run', {
+await fetch('http://127.0.0.1:7887/analysis/run', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -228,7 +228,7 @@ await fetch('http://127.0.0.1:8000/analysis/run', {
 ### Environment Configuration
 ```bash
 # .env.local (Next.js)
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_API_URL=http://127.0.0.1:7887
 NEXT_PUBLIC_POLLING_INTERVAL=3000
 
 # Python environment
@@ -241,11 +241,11 @@ export HATAY_OUTPUT_DIR="custom/output/path"
 ### Backend Deployment
 ```bash
 # Using Uvicorn in production
-uvicorn api_server:app --host 0.0.0.0 --port 8000 --workers 4
+uvicorn api_server:app --host 0.0.0.0 --port 7887 --workers 4
 
 # Using Docker
 docker build -t hatay-api .
-docker run -p 8000:8000 hatay-api
+docker run -p 7887:7887 hatay-api
 ```
 
 ### Frontend Deployment
@@ -262,7 +262,7 @@ pm2 start npm --name "hatay-dashboard" -- start
 ```nginx
 # API proxy
 location /api/ {
-    proxy_pass http://127.0.0.1:8000/;
+    proxy_pass http://127.0.0.1:7887/;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
 }
@@ -296,7 +296,7 @@ location / {
 1. **API Connection Failed**
    ```bash
    # Check if API server is running
-   curl http://127.0.0.1:8000/health
+   curl http://127.0.0.1:7887/health
    
    # Check CORS configuration
    # Verify Next.js is running on port 3000
@@ -325,7 +325,7 @@ location / {
 
 ### Development Tips
 
-1. **Use API Documentation**: http://127.0.0.1:8000/docs
+1. **Use API Documentation**: http://127.0.0.1:7887/docs
 2. **Monitor Browser Console**: Check for JavaScript errors
 3. **Check Network Tab**: Verify API requests
 4. **Use React DevTools**: Inspect component state

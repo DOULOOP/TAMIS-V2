@@ -9,8 +9,8 @@
 
 ## Build, Test, and Development Commands
 - Python setup (Windows): `python -m venv .venv && .\.venv\Scripts\activate && pip install -r requirements.txt`.
-- Run API (dev): `python start_api_server.py` or `python api_server.py` → docs at `http://127.0.0.1:8000/docs`.
-- Health check: `curl http://127.0.0.1:8000/health`.
+- Run API (dev): `python start_api_server.py` or `python api_server.py` → docs at `http://127.0.0.1:7887/docs`.
+- Health check: `curl http://127.0.0.1:7887/health`.
 - Frontend dev: `cd client && npm install && npm run dev` → `http://localhost:3000`.
 - Frontend build/start: `cd client && npm run build && npm start`.
 - Lint (client): `cd client && npm run lint`.

@@ -61,7 +61,7 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-ENV NEXT_PUBLIC_API_SERVER_URL="http://localhost:8000/api"
+ENV NEXT_PUBLIC_API_SERVER_URL="http://localhost:7887/api"
 ENV JWT_SECRET="tamis-super-secret-jwt-key-2025-change-in-production"
 ENV DATABASE_URL="postgresql://tamis_user:tamis_password@postgres:5432/tamis"
 
