@@ -1,5 +1,38 @@
 **TAMİS Raporu**
 
+## 📋 İçindekiler
+
+- [1. Proje Özeti 🚀](#1-proje-özeti-)
+- [2. Çözüm Ürettiği Sorun / İhtiyaç ❗](#2-çözüm-ürettiği-sorun--ihtiyaç-)
+- [3. Yerlilik ve Özgünlük Tarafı 🇹🇷](#3-yerlilik-ve-özgünlük-tarafı-)
+- [4. Yöntem ve Hedef Kitle 🎯](#4-yöntem-ve-hedef-kitle-)
+- [5. Yenilik ve Ticarileşme Potansiyeli 💡](#5-yenilik-ve-ticarileşme-potansiyeli-)
+- [6. SWOT Analizi 📊](#6-swot-analizi-)
+- [🚀 Hızlı Başlangıç Seçenekleri](#-hızlı-başlangıç-seçenekleri)
+  - [🐳 Docker Kurulumu](#-docker-kurulumu)
+    - [Ön Gereksinimler](#ön-gereksinimler)
+    - [Hızlı Kurulum](#hızlı-kurulumu)
+    - [Docker Servisleri](#docker-servisleri)
+    - [Docker Komutları](#docker-komutları)
+    - [Ortam Yapılandırması](#ortam-yapılandırması)
+  - [⚙️ Manuel Kurulum](#️-manuel-kurulum)
+    - [Ön Gereksinimler](#ön-gereksinimler-1)
+    - [Frontend Kurulumu (Next.js)](#frontend-kurulumu-nextjs)
+    - [Backend Kurulumu (Python API)](#backend-kurulumu-python-api)
+    - [Veritabanı Kurulumu (PostgreSQL)](#veritabanı-kurulumu-postgresql)
+    - [Geliştirme İş Akışı](#geliştirme-iş-akışı)
+- [🏗️ Proje Yapısı](#️-proje-yapısı)
+- [🛠️ Teknoloji Sürümleri](#️-teknoloji-sürümleri)
+  - [Frontend (Next.js)](#frontend-nextjs)
+  - [Backend (Python API)](#backend-python-api)
+  - [Veritabanı ve Altyapı](#veritabanı-ve-altyapı)
+  - [Geliştirme Araçları](#geliştirme-araçları)
+- [🔧 Yapılandırma](#-yapılandırma)
+- [📊 Temel Özellikler](#-temel-özellikler)
+- [📚 API Dokümantasyonu](#-api-dokümantasyonu)
+
+---
+
 ## 1. Proje Özeti 🚀
 
 TAMİS (Tehlike Alanı Müdahale İzleme Sistemi), afet anlarında hızlı,
@@ -394,6 +427,56 @@ TAMIS-V2/
 
 ---
 
+## 🛠️ Teknoloji Sürümleri
+
+### Frontend (Next.js)
+- **Next.js**: 15.2.3
+- **React**: 19.0.0
+- **React DOM**: 19.0.0
+- **Node.js**: 20.14.10
+- **TypeScript**: 5.8.2
+- **Bun**: 1.0 (Paket yöneticisi)
+- **Prisma Client**: 6.5.0
+- **Tailwind CSS**: 4.0.15
+- **ESLint**: 9.23.0
+- **Prettier**: 3.5.3
+- **NextAuth.js**: 4.24.11
+- **OpenLayers**: 10.6.1
+- **Zod**: 3.24.2
+
+### Backend (Python API)
+- **Python**: 3.11
+- **FastAPI**: 0.104.0+
+- **Uvicorn**: 0.24.0+
+- **Pydantic**: 2.0.0+
+
+#### Veri İşleme ve Analiz Kütüphaneleri
+- **GeoPandas**: 0.12.0+
+- **Rasterio**: 1.3.0+
+- **NumPy**: 1.21.0+
+- **Pandas**: 1.3.0+
+- **OpenCV**: 4.6.0+
+- **Scikit-learn**: 1.1.0+
+- **Scikit-image**: 0.19.0+
+- **Matplotlib**: 3.5.0+
+- **Pillow**: 8.3.0+
+- **Folium**: 0.14.0+
+- **Contextily**: 1.3.0+
+
+### Veritabanı ve Altyapı
+- **PostgreSQL**: 15 (Alpine)
+- **Prisma ORM**: 6.5.0
+- **PostGIS**: Jeouzamsal veri desteği için
+
+### Geliştirme Araçları
+- **Docker**: Konteynerleştirme
+- **Docker Compose**: Çoklu servis orkestrasyonu
+- **TypeScript ESLint**: 8.27.0
+- **Prettier Plugin TailwindCSS**: 0.6.11
+- **TSX**: 4.20.5
+
+---
+
 ## 🔧 Yapılandırma
 
 ### Ortam Değişkenleri
@@ -455,9 +538,9 @@ Python API ortam değişkenlerini kullanır veya FastAPI ayarları aracılığı
 
 API sunucusu çalıştığında şunlara erişebilirsiniz:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
+- **Swagger UI**: https://tamis-v2.onrender.com/docs
+- **ReDoc**: https://tamis-v2.onrender.com/redoc
+- **OpenAPI JSON**: https://tamis-v2.onrender.com/openapi.json
 
 ### Ana Endpoint'ler
 
