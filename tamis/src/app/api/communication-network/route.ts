@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/server/db';
+import fs from 'fs';
+import path from 'path';
 
 export async function GET() {
   try {
@@ -23,6 +25,15 @@ export async function GET() {
       latency: l.latency,
       status: l.status,
     }));
+
+    // Try reading enriched AAIA modem information from local JSON to augment API
+    let aaia_modems_information: any = null;
+    try {
+      const dataPath = path.resolve(process.cwd(), 'src', 'data', 'communication-network.json');
+      const raw = fs.readFileSync(dataPath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      aaia_modems_information = parsed?.aaia_modems_information ?? null;
+    } catch {}
 
     const communicationNetworkAnalysis = {
       summary: {
@@ -75,7 +86,8 @@ export async function GET() {
           backupPaths: Math.max(0, Math.floor(backbone.length / 3)),
           redundancyLevel: backbone.length > 3 ? 'high' : 'low',
         },
-      },
+  },
+  aaia_modems_information,
     };
     return NextResponse.json({ communicationNetworkAnalysis });
   } catch (e: any) {

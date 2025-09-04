@@ -12,7 +12,7 @@ import "ol/ol.css";
 
 type Mode = "swipe" | "split";
 
-// WGS84 extent from your raster bounds
+// Raster sınırlarınızdan WGS84 kapsamı
 const extent4326: [number, number, number, number] = [
 	36.136884, // minLon (W)
 	36.200889, // minLat (S)

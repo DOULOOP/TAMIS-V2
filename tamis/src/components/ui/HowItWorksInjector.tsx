@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffe      // Her bölüme ekle
+      document.querySelectorAll('section').forEach(attachToAnchor);
+      // Ve data-section ipucu ile ana kapsayıcılara} from "react";
 import HowItWorks from "./HowItWorks";
 
 /**
@@ -10,7 +12,7 @@ import HowItWorks from "./HowItWorks";
  */
 export default function HowItWorksInjector() {
   useEffect(() => {
-    // Helper to mount component to target element
+    // Hedef elemente bileşen yerleştirmek için yardımcı
     const ensureAnchor = (host: Element) => {
       const id = "tamis-howitworks-anchor";
       let anchor = host.querySelector(`:scope > .${id}`);
@@ -20,9 +22,9 @@ export default function HowItWorksInjector() {
         const cs = getComputedStyle(host as HTMLElement);
         (host as HTMLElement).style.position = cs.position === "static" ? "relative" : cs.position;
         host.appendChild(anchor);
-        // Render a simple cloned balloon using Web Components-free approach
-        // We'll mount a minimal React root per anchor to avoid global state.
-        // To keep dependencies tiny, use dynamic import of react-dom/client.
+        // Web Components'siz yaklaşımla basit klonlanmış balon render et
+        // Global state'den kaçınmak için her anchor için minimal React root monte edeceğiz.
+        // Bağımlılıkları küçük tutmak için react-dom/client'ın dinamik import'unu kullan.
         import("react-dom/client").then(({ createRoot }) => {
           const root = createRoot(anchor as Element);
           root.render(<HowItWorks />);
@@ -31,16 +33,16 @@ export default function HowItWorksInjector() {
     };
 
     const scan = () => {
-      // Attach to every section
+      // Her bölüme ekle
       document.querySelectorAll("section").forEach(ensureAnchor);
-      // And to main containers with data-section hint
+      // Ve data-section ipucu ile ana kapsayıcılara
       document.querySelectorAll('[data-section], main').forEach(ensureAnchor);
     };
 
-    // Initial scan
+    // İlk tarama
     scan();
 
-    // Observe route/page changes and DOM mutations
+    // Rota/sayfa değişikliklerini ve DOM mutasyonlarını gözlemle
     const mo = new MutationObserver((muts) => {
       for (const m of muts) {
         if (m.addedNodes && m.addedNodes.length) {
@@ -51,7 +53,7 @@ export default function HowItWorksInjector() {
     });
     mo.observe(document.body, { childList: true, subtree: true });
 
-    // Re-scan on history navigation
+    // Geçmiş navigasyonunda yeniden tara
     const onPop = () => setTimeout(scan, 50);
     window.addEventListener("popstate", onPop);
 

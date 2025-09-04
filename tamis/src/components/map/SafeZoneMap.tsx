@@ -50,7 +50,7 @@ interface SafeZoneMapProps {
 }
 
 export default function SafeZoneMap({ 
-  height = '100%', 
+  height = '50vh', 
   center = [36.150837, 36.209898],
   zoom = 15,
   onMapReady,

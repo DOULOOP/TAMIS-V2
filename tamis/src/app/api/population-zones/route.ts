@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const zones = (await (db as any).populationZone.findMany()) as any[];
 
-    // Aggregate helper functions
+    // Toplam yardımcı fonksiyonları
     const sum = (arr: number[]) => arr.reduce((a, b) => a + (b || 0), 0);
     const densities: number[] = zones.map((z: any) => Number(z.density) || 0).sort((a: number, b: number) => a - b);
     const getPercentile = (p: number): number => {
@@ -22,7 +22,7 @@ export async function GET() {
     const criticalZonesCount = zones.filter((z: any) => String(z.riskLevel).toLowerCase() === 'high').length;
     const riskScore = zones.length ? Number(((criticalZonesCount / zones.length) * 10).toFixed(1)) : 0;
 
-    // Evacuation capacity from SafeZone table
+    // SafeZone tablosundan tahliye kapasitesi
     const safeAgg = (await (db as any).safeZone.aggregate({ _sum: { capacity: true } })) as any;
     const totalSafeCapacity = Number(safeAgg?._sum?.capacity || 0);
     const requiredCapacity = totalPopulation;

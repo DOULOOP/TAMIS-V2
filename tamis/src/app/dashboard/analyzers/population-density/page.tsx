@@ -106,7 +106,7 @@ export default function PopulationDensityAnalyzer() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* HowTo at the very top, aligned right */}
           <div className="relative mb-2 h-10">
@@ -281,7 +281,7 @@ export default function PopulationDensityAnalyzer() {
               </div>
 
               {/* Map Section */}
-              <div className="mb-6 aspect-square overflow-hidden rounded-lg">
+              <div className="mb-6  overflow-hidden rounded-lg">
                 <OpenLayersMap showPopulationData={true} />
               </div>
 

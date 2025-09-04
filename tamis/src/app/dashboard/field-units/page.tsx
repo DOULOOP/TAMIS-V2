@@ -149,7 +149,7 @@ export default function FieldUnitsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* HowTo at the very top, aligned right */}
           <div className="relative mb-2 h-10">

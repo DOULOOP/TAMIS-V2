@@ -147,7 +147,7 @@ export default function FieldUnitsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto  py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Summary Stats */}
           <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">

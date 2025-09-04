@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    // Validate input
+    // Girişi doğrula
     const validation = registerSchema.safeParse(body);
     if (!validation.success) {
       const firstError = validation.error.errors[0];
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const { email, password, name, department } = validation.data;
 
-    // Check if user already exists
+    // Kullanıcının zaten var olup olmadığını kontrol et
     const existingUser = await db.user.findUnique({
       where: { email },
     });
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password
+    // Şifreyi hash'le
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 

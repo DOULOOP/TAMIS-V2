@@ -207,7 +207,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   ];
 
   const handleLogout = () => {
-    // Clear any stored auth data
+    // Depolanan auth verilerini temizle
     localStorage.removeItem("user");
     router.push("/");
   };

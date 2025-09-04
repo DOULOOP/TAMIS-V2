@@ -10,18 +10,69 @@ const RouteMap = dynamic(() => import("@/components/map/RouteMap"), {
 });
 
 export default function AidRouteAnalyzer() {
+  // Types for Aid Route analysis
+  interface RouteStep {
+    instruction?: string | { text?: string };
+    name?: string;
+    maneuver?: string;
+    distance?: number;
+    length?: number;
+    time?: number;
+    duration?: number;
+  }
+
+  interface AidRouteSupply {
+    type: string;
+    amount: number;
+    unit: string;
+  }
+
+  interface AidRouteVehicle {
+    id: string;
+    type: string;
+    plate: string;
+    status: "active" | "maintenance" | "offline" | string;
+  }
+
+  interface AidRouteCheckpoint {
+    id: string;
+    name: string;
+    status: "clear" | "congested" | "blocked" | string;
+  }
+
+  interface AidRoute {
+    id: string;
+    name: string;
+    distance: number; // km
+    estimatedTime: number; // hours
+    status: "active" | "blocked" | "restricted" | string;
+    vehicles: AidRouteVehicle[];
+    supplies: AidRouteSupply[];
+    checkpoints: AidRouteCheckpoint[];
+  }
+
+  interface AidRouteAnalysis {
+    routes: AidRoute[];
+    averageTime?: number;
+    averageDistance?: number;
+  }
+
+  type Coord = [number, number];
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState<any>(null);
+  const [analysisResults, setAnalysisResults] = useState<AidRouteAnalysis | null>(null);
   const router = useRouter();
 
   // Load summary/list from DB-backed API
   useEffect(() => {
-    (async () => {
+    void (async () => {
       try {
         const res = await fetch("/api/aid-routes", { cache: "no-store" });
-        const j = await res.json();
-        setAnalysisResults(j.aidRouteAnalysis);
-      } catch {}
+        const j = (await res.json()) as { aidRouteAnalysis?: AidRouteAnalysis };
+        setAnalysisResults(j.aidRouteAnalysis ?? null);
+      } catch {
+        // ignore
+      }
     })();
   }, []);
 
@@ -39,12 +90,12 @@ export default function AidRouteAnalyzer() {
   };
 
   // New: interactive routing state
-  const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
-  const [endPoint, setEndPoint] = useState<[number, number] | null>(null);
-  const [routeCoords, setRouteCoords] = useState<[number, number][] | null>(
+  const [startPoint, setStartPoint] = useState<Coord | null>(null);
+  const [endPoint, setEndPoint] = useState<Coord | null>(null);
+  const [routeCoords, setRouteCoords] = useState<Coord[] | null>(
     null,
   );
-  const [routeSteps, setRouteSteps] = useState<any[]>([]);
+  const [routeSteps, setRouteSteps] = useState<RouteStep[]>([]);
   const [routeMeta, setRouteMeta] = useState<{
     distanceKm?: number;
     durationMin?: number;
@@ -57,7 +108,7 @@ export default function AidRouteAnalyzer() {
   >([]);
   const [drawZoneMode, setDrawZoneMode] = useState(false);
   const [avoidClosed, setAvoidClosed] = useState(true);
-  const [altRoutes, setAltRoutes] = useState<[number, number][][]>([]);
+  const [altRoutes, setAltRoutes] = useState<Coord[][]>([]);
   const [hitZones, setHitZones] = useState<{ id?: string; name?: string }[]>(
     [],
   );
@@ -66,39 +117,60 @@ export default function AidRouteAnalyzer() {
     try {
       const res = await fetch("https://tamis-v2.onrender.com/api/closed-zones");
       if (res.ok) {
-        const j = await res.json();
-        setClosedZones(j.zones || []);
+        const j = (await res.json()) as { zones?: { id?: string; name?: string; polygon: [number, number][] }[] };
+        setClosedZones(j.zones ?? []);
       }
     } catch {}
   }
   useEffect(() => {
-    loadZones();
+    void loadZones();
   }, []);
 
   const handleSelectPoint = (
-    point: [number, number],
+    point: Coord,
     kind: "start" | "end",
   ) => {
     if (kind === "start") setStartPoint(point);
     else setEndPoint(point);
   };
 
-  function extractCoordsFromRoute(route: any): [number, number][] {
-    let coords: [number, number][] = [];
-    const routes0 = route?.routes?.[0];
+  // Minimal route result types (OSRM/ORS-like)
+  type OSRMRouteLike = {
+    routes?: Array<{
+      geometry?: { coordinates?: Coord[] };
+      legs?: Array<{ steps?: RouteStep[] }>;
+      summary?: { length?: number; duration?: number };
+    }>;
+  };
+  type ORSFeatureLike = {
+    features?: Array<{
+      geometry?:
+        | { type: "LineString"; coordinates: Coord[] }
+        | { type: "MultiLineString"; coordinates: Coord[][] };
+      properties?: {
+        distance?: number;
+        time?: number;
+        legs?: Array<{ steps?: RouteStep[]; distance?: number; time?: number }>;
+        segments?: Array<{ steps?: RouteStep[]; distance?: number; duration?: number }>;
+      };
+    }>;
+  };
+
+  function extractCoordsFromRoute(route: OSRMRouteLike | ORSFeatureLike): Coord[] {
+    let coords: Coord[] = [];
+    const routes0 = (route as OSRMRouteLike)?.routes?.[0];
     if (routes0?.geometry?.coordinates) {
-      coords = routes0.geometry.coordinates as [number, number][];
+      coords = routes0.geometry.coordinates as Coord[];
     } else {
-      const feat0 = route?.features?.[0];
+      const feat0 = (route as ORSFeatureLike)?.features?.[0];
       const geom = feat0?.geometry;
       if (geom?.type === "LineString" && Array.isArray(geom.coordinates)) {
-        coords = geom.coordinates as [number, number][];
+        coords = geom.coordinates as Coord[];
       } else if (
-        geom?.type === "MultiLineString" &&
-        Array.isArray(geom.coordinates)
+        geom?.type === "MultiLineString" && Array.isArray(geom.coordinates)
       ) {
-        const flat = (geom.coordinates as [number, number][][]).flat();
-        coords = flat as [number, number][];
+        const flat = (geom.coordinates as Coord[][]).flat();
+        coords = flat as Coord[];
       }
     }
     return coords;
@@ -123,23 +195,27 @@ export default function AidRouteAnalyzer() {
         },
       );
       if (!res.ok) throw new Error(`API ${res.status}`);
-      const data = await res.json();
+      const data = (await res.json()) as {
+        route: OSRMRouteLike | ORSFeatureLike;
+        alternatives?: Array<{ route: OSRMRouteLike | ORSFeatureLike }>;
+        closed_zones_hit?: { id?: string; name?: string }[];
+      };
       const route = data.route;
 
       // Extract geometry coordinates (supports LineString and MultiLineString)
-      let coords: [number, number][] = extractCoordsFromRoute(route);
+  let coords: Coord[] = extractCoordsFromRoute(route);
       if (!coords.length) throw new Error("Rota bulunamadı");
       setRouteCoords(coords);
 
       // Steps/instructions: support different shapes
-      let steps: any[] = [];
-      const routes0 = route?.routes?.[0];
-      if (routes0?.legs?.[0]?.steps) steps = routes0.legs[0].steps;
+      let steps: RouteStep[] = [];
+      const routes0 = (route as OSRMRouteLike)?.routes?.[0];
+      if (routes0?.legs?.[0]?.steps) steps = routes0.legs[0].steps as RouteStep[];
       else {
-        const feat0 = route?.features?.[0];
+        const feat0 = (route as ORSFeatureLike)?.features?.[0];
         steps =
-          feat0?.properties?.legs?.[0]?.steps ||
-          feat0?.properties?.segments?.[0]?.steps ||
+          (feat0?.properties?.legs?.[0]?.steps as RouteStep[] | undefined) ??
+          (feat0?.properties?.segments?.[0]?.steps as RouteStep[] | undefined) ??
           [];
       }
       setRouteSteps(steps);
@@ -148,19 +224,19 @@ export default function AidRouteAnalyzer() {
       let distanceMeters = 0;
       let durationSeconds = 0;
       if (routes0?.summary) {
-        distanceMeters = routes0.summary.length || 0;
-        durationSeconds = routes0.summary.duration || 0;
+        distanceMeters = routes0.summary.length ?? 0;
+        durationSeconds = routes0.summary.duration ?? 0;
       } else {
-        const feat0 = route?.features?.[0];
+        const feat0 = (route as ORSFeatureLike)?.features?.[0];
         distanceMeters =
-          feat0?.properties?.distance ||
-          feat0?.properties?.segments?.[0]?.distance ||
-          feat0?.properties?.legs?.[0]?.distance ||
+          feat0?.properties?.distance ??
+          feat0?.properties?.segments?.[0]?.distance ??
+          feat0?.properties?.legs?.[0]?.distance ??
           0;
         durationSeconds =
-          feat0?.properties?.time ||
-          feat0?.properties?.segments?.[0]?.duration ||
-          feat0?.properties?.legs?.[0]?.time ||
+          feat0?.properties?.time ??
+          feat0?.properties?.segments?.[0]?.duration ??
+          feat0?.properties?.legs?.[0]?.time ??
           0;
       }
       setRouteMeta({
@@ -173,16 +249,17 @@ export default function AidRouteAnalyzer() {
       });
 
       // Closed zone hits and alternatives
-      setHitZones(data.closed_zones_hit || []);
+      setHitZones(data.closed_zones_hit ?? []);
       const alts = Array.isArray(data.alternatives) ? data.alternatives : [];
-      const altCoords: [number, number][][] = [];
+      const altCoords: Coord[][] = [];
       for (const a of alts) {
         const rc = extractCoordsFromRoute(a.route);
         if (rc.length) altCoords.push(rc);
       }
       setAltRoutes(altCoords);
-    } catch (e: any) {
-      setError(e.message || "Rota alınamadı");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Rota alınamadı";
+      setError(msg);
       setRouteCoords(null);
       setRouteSteps([]);
       setRouteMeta({});
@@ -193,7 +270,7 @@ export default function AidRouteAnalyzer() {
     }
   }
 
-  async function handleClosedZoneComplete(poly: [number, number][]) {
+  async function handleClosedZoneComplete(poly: Coord[]) {
     try {
       const name =
         typeof window !== "undefined"
@@ -210,8 +287,9 @@ export default function AidRouteAnalyzer() {
       );
       if (!res.ok) throw new Error("Bölge kaydedilemedi");
       await loadZones();
-    } catch (e: any) {
-      setError(e.message || "Bölge kaydedilemedi");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Bölge kaydedilemedi";
+      setError(msg);
     }
   }
 
@@ -286,7 +364,7 @@ export default function AidRouteAnalyzer() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main className="mx-autopy-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* HowTo at the very top, aligned right */}
           <div className="relative mb-2 h-10">
@@ -510,10 +588,13 @@ export default function AidRouteAnalyzer() {
                 </div>
 
                 <div className="max-h-96 space-y-3 overflow-y-auto">
-                  {routeSteps.map((s: any, idx: number) => {
+                  {routeSteps.map((s: RouteStep, idx: number) => {
+                    const instr =
+                      typeof s?.instruction === "object"
+                        ? s.instruction?.text
+                        : s?.instruction;
                     const text =
-                      s?.instruction?.text ??
-                      s?.instruction ??
+                      instr ??
                       s?.name ??
                       s?.maneuver ??
                       "Adım";
@@ -752,7 +833,7 @@ export default function AidRouteAnalyzer() {
               <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                 <div className="rounded-lg bg-orange-50 p-4 text-center">
                   <div className="text-2xl font-bold text-orange-900">
-                    {analysisResults?.routes?.length || 0}
+                    {analysisResults?.routes?.length ?? 0}
                   </div>
                   <div className="text-sm font-medium text-orange-700">
                     Optimal Rotalar
@@ -763,7 +844,7 @@ export default function AidRouteAnalyzer() {
                 </div>
                 <div className="rounded-lg bg-orange-50 p-4 text-center">
                   <div className="text-2xl font-bold text-orange-900">
-                    {analysisResults?.averageTime || 0}
+                    {analysisResults?.averageTime ?? 0}
                   </div>
                   <div className="text-sm font-medium text-orange-700">
                     Ortalama Süre
@@ -772,7 +853,7 @@ export default function AidRouteAnalyzer() {
                 </div>
                 <div className="rounded-lg bg-orange-50 p-4 text-center">
                   <div className="text-2xl font-bold text-orange-900">
-                    {analysisResults?.averageDistance || 0}
+                    {analysisResults?.averageDistance ?? 0}
                   </div>
                   <div className="text-sm font-medium text-orange-700">
                     Toplam Mesafe
@@ -811,7 +892,7 @@ export default function AidRouteAnalyzer() {
                     Rota Detayları
                   </h3>
                   <div className="space-y-4">
-                    {analysisResults.routes.map((route: any) => (
+                    {analysisResults.routes.map((route: AidRoute) => (
                       <div
                         key={route.id}
                         className="rounded-lg border border-gray-200 bg-white p-4"
@@ -855,7 +936,7 @@ export default function AidRouteAnalyzer() {
                           </h5>
                           <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
                             {route.supplies.map(
-                              (supply: any, index: number) => (
+                              (supply: AidRouteSupply, index: number) => (
                                 <div
                                   key={index}
                                   className="rounded bg-gray-100 px-2 py-1 text-sm"
@@ -878,7 +959,7 @@ export default function AidRouteAnalyzer() {
                             Araçlar:
                           </h5>
                           <div className="flex flex-wrap gap-2">
-                            {route.vehicles.map((vehicle: any) => (
+                            {route.vehicles.map((vehicle: AidRouteVehicle) => (
                               <span
                                 key={vehicle.id}
                                 className={`rounded-full px-2 py-1 text-xs font-medium ${
@@ -901,7 +982,7 @@ export default function AidRouteAnalyzer() {
                             Kontrol Noktaları:
                           </h5>
                           <div className="flex flex-wrap gap-2">
-                            {route.checkpoints.map((checkpoint: any) => (
+                            {route.checkpoints.map((checkpoint: AidRouteCheckpoint) => (
                               <span
                                 key={checkpoint.id}
                                 className={`rounded-full px-2 py-1 text-xs ${

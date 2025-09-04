@@ -241,7 +241,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className=" mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Page Header */}
           <div className="relative mb-6 pr-10">
@@ -389,6 +389,21 @@ export default function DashboardPage() {
                 Hızlı İşlemler
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <button 
+                  onClick={() => router.push('/dashboard/monitoring-map')}
+                  className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left"
+                >
+                  <div className="flex items-center">
+                    <svg className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <div className="font-medium">Monitoring Haritası</div>
+                      <div className="text-sm text-green-200">Tüm sistem analitikleri - Gerçek zamanlı</div>
+                    </div>
+                  </div>
+                </button>
                 <button className="bg-red-600 text-white p-4 rounded-lg hover:bg-red-700 transition-colors text-left">
                   <div className="flex items-center">
                     <svg className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -413,20 +428,6 @@ export default function DashboardPage() {
                   </div>
                 </button>
 
-                <button 
-                  onClick={() => router.push('/dashboard/monitoring-map')}
-                  className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left"
-                >
-                  <div className="flex items-center">
-                    <svg className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                      <div className="font-medium">Monitoring Haritası</div>
-                      <div className="text-sm text-green-200">Tüm sistem analitikleri - Gerçek zamanlı</div>
-                    </div>
-                  </div>
-                </button>
               </div>
             </div>
           </div>

@@ -26,7 +26,7 @@ interface OpenLayersMapProps {
 }
 
 export default function OpenLayersMap({ 
-  height = '100%', 
+  height = '50vh', 
   center = [36.150837, 36.209898], // Your specified center coordinates
   zoom = 15, // Higher zoom for detailed area view
   onMapReady,
