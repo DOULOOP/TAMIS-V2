@@ -1,18 +1,18 @@
-// Sample data for TAMIS (Instant Hazard Engineering Monitoring System)
+// TAMIS (Anlık Tehlike Mühendisliği İzleme Sistemi) için örnek veriler
 
-// Population Density Analysis Data
+// Nüfus Yoğunluğu Analiz Verileri
 import populationDensityData from './population-density.json';
 
-// Safe Zone Analysis Data  
+// Güvenli Bölge Analiz Verileri  
 import safeZoneData from './safe-zone.json';
 
-// Aid Route Analysis Data
+// Yardım Rotası Analiz Verileri
 import aidRouteData from './aid-route.json';
 
-// Communication Network Analysis Data
+// İletişim Ağı Analiz Verileri
 import communicationNetworkData from './communication-network.json';
 
-// Field Units Data
+// Saha Birimleri Verileri
 import fieldUnitsData from './field-units.json';
 
 export {
@@ -23,7 +23,7 @@ export {
   fieldUnitsData
 };
 
-// Export individual sections for easy access
+// Kolay erişim için bireysel bölümleri dışa aktar
 export const {
   populationDensityAnalysis
 } = populationDensityData;
@@ -44,7 +44,7 @@ export const {
   fieldUnitsData: fieldUnitsAnalysis
 } = fieldUnitsData;
 
-// Helper functions to get specific data
+// Belirli verileri almak için yardımcı fonksiyonlar
 export const getPopulationZones = () => populationDensityAnalysis.populationData;
 export const getSafeZones = () => safeZoneAnalysis.safeZones;
 export const getAidRoutes = () => aidRouteAnalysis.routes;
@@ -52,7 +52,7 @@ export const getModemStations = () => communicationNetworkAnalysis.modemStations
 export const getFieldUnits = () => fieldUnitsAnalysis.fieldUnits;
 export const getAreaData = () => fieldUnitsAnalysis.areaData;
 
-// Data summary functions
+// Veri özet fonksiyonları
 export const getSystemSummary = () => ({
   population: populationDensityAnalysis.summary,
   safeZones: safeZoneAnalysis.summary,
@@ -61,7 +61,7 @@ export const getSystemSummary = () => ({
   fieldUnits: fieldUnitsAnalysis.summary
 });
 
-// Alert type definition
+// Uyarı tipi tanımı
 interface Alert {
   type: string;
   level: string;
@@ -76,7 +76,7 @@ interface Alert {
 export const getCriticalAlerts = (): Alert[] => {
   const alerts: Alert[] = [];
   
-  // Population density critical zones
+  // Nüfus yoğunluğu kritik bölgeleri
   populationDensityAnalysis.riskAssessment.criticalZones.forEach(zone => {
     alerts.push({
       type: 'population',
@@ -86,7 +86,7 @@ export const getCriticalAlerts = (): Alert[] => {
     });
   });
   
-  // Safe zone critical occupancy
+  // Güvenli bölge kritik doluluk
   safeZoneAnalysis.safeZones.forEach(zone => {
     if (zone.status === 'critical') {
       alerts.push({
@@ -98,7 +98,7 @@ export const getCriticalAlerts = (): Alert[] => {
     }
   });
   
-  // Blocked aid routes
+  // Engellenen yardım rotaları
   aidRouteAnalysis.routes.forEach(route => {
     if (route.status === 'blocked') {
       alerts.push({
@@ -110,7 +110,7 @@ export const getCriticalAlerts = (): Alert[] => {
     }
   });
   
-  // Communication network critical issues
+  // İletişim ağı kritik sorunları
   communicationNetworkAnalysis.modemStations.forEach(modem => {
     modem.alerts.forEach(alert => {
       if (alert.level === 'critical') {
@@ -124,7 +124,7 @@ export const getCriticalAlerts = (): Alert[] => {
     });
   });
   
-  // Field unit critical issues
+  // Saha birimi kritik sorunları
   fieldUnitsAnalysis.fieldUnits.forEach(unit => {
     if (unit.status === 'inactive' || unit.batteryLevel < 30) {
       alerts.push({

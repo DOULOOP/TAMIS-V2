@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { fieldUnitsData } from "@/data";
+import HowItWorks from "@/components/ui/HowItWorks";
 
 // Dynamically import the map component to avoid SSR issues
 const FieldUnitsMap = dynamic(() => import("@/components/map/FieldUnitsMap"), {
@@ -95,7 +96,7 @@ export default function FieldUnitsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="relative bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -144,11 +145,44 @@ export default function FieldUnitsPage() {
             </div>
           </div>
         </div>
+        {/* HowTo button moved to main content top-right */}
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+          {/* HowTo at the very top, aligned right */}
+          <div className="relative mb-2 h-10">
+            <HowItWorks
+              title="Saha Birimleri"
+              howToUseText="Afet ve kriz yönetiminde en kritik konulardan biri mevcut kaynakların (insan gücü, araç, ekipman, sağlık hizmetleri vb.) doğru dağıtılması ve koordinasyonudur. Projemizin bu modülü, canlı envanter takibi, akıllı görevlendirme ve çakışma önleme mekanizmalarıyla, sahadaki ekiplerin en verimli şekilde yönlendirilmesini sağlar."
+              howItWorksText=", afet sırasında mevcut kaynakları (ekipler, araçlar, ekipman, sağlık hizmetleri) anlık olarak izleyip en verimli şekilde yönlendirmek için çalışır. Kriz merkezi paneli ve mobil uygulama üzerinden tüm ekiplerin konumu GPS ile takip edilir, canlı envanter sürekli güncellenir. Optimizasyon algoritmaları; görev önceliği, mesafe ve ekip uygunluğunu değerlendirerek en uygun ekibi sahaya atar. Çakışma önleme mekanizması sayesinde aynı bölgeye gereksiz ekip yönlendirilmez, böylece zaman ve kaynak israfı engellenir. Ekip liderleri mobil uygulamadan görev bildirimlerini alır, konum ve durum güncellemeleri yapar. Tüm bu bilgiler gerçek zamanlı olarak harita tabanlı dashboard’a yansır ve kriz yönetim ekibi anlık karar alabilir."
+              ariaLabel="Saha birimleri nasıl çalışır"
+            />
+          </div>
+          {/* Analysis Description */}
+          <div className="mb-6 rounded-lg bg-white shadow">
+            <div className="px-6 py-4">
+              <h2 className="mb-2 text-lg font-medium text-gray-900">
+                Modül Hakkında
+              </h2>
+              <p className="text-gray-600">
+                Kaynak Dağılımı ve Ekip Yönetimi Modülü, afet sırasında mevcut
+                kaynakları (ekipler, araçlar, ekipman, sağlık hizmetleri) anlık
+                olarak izleyip en verimli şekilde yönlendirmek için çalışır.
+                Kriz merkezi paneli ve mobil uygulama üzerinden tüm ekiplerin
+                konumu GPS ile takip edilir, canlı envanter sürekli güncellenir.
+                <br></br>
+                Sistem, önce uydu veya İHA görüntülerinden elde edilen hasarlı
+                alan poligonlarını çıkarır. Bu poligonlar CBS (Coğrafi Bilgi
+                Sistemleri) üzerinde bina poligonlarıyla çakıştırılır. Her bina
+                için kayıtlı nüfus (MAKS verisi) ve AAIA’dan gelen cihaz
+                verileri eşleştirilir. Daha sonra cihaz sayıları kişi tahminine
+                dönüştürülür ve kayıtlı nüfus ile ağırlıklı ortalama alınarak
+                gerçekçi bir nüfus değeri hesaplanır.
+              </p>
+            </div>
+          </div>
           {/* Summary Stats */}
           <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
             <div className="rounded-lg bg-white p-6 shadow">

@@ -35,7 +35,7 @@ interface RouteMapProps {
 }
 
 export default function RouteMap({
-  height = '320px',
+  height = "100%",
   center = [36.150837, 36.209898],
   zoom = 14,
   start = null,

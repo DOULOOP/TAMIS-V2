@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import HowItWorks from '@/components/ui/HowItWorks';
 
 // Dynamically import the map component to avoid SSR issues
 const SafeZoneMap = dynamic(() => import('@/components/map/SafeZoneMap'), {
@@ -138,7 +139,7 @@ export default function SafeZoneAnalyzer() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+  <header className="bg-white shadow relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
@@ -169,19 +170,39 @@ export default function SafeZoneAnalyzer() {
             </button>
           </div>
         </div>
+        {/* HowTo button moved to main content top-right */}
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+          {/* HowTo at the very top, aligned right */}
+          <div className="relative h-10 mb-2">
+            <HowItWorks
+              title="Güvenli Bölgeler"
+              howToUseText="TAMİS’in Güvenli Alan ve Tahliye Yönetimi Modülü, afet sonrasında vatandaşların güvenli bir şekilde toplanma alanlarına yönlendirilmesi için kullanılır. Bu modül, toplanma alanlarının kapasite ve doluluk oranlarını gerçek zamanlı olarak izleyerek aşırı kalabalık ve kaosu önler."
+              howItWorksText="Sistem; AFAD, belediyeler, emniyet, meteoroloji, sağlık, enerji kurumları, karayolları, telekom operatörleri, uydu/drone görüntüleri ve vatandaşlardan gelen verileri tek merkezde toplar. Bu veriler PostgreSQL + PostGIS tabanlı bir veritabanına işlenir ve anlık güncellemeler Websocket/MQTT ile sisteme aktarılır. Doluluk oranı kritik eşikleri geçtiğinde uyarılar üretilir ve PostGIS mekânsal sorguları kullanılarak vatandaşlar en yakın uygun güvenli alana yönlendirilir. Karar verme sürecinde yol durumu, nüfus yoğunluğu ve hava şartları da dikkate alınır"
+              ariaLabel="Güvenli bölgeler nasıl çalışır"
+            />
+          </div>
           
           {/* Analysis Description */}
           <div className="bg-white shadow rounded-lg mb-6">
             <div className="px-6 py-4">
               <h2 className="text-lg font-medium text-gray-900 mb-2">Analiz Hakkında</h2>
               <p className="text-gray-600">
-                Bu analiz, Google Haritalar'dan elde edilen güvenli bölgeleri tespit eder ve kapasitelerini değerlendirir. 
-                Parklar, hastaneler, okullar ve diğer güvenli alanlar belirlenerek doluluk oranları hesaplanır.
+                                TAMİS projesinin Güvenli Alan ve Tahliye Yönetimi Modülü, afet
+                sonrası toplanma alanlarının kapasite ve doluluk durumlarını
+                gerçek zamanlı takip ederek çalışır. Sistem; AFAD, belediyeler,
+                emniyet, meteoroloji, sağlık, enerji kurumları, karayolları,
+                telekom operatörleri, uydu/drone görüntüleri ve vatandaşlardan
+                gelen verileri tek merkezde toplar. Bu veriler PostgreSQL +
+                PostGIS tabanlı bir veritabanına işlenir ve anlık güncellemeler
+                Websocket/MQTT ile sisteme aktarılır. <br></br>Doluluk oranı kritik
+                eşikleri geçtiğinde uyarılar üretilir ve PostGIS mekânsal
+                sorguları kullanılarak vatandaşlar en yakın uygun güvenli alana
+                yönlendirilir. Karar verme sürecinde yol durumu, nüfus yoğunluğu
+                ve hava şartları da dikkate alınır.
               </p>
             </div>
           </div>
@@ -250,7 +271,7 @@ export default function SafeZoneAnalyzer() {
               </div>
               
               {/* Interactive Map */}
-              <div className="aspect-square mb-6">
+              <div className="mb-6">
                 <SafeZoneMap 
                   showSafeZones={true}
                   onZoneSelect={setSelectedZone}

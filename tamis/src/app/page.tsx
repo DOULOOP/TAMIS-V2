@@ -1,4 +1,5 @@
 import LoginForm from "@/components/auth/LoginForm";
+import HowItWorks from "@/components/ui/HowItWorks";
 
 export default function HomePage() {
   return (
@@ -21,7 +22,8 @@ export default function HomePage() {
           </p>
         </div>
         
-        <div className="bg-white shadow-xl rounded-lg p-8">
+        <div className="bg-white shadow-xl rounded-lg p-8 relative">
+          <HowItWorks className="!top-3 !right-3" />
           <LoginForm />
         </div>
         

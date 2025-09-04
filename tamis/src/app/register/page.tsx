@@ -1,4 +1,5 @@
 import RegisterForm from "@/components/auth/RegisterForm";
+import HowItWorks from "@/components/ui/HowItWorks";
 
 export default function RegisterPage() {
   return (
@@ -21,7 +22,8 @@ export default function RegisterPage() {
           </p>
         </div>
         
-        <div className="bg-white shadow-xl rounded-lg p-8">
+        <div className="bg-white shadow-xl rounded-lg p-8 relative">
+          <HowItWorks className="!top-3 !right-3" />
           <RegisterForm />
         </div>
         

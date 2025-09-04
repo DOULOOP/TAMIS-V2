@@ -460,7 +460,7 @@ function MapCanvas() {
         ref={mapEl}
         style={{ 
           width: "100%", 
-          height: "70vh", 
+          height: "50vh", 
           borderRadius: 12, 
           overflow: "hidden",
           minWidth: 0 // Prevent flex shrinking issues
