@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { fieldUnitsData } from "@/data";
-import HowItWorks from "@/components/ui/HowItWorks";
 
 // Dynamically import the map component to avoid SSR issues
 const FieldUnitsMap = dynamic(() => import("@/components/map/FieldUnitsMap"), {
@@ -19,14 +17,156 @@ const FieldUnitsMap = dynamic(() => import("@/components/map/FieldUnitsMap"), {
   ),
 });
 
+interface Personnel {
+  id: string;
+  name: string;
+  role: string;
+  certification: string;
+  experience: string;
+  contact: string;
+}
+
+interface Equipment {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  condition: string;
+  lastMaintenance: string;
+}
+
+interface FieldUnitDetails {
+  id: string;
+  name: string;
+  location: string;
+  coordinates: [number, number];
+  status: 'active' | 'reporting' | 'inactive' | 'emergency';
+  lastReport: string;
+  dataCount: number;
+  areasCovered: string[];
+  batteryLevel: number;
+  signalStrength: number;
+  teamLeader: string;
+  establishedTime: string;
+  missionType: string;
+  personnel: Personnel[];
+  equipment: Equipment[];
+  communications: {
+    radio: string;
+    satellite: string;
+    cellular: string;
+  };
+  vehicle: {
+    type: string;
+    plateNumber: string;
+    fuelLevel: number;
+    condition: string;
+  };
+}
+
+interface FieldUnitsData {
+  summary: {
+    totalUnits: number;
+    activeUnits: number;
+    reportingUnits: number;
+    inactiveUnits: number;
+    totalPersonnel: number;
+    totalEquipment: number;
+    averageBatteryLevel: number;
+    averageSignalStrength: number;
+    totalDataPoints: number;
+    coverageAreas: number;
+  };
+  fieldUnits: FieldUnitDetails[];
+}
+
 export default function FieldUnitsPage() {
-  const [selectedUnit, setSelectedUnit] = useState<any>(null);
+  const [selectedUnit, setSelectedUnit] = useState<FieldUnitDetails | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [fieldUnitsData, setFieldUnitsData] = useState<FieldUnitsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const router = useRouter();
 
-  // Get data from JSON
-  const fieldUnits = fieldUnitsData.fieldUnitsData.fieldUnits;
-  const summary = fieldUnitsData.fieldUnitsData.summary;
+  // Veritabanından saha birim verilerini al
+  const fetchFieldUnitsData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch('/api/field-units');
+      if (!response.ok) {
+        throw new Error('Saha birim verileri alınamadı');
+      }
+      
+      const data = await response.json();
+      setFieldUnitsData(data.fieldUnitsData);
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Saha birim verileri yüklenirken hata:', error);
+      setError(error instanceof Error ? error.message : 'Bilinmeyen hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Component mount edildiğinde verileri yükle
+  useEffect(() => {
+    fetchFieldUnitsData();
+  }, []);
+
+  // Veri yoksa veya yükleniyorsa
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
+          <p className="text-gray-600">Saha birim verileri yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="mx-auto mb-4 h-12 w-12 text-red-500">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Veri Yükleme Hatası</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={fetchFieldUnitsData}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Tekrar Dene
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!fieldUnitsData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Saha birim verileri bulunamadı</p>
+          <button
+            onClick={fetchFieldUnitsData}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Tekrar Yükle
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const { fieldUnits, summary } = fieldUnitsData;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -88,16 +228,20 @@ export default function FieldUnitsPage() {
     }
   };
 
-  const handleUnitClick = (unit: any) => {
+  const handleUnitClick = (unit: FieldUnitDetails) => {
     setSelectedUnit(unit);
     setShowDetails(true);
+  };
+
+  const handleMapUnitSelect = (unit: FieldUnitDetails) => {
+    setSelectedUnit(unit);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="relative bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <header className="bg-white shadow">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <button
@@ -143,46 +287,41 @@ export default function FieldUnitsPage() {
                 Saha Birim Yönetimi
               </h1>
             </div>
+            
+            <div className="flex items-center space-x-4">
+              {lastUpdated && (
+                <div className="text-sm text-gray-500">
+                  Son güncelleme: {lastUpdated.toLocaleTimeString('tr-TR')}
+                </div>
+              )}
+              <button
+                onClick={fetchFieldUnitsData}
+                disabled={loading}
+                className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+              >
+                <svg
+                  className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                {loading ? 'Yenileniyor...' : 'Yenile'}
+              </button>
+            </div>
           </div>
         </div>
-        {/* HowTo button moved to main content top-right */}
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto  py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {/* HowTo at the very top, aligned right */}
-          <div className="relative mb-2 h-10">
-            <HowItWorks
-              title="Saha Birimleri"
-              howToUseText="Afet ve kriz yönetiminde en kritik konulardan biri mevcut kaynakların (insan gücü, araç, ekipman, sağlık hizmetleri vb.) doğru dağıtılması ve koordinasyonudur. Projemizin bu modülü, canlı envanter takibi, akıllı görevlendirme ve çakışma önleme mekanizmalarıyla, sahadaki ekiplerin en verimli şekilde yönlendirilmesini sağlar."
-              howItWorksText=", afet sırasında mevcut kaynakları (ekipler, araçlar, ekipman, sağlık hizmetleri) anlık olarak izleyip en verimli şekilde yönlendirmek için çalışır. Kriz merkezi paneli ve mobil uygulama üzerinden tüm ekiplerin konumu GPS ile takip edilir, canlı envanter sürekli güncellenir. Optimizasyon algoritmaları; görev önceliği, mesafe ve ekip uygunluğunu değerlendirerek en uygun ekibi sahaya atar. Çakışma önleme mekanizması sayesinde aynı bölgeye gereksiz ekip yönlendirilmez, böylece zaman ve kaynak israfı engellenir. Ekip liderleri mobil uygulamadan görev bildirimlerini alır, konum ve durum güncellemeleri yapar. Tüm bu bilgiler gerçek zamanlı olarak harita tabanlı dashboard’a yansır ve kriz yönetim ekibi anlık karar alabilir."
-              ariaLabel="Saha birimleri nasıl çalışır"
-            />
-          </div>
-          {/* Analysis Description */}
-          <div className="mb-6 rounded-lg bg-white shadow">
-            <div className="px-6 py-4">
-              <h2 className="mb-2 text-lg font-medium text-gray-900">
-                Modül Hakkında
-              </h2>
-              <p className="text-gray-600">
-                Kaynak Dağılımı ve Ekip Yönetimi Modülü, afet sırasında mevcut
-                kaynakları (ekipler, araçlar, ekipman, sağlık hizmetleri) anlık
-                olarak izleyip en verimli şekilde yönlendirmek için çalışır.
-                Kriz merkezi paneli ve mobil uygulama üzerinden tüm ekiplerin
-                konumu GPS ile takip edilir, canlı envanter sürekli güncellenir.
-                <br></br>
-                Sistem, önce uydu veya İHA görüntülerinden elde edilen hasarlı
-                alan poligonlarını çıkarır. Bu poligonlar CBS (Coğrafi Bilgi
-                Sistemleri) üzerinde bina poligonlarıyla çakıştırılır. Her bina
-                için kayıtlı nüfus (MAKS verisi) ve AAIA’dan gelen cihaz
-                verileri eşleştirilir. Daha sonra cihaz sayıları kişi tahminine
-                dönüştürülür ve kayıtlı nüfus ile ağırlıklı ortalama alınarak
-                gerçekçi bir nüfus değeri hesaplanır.
-              </p>
-            </div>
-          </div>
           {/* Summary Stats */}
           <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
             <div className="rounded-lg bg-white p-6 shadow">
@@ -318,34 +457,17 @@ export default function FieldUnitsPage() {
               <h2 className="text-lg font-medium text-gray-900">
                 Saha Birimleri Haritası
               </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                {fieldUnits.length} birim görüntüleniyor • Son güncelleme: {lastUpdated?.toLocaleTimeString('tr-TR')}
+              </p>
             </div>
             <div className="p-6">
-              <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100">
-                <div className="text-center">
-                  <svg
-                    className="mx-auto mb-4 h-16 w-16 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="m15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  <p className="text-gray-500">Saha Birimleri Haritası</p>
-                  <p className="text-sm text-gray-400">
-                    {fieldUnits.length} birim görüntülenecek
-                  </p>
-                </div>
+              <div className="h-96 rounded-lg overflow-hidden">
+                <FieldUnitsMap
+                  fieldUnits={fieldUnits}
+                  selectedUnit={selectedUnit}
+                  onUnitSelect={handleMapUnitSelect}
+                />
               </div>
             </div>
           </div>
@@ -494,7 +616,7 @@ export default function FieldUnitsPage() {
                         Personel
                       </h4>
                       <div className="space-y-2">
-                        {selectedUnit.personnel.map((person: any) => (
+                        {selectedUnit.personnel.map((person: Personnel) => (
                           <div
                             key={person.id}
                             className="rounded bg-gray-50 p-3"
@@ -506,6 +628,11 @@ export default function FieldUnitsPage() {
                             <div className="text-sm text-gray-500">
                               {person.contact}
                             </div>
+                            {person.certification && (
+                              <div className="text-xs text-blue-600 mt-1">
+                                Sertifika: {person.certification}
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -520,7 +647,7 @@ export default function FieldUnitsPage() {
                         Ekipman
                       </h4>
                       <div className="space-y-2">
-                        {selectedUnit.equipment.map((equipment: any) => (
+                        {selectedUnit.equipment.map((equipment: Equipment) => (
                           <div
                             key={equipment.id}
                             className="rounded bg-gray-50 p-3"
@@ -544,12 +671,51 @@ export default function FieldUnitsPage() {
                                   ? "Bakım"
                                   : "Arızalı"}
                             </div>
+                            {equipment.lastMaintenance && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                Son bakım: {equipment.lastMaintenance}
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
               </div>
+
+              {/* Communications */}
+              {selectedUnit.communications && (
+                <div className="mt-6">
+                  <h4 className="text-md mb-3 font-semibold text-gray-900">
+                    İletişim Durumu
+                  </h4>
+                  <div className="rounded bg-gray-50 p-4">
+                    <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
+                      <div>
+                        <span className="font-medium">Radyo:</span>
+                        <br />
+                        <span className={selectedUnit.communications.radio === 'active' ? 'text-green-600' : 'text-red-600'}>
+                          {selectedUnit.communications.radio === 'active' ? 'Aktif' : 'Pasif'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Uydu:</span>
+                        <br />
+                        <span className={selectedUnit.communications.satellite === 'active' ? 'text-green-600' : 'text-red-600'}>
+                          {selectedUnit.communications.satellite === 'active' ? 'Aktif' : 'Pasif'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Hücresel:</span>
+                        <br />
+                        <span className={selectedUnit.communications.cellular === 'active' ? 'text-green-600' : 'text-red-600'}>
+                          {selectedUnit.communications.cellular === 'active' ? 'Aktif' : 'Pasif'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Vehicle Info */}
               {selectedUnit.vehicle && (
@@ -558,7 +724,7 @@ export default function FieldUnitsPage() {
                     Araç Bilgileri
                   </h4>
                   <div className="rounded bg-gray-50 p-4">
-                    <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-4">
                       <div>
                         <span className="font-medium">Tip:</span>
                         <br />
@@ -582,6 +748,13 @@ export default function FieldUnitsPage() {
                           }`}
                         >
                           {selectedUnit.vehicle.fuelLevel}%
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Durum:</span>
+                        <br />
+                        <span className={selectedUnit.vehicle.condition === 'good' ? 'text-green-600' : 'text-yellow-600'}>
+                          {selectedUnit.vehicle.condition === 'good' ? 'İyi' : 'Bakım Gerekli'}
                         </span>
                       </div>
                     </div>

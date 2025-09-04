@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffe      // Her bölüme ekle
-      document.querySelectorAll('section').forEach(attachToAnchor);
-      // Ve data-section ipucu ile ana kapsayıcılara} from "react";
+import { useEffect } from "react";
+
+document.querySelectorAll("section").forEach(attachToAnchor);
+// Ve data-section ipucu ile ana kapsayıcılara} from "react";
 import HowItWorks from "./HowItWorks";
 
 /**
@@ -20,7 +21,8 @@ export default function HowItWorksInjector() {
         anchor = document.createElement("div");
         anchor.className = `${id} absolute inset-0 pointer-events-none`;
         const cs = getComputedStyle(host as HTMLElement);
-        (host as HTMLElement).style.position = cs.position === "static" ? "relative" : cs.position;
+        (host as HTMLElement).style.position =
+          cs.position === "static" ? "relative" : cs.position;
         host.appendChild(anchor);
         // Web Components'siz yaklaşımla basit klonlanmış balon render et
         // Global state'den kaçınmak için her anchor için minimal React root monte edeceğiz.
@@ -36,7 +38,7 @@ export default function HowItWorksInjector() {
       // Her bölüme ekle
       document.querySelectorAll("section").forEach(ensureAnchor);
       // Ve data-section ipucu ile ana kapsayıcılara
-      document.querySelectorAll('[data-section], main').forEach(ensureAnchor);
+      document.querySelectorAll("[data-section], main").forEach(ensureAnchor);
     };
 
     // İlk tarama

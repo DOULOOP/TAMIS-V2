@@ -544,7 +544,7 @@ export default function CommunicationNetworkAnalyzer() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="relative bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <button
@@ -613,14 +613,14 @@ export default function CommunicationNetworkAnalyzer() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto  py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* HowTo at the very top, aligned right */}
           <div className="relative mb-2 h-10">
             <HowItWorks
               title="İletişim Ağı"
-              howToUseText="Analizi başlatın; istasyon tablosu ve özet metriklerden ağ sağlığını izleyin. Filtre ve arama ile cihazları bulun."
-              howItWorksText="Sistem modem istasyon verilerini toplayarak durum, sinyal, veri oranı ve ağ yükünü hesaplar; güvenlik ve uyumluluğu raporlar."
+              howToUseText="AAIA Projesi, afet sonrasında yaşanan iletişim kesintilerini gidermek ve afet yönetimini daha etkin hale getirmek için kullanılır. Afet anında çöken veya zarar gören mevcut altyapılara bağımlı olmadan, kendi oluşturduğu bağımsız iletişim ağı sayesinde kesintisiz bağlantı sağlar. Bu sayede hem bireyler aileleriyle haberleşebilir hem de bakanlıklar, AFAD, belediyeler ve arama kurtarma ekipleri arasında hızlı bilgi paylaşımı yapılır. Ayrıca sistem, hasar tespiti ve enkaz altındaki bireylerin yerinin belirlenmesi gibi kritik süreçleri hızlandırarak, hem kurtarma çalışmalarına hem de afet sonrası şehircilik planlamalarına katkı sunar."
+              howItWorksText="Sistem, afet sonrası modemlerin kendi içerisinde tuttuğu konum, batarya durumu, kapsama bilgisi ve bağlı cihaz sayısı gibi verileri merkeze gönderir. Bu veriler alındığında önce doğrulanır, ardından harita üzerinde modem ikonları, kapsama alanı çemberleri ve bina katmanları ile görselleştirilir. Modemden gelen cihaz yoğunluğu ve sinyal bilgisi kullanılarak, kapsama alanındaki binalar analiz edilir ve hangi binaların etkilendiği tahmin edilir. Bu tahminler haritanın altında anlamlı bilgiler halinde operatöre sunulur; örneğin “27 bina etkilenmiş, 315 kişi bağlantıda, en riskli mahalle Odabaşı Mahallesi.” Böylece operatör hem görsel harita üzerinden hem de özet verilerle hızlı karar verebilir."
               ariaLabel="İletişim ağı nasıl çalışır"
             />
           </div>
@@ -640,13 +640,17 @@ export default function CommunicationNetworkAnalyzer() {
                 Analiz Hakkında
               </h2>
               <p className="text-gray-600">
-                Afet sonrasında sahada bulunan AAIA modemlerinden gelen verileri
-                toplayarak kaç binanın etkilendiğini, hangi bölgelerin risk
-                altında olduğunu ve modemlerin mevcut durumunu tespit etmek için
-                kullanılır. Böylece operatörler, modemlerin konumlarını ve bağlı
-                cihaz sayılarını harita üzerinde görerek kriz alanlarını hızlıca
-                belirleyebilir, vatandaşların yoğunlaştığı bölgeleri izleyebilir
-                ve acil müdahale ekiplerini doğru noktalara yönlendirebilir.
+                AAIA Projesi, afet sonrasında yaşanan iletişim kesintilerini
+                gidermek ve afet yönetimini daha etkin hale getirmek için
+                kullanılır. Afet anında çöken veya zarar gören mevcut
+                altyapılara bağımlı olmadan, kendi oluşturduğu bağımsız iletişim
+                ağı sayesinde kesintisiz bağlantı sağlar. Bu sayede hem bireyler
+                aileleriyle haberleşebilir hem de bakanlıklar, AFAD, belediyeler
+                ve arama kurtarma ekipleri arasında hızlı bilgi paylaşımı
+                yapılır. Ayrıca sistem, hasar tespiti ve enkaz altındaki
+                bireylerin yerinin belirlenmesi gibi kritik süreçleri
+                hızlandırarak, hem kurtarma çalışmalarına hem de afet sonrası
+                şehircilik planlamalarına katkı sunar.
               </p>
             </div>
           </div>
@@ -768,7 +772,7 @@ export default function CommunicationNetworkAnalyzer() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Additional AAIA KPIs */}
               <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
                 <div className="rounded-lg bg-orange-50 p-3 text-center">
@@ -795,23 +799,41 @@ export default function CommunicationNetworkAnalyzer() {
                     Paket Kaybı
                   </div>
                 </div>
-                <div className={`rounded-lg p-3 text-center ${
-                  kpis.healthStatus === 'ok' ? 'bg-green-50' :
-                  kpis.healthStatus === 'warning' ? 'bg-yellow-50' :
-                  kpis.healthStatus === 'critical' ? 'bg-red-50' : 'bg-gray-50'
-                }`}>
-                  <div className={`text-lg font-bold ${
-                    kpis.healthStatus === 'ok' ? 'text-green-900' :
-                    kpis.healthStatus === 'warning' ? 'text-yellow-900' :
-                    kpis.healthStatus === 'critical' ? 'text-red-900' : 'text-gray-900'
-                  }`}>
+                <div
+                  className={`rounded-lg p-3 text-center ${
+                    kpis.healthStatus === "ok"
+                      ? "bg-green-50"
+                      : kpis.healthStatus === "warning"
+                        ? "bg-yellow-50"
+                        : kpis.healthStatus === "critical"
+                          ? "bg-red-50"
+                          : "bg-gray-50"
+                  }`}
+                >
+                  <div
+                    className={`text-lg font-bold ${
+                      kpis.healthStatus === "ok"
+                        ? "text-green-900"
+                        : kpis.healthStatus === "warning"
+                          ? "text-yellow-900"
+                          : kpis.healthStatus === "critical"
+                            ? "text-red-900"
+                            : "text-gray-900"
+                    }`}
+                  >
                     {kpis.healthStatus.toUpperCase()}
                   </div>
-                  <div className={`text-xs font-medium ${
-                    kpis.healthStatus === 'ok' ? 'text-green-700' :
-                    kpis.healthStatus === 'warning' ? 'text-yellow-700' :
-                    kpis.healthStatus === 'critical' ? 'text-red-700' : 'text-gray-700'
-                  }`}>
+                  <div
+                    className={`text-xs font-medium ${
+                      kpis.healthStatus === "ok"
+                        ? "text-green-700"
+                        : kpis.healthStatus === "warning"
+                          ? "text-yellow-700"
+                          : kpis.healthStatus === "critical"
+                            ? "text-red-700"
+                            : "text-gray-700"
+                    }`}
+                  >
                     Genel Sağlık
                   </div>
                 </div>
