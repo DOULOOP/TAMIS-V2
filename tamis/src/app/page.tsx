@@ -23,7 +23,6 @@ export default function HomePage() {
         </div>
         
         <div className="bg-white shadow-xl rounded-lg p-8 relative">
-          <HowItWorks className="!top-3 !right-3" />
           <LoginForm />
         </div>
         

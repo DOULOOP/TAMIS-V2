@@ -103,6 +103,46 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   ];
 
   const analyzerNavigation: NavigationItem[] = [
+        {
+      name: "İletişim Ağı",
+      href: "/dashboard/analyzers/communication-network",
+      icon: (
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+          />
+        </svg>
+      ),
+      description: "İletişim altyapısı durumu",
+    },
+        {
+      name: "Yardım Rotaları",
+      href: "/dashboard/analyzers/aid-route",
+      icon: (
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+      description: "Optimum yardım güzergahları",
+    },
     {
       name: "Uydu Karşılaştırması",
       href: "/dashboard/analyzers/satellite-comparison",
@@ -122,26 +162,6 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         </svg>
       ),
       description: "Hasar tespiti analizi",
-    },
-    {
-      name: "Yardım Rotaları",
-      href: "/dashboard/analyzers/aid-route",
-      icon: (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      ),
-      description: "Optimum yardım güzergahları",
     },
     {
       name: "Güvenli Bölgeler",
@@ -184,26 +204,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       ),
       description: "Nüfus dağılım analizi",
     },
-    {
-      name: "İletişim Ağı",
-      href: "/dashboard/analyzers/communication-network",
-      icon: (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-          />
-        </svg>
-      ),
-      description: "İletişim altyapısı durumu",
-    },
+
   ];
 
   const handleLogout = () => {
@@ -231,8 +232,8 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <div className="flex h-16 items-center justify-between border-b border-gray-700 bg-gray-800 px-6">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-                <span className="text-sm font-bold text-white">T</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg">
+                <img src="/TAMISLOGO.png" alt="tamis logo" />
               </div>
             </div>
             <div className="ml-3">
