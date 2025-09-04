@@ -13,8 +13,8 @@ import numpy as np
 
 def main():
     # Set the data directory
-    data_dir = "1c__Hatay_Enkaz_Bina_Etiketleme"
-    
+    data_dir = "C:\\Users\\furka\\Desktop\\TAMIS-V2\\tamis-api\\1c__Hatay_Enkaz_Bina_Etiketleme"
+
     # File paths
     img_2015_path = os.path.join(data_dir, "HATAY MERKEZ-2 2015.tif")
     img_2023_path = os.path.join(data_dir, "HATAY MERKEZ-2 2023.tif")
