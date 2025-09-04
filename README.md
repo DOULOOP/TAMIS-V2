@@ -1,4 +1,5 @@
-**TAMİS Raporu**
+**Demo Linki: (https://tamis.douloop.com)** <br>
+**API Server: (https://tamis-v2.onrender.com/api/)**
 
 ## 📋 İçindekiler
 
