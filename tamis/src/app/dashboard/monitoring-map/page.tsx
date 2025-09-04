@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import HowItWorks from '@/components/ui/HowItWorks';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Map from 'ol/Map';
@@ -155,13 +156,12 @@ export default function MonitoringMapPage() {
   return (
     <div className="h-screen bg-gray-900 text-white overflow-hidden">
       {/* Header Stats */}
-      <header className="bg-gray-800 border-b border-gray-700 px-4 py-3">
-        <div className="flex items-center justify-between">
+  <header className="bg-gray-800 border-b border-gray-700 px-4 py-3">
+        <div className="flex items-center justify-between relative">
           <div>
             <h1 className="text-xl font-bold">TAMIS Monitoring Haritası</h1>
             <p className="text-sm text-gray-400">Tüm sistem analitikleri - Gerçek zamanlı izleme</p>
           </div>
-          
           <div className="flex items-center space-x-6 text-sm">
             {systemStats && (
               <>
@@ -186,6 +186,18 @@ export default function MonitoringMapPage() {
           </div>
         </div>
       </header>
+
+      {/* HowTo below header, aligned right */}
+      <div className="px-4 py-2 relative h-10">
+        <HowItWorks
+          title="Monitoring Haritası"
+          howToUseTitle="Nasıl kullanılır"
+          howItWorksTitle="Nasıl çalışır"
+          howToUseText="Sağ panelden katmanları açıp kapatın, şeffaflığı ayarlayın. Harita üzerindeki öğelere tıklayarak detay görün."
+          howItWorksText="Harita; nüfus, güvenli bölgeler, yardım rotaları ve iletişim ağı verilerini gerçek zamanlı birleştirerek gösterir."
+          ariaLabel="Monitoring haritası nasıl çalışır"
+        />
+      </div>
 
       <div className="flex h-full">
         {/* Control Panel */}

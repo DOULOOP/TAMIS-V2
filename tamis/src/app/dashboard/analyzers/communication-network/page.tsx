@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import HowItWorks from '@/components/ui/HowItWorks';
 // Fetch from API instead of static JSON
 
 export default function CommunicationNetworkAnalyzer() {
@@ -36,7 +37,7 @@ export default function CommunicationNetworkAnalyzer() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+  <header className="bg-white shadow relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
@@ -70,11 +71,21 @@ export default function CommunicationNetworkAnalyzer() {
             </button>
           </div>
         </div>
+        {/* HowTo button moved to main content top-right */}
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+          {/* HowTo at the very top, aligned right */}
+          <div className="relative h-10 mb-2">
+            <HowItWorks
+              title="İletişim Ağı"
+              howToUseText="Analizi başlatın; istasyon tablosu ve özet metriklerden ağ sağlığını izleyin. Filtre ve arama ile cihazları bulun."
+              howItWorksText="Sistem modem istasyon verilerini toplayarak durum, sinyal, veri oranı ve ağ yükünü hesaplar; güvenlik ve uyumluluğu raporlar."
+              ariaLabel="İletişim ağı nasıl çalışır"
+            />
+          </div>
           
           {/* Analysis Description */}
           <div className="bg-white shadow rounded-lg mb-6">

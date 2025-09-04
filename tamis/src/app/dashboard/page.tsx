@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import HowItWorks from '@/components/ui/HowItWorks';
 
 interface User {
   id: string;
@@ -243,9 +244,17 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Page Header */}
-          <div className="mb-6">
+          <div className="relative mb-6 pr-10">
             <h1 className="text-2xl font-bold text-gray-900">Ana Panel</h1>
             <p className="text-gray-600">Sistem durumu ve genel istatistikler</p>
+            <HowItWorks
+              title="Ana Panel Yardım"
+              howToUseTitle="Nasıl kullanılır"
+              howItWorksTitle="Nasıl çalışır"
+              howToUseText="Hızlı işlemlerden ilgili analiz sayfalarına geçin; üstteki özet kartları takip edin. Harita ve analizlere kısayollardan erişebilirsiniz."
+              howItWorksText="Bu panel, saha ekipleri ve analiz servislerinden gelen metrikleri toplayarak gerçek zamanlı özetler üretir. Uyarılar kritik eşiklere göre tetiklenir ve kartlar otomatik güncellenir."
+              ariaLabel="Ana panel nasıl çalışır"
+            />
           </div>
 
           {/* Welcome Card */}

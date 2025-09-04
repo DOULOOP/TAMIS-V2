@@ -1,28 +1,29 @@
 {
   "populationDensityAnalysis": {
     "metadata": {
-      "analysisId": "pda_20250901_001",
-      "timestamp": "2025-09-01T14:30:00Z",
+      "analysisId": "pda_20250904_001",
+      "timestamp": "2025-09-04T09:45:00Z",
+      "latestUpdate": "2025-09-04T09:40:00Z",
       "region": "Hatay İli",
       "coordinates": {
         "center": [36.206, 36.150],
         "bounds": {
-          "north": 36.220,
-          "south": 36.130,
-          "east": 36.250,
-          "west": 36.150
+          "north": 36.235,
+          "south": 36.120,
+          "east": 36.265,
+          "west": 36.135
         }
       },
-      "dataSource": "AAIA_MODEM",
+      "dataSource": "COMBINED_DB",
       "status": "completed",
-      "processingTime": 3000
+      "processingTime": 3120
     },
     "summary": {
-      "totalPopulation": 125847,
-      "averageDensity": 2341,
-      "riskScore": 7.8,
-      "affectedArea": 53.7,
-      "criticalZones": 12
+      "totalPopulation": 187950,
+      "averageDensity": 2275,
+      "riskScore": 7.4,
+      "affectedArea": 81.9,
+      "criticalZones": 8
     },
     "populationData": [
       {
@@ -186,49 +187,238 @@
           "emergencyServices": 2
         },
         "lastUpdated": "2025-09-01T14:00:00Z"
+      },
+      {
+        "zoneId": "zone_007",
+        "name": "Eski Antakya Çarşısı",
+        "coordinates": [36.160, 36.201],
+        "bounds": { "north": 36.164, "south": 36.158, "east": 36.204, "west": 36.196 },
+        "population": 11250,
+        "area": 2.6,
+        "density": 4327,
+        "riskLevel": "high",
+        "demographics": { "children": 2812, "adults": 7312, "elderly": 1126, "vulnerable": 1950 },
+        "facilities": { "schools": 1, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T09:30:00Z"
+      },
+      {
+        "zoneId": "zone_008",
+        "name": "Yeni Mahalle Konutları",
+        "coordinates": [36.170, 36.214],
+        "bounds": { "north": 36.174, "south": 36.212, "east": 36.218, "west": 36.166 },
+        "population": 14850,
+        "area": 5.9,
+        "density": 2518,
+        "riskLevel": "medium",
+        "demographics": { "children": 3420, "adults": 9820, "elderly": 1610, "vulnerable": 2100 },
+        "facilities": { "schools": 2, "hospitals": 1, "emergencyServices": 2 },
+        "lastUpdated": "2025-09-04T09:25:00Z"
+      },
+      {
+        "zoneId": "zone_009",
+        "name": "Kışla Caddesi",
+        "coordinates": [36.152, 36.197],
+        "bounds": { "north": 36.156, "south": 36.194, "east": 36.156, "west": 36.148 },
+        "population": 9350,
+        "area": 2.1,
+        "density": 4452,
+        "riskLevel": "high",
+        "demographics": { "children": 2100, "adults": 6450, "elderly": 800, "vulnerable": 1670 },
+        "facilities": { "schools": 0, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T09:20:00Z"
+      },
+      {
+        "zoneId": "zone_010",
+        "name": "İskenderun Yolu Girişi",
+        "coordinates": [36.175, 36.188],
+        "bounds": { "north": 36.178, "south": 36.184, "east": 36.180, "west": 36.170 },
+        "population": 5200,
+        "area": 3.6,
+        "density": 1444,
+        "riskLevel": "low",
+        "demographics": { "children": 980, "adults": 3550, "elderly": 670, "vulnerable": 600 },
+        "facilities": { "schools": 0, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T09:15:00Z"
+      },
+      {
+        "zoneId": "zone_011",
+        "name": "Otogar Çevresi",
+        "coordinates": [36.165, 36.205],
+        "bounds": { "north": 36.168, "south": 36.202, "east": 36.170, "west": 36.160 },
+        "population": 13200,
+        "area": 3.0,
+        "density": 4400,
+        "riskLevel": "high",
+        "demographics": { "children": 2700, "adults": 9500, "elderly": 1000, "vulnerable": 2100 },
+        "facilities": { "schools": 0, "hospitals": 1, "emergencyServices": 2 },
+        "lastUpdated": "2025-09-04T09:10:00Z"
+      },
+      {
+        "zoneId": "zone_012",
+        "name": "Reyhanlı Yolu Üzeri",
+        "coordinates": [36.188, 36.220],
+        "bounds": { "north": 36.222, "south": 36.216, "east": 36.194, "west": 36.182 },
+        "population": 7800,
+        "area": 4.5,
+        "density": 1733,
+        "riskLevel": "low",
+        "demographics": { "children": 1650, "adults": 5450, "elderly": 700, "vulnerable": 820 },
+        "facilities": { "schools": 1, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T09:05:00Z"
+      },
+      {
+        "zoneId": "zone_013",
+        "name": "Haraparası Mahallesi",
+        "coordinates": [36.141, 36.199],
+        "bounds": { "north": 36.144, "south": 36.196, "east": 36.146, "west": 36.136 },
+        "population": 10150,
+        "area": 2.4,
+        "density": 4229,
+        "riskLevel": "high",
+        "demographics": { "children": 2400, "adults": 6650, "elderly": 1100, "vulnerable": 1750 },
+        "facilities": { "schools": 1, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T09:00:00Z"
+      },
+      {
+        "zoneId": "zone_014",
+        "name": "Serinyol Girişi",
+        "coordinates": [36.230, 36.170],
+        "bounds": { "north": 36.233, "south": 36.166, "east": 36.235, "west": 36.226 },
+        "population": 6400,
+        "area": 3.8,
+        "density": 1684,
+        "riskLevel": "low",
+        "demographics": { "children": 1200, "adults": 4550, "elderly": 650, "vulnerable": 700 },
+        "facilities": { "schools": 1, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T08:55:00Z"
+      },
+      {
+        "zoneId": "zone_015",
+        "name": "Habibi Neccar Çevresi",
+        "coordinates": [36.204, 36.155],
+        "bounds": { "north": 36.207, "south": 36.152, "east": 36.208, "west": 36.200 },
+        "population": 8800,
+        "area": 2.0,
+        "density": 4400,
+        "riskLevel": "high",
+        "demographics": { "children": 1950, "adults": 6100, "elderly": 750, "vulnerable": 1500 },
+        "facilities": { "schools": 0, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T08:50:00Z"
+      },
+      {
+        "zoneId": "zone_016",
+        "name": "Aksaray Konut Projesi",
+        "coordinates": [36.212, 36.162],
+        "bounds": { "north": 36.215, "south": 36.159, "east": 36.216, "west": 36.208 },
+        "population": 13250,
+        "area": 5.6,
+        "density": 2366,
+        "riskLevel": "medium",
+        "demographics": { "children": 3200, "adults": 8850, "elderly": 1200, "vulnerable": 1800 },
+        "facilities": { "schools": 2, "hospitals": 1, "emergencyServices": 2 },
+        "lastUpdated": "2025-09-04T08:45:00Z"
+      },
+      {
+        "zoneId": "zone_017",
+        "name": "Harbiye Şelaleleri Yakını",
+        "coordinates": [36.268, 36.142],
+        "bounds": { "north": 36.270, "south": 36.139, "east": 36.272, "west": 36.264 },
+        "population": 7200,
+        "area": 1.6,
+        "density": 4500,
+        "riskLevel": "high",
+        "demographics": { "children": 1500, "adults": 5100, "elderly": 600, "vulnerable": 1200 },
+        "facilities": { "schools": 0, "hospitals": 0, "emergencyServices": 1 },
+        "lastUpdated": "2025-09-04T08:40:00Z"
+      },
+      {
+        "zoneId": "zone_018",
+        "name": "Kuzey Çevre Yolu",
+        "coordinates": [36.225, 36.220],
+        "bounds": { "north": 36.228, "south": 36.216, "east": 36.232, "west": 36.220 },
+        "population": 5600,
+        "area": 2.3,
+        "density": 2435,
+        "riskLevel": "medium",
+        "demographics": { "children": 1100, "adults": 4000, "elderly": 500, "vulnerable": 800 },
+        "facilities": { "schools": 0, "hospitals": 0, "emergencyServices": 2 },
+        "lastUpdated": "2025-09-04T08:35:00Z"
       }
     ],
     "riskAssessment": {
       "criticalZones": [
         {
           "zoneId": "zone_001",
-          "riskFactors": [
-            "High population density",
-            "High vulnerable population ratio",
-            "Limited emergency services"
-          ],
-          "recommendedActions": [
-            "Increase emergency response capacity",
-            "Establish additional evacuation routes",
-            "Deploy mobile health units"
-          ]
+          "riskFactors": ["High population density", "High vulnerable population ratio", "Limited emergency services"],
+          "recommendedActions": ["Increase emergency response capacity", "Establish additional evacuation routes", "Deploy mobile health units"]
+        },
+        {
+          "zoneId": "zone_007",
+          "riskFactors": ["High population density", "Historic area with narrow streets"],
+          "recommendedActions": ["Crowd flow control", "Pedestrian-only corridors during peak times"]
+        },
+        {
+          "zoneId": "zone_009",
+          "riskFactors": ["High population density", "Limited emergency services"],
+          "recommendedActions": ["Temporary first-aid posts", "Increase patrol presence"]
+        },
+        {
+          "zoneId": "zone_011",
+          "riskFactors": ["Transit hub congestion", "High population density"],
+          "recommendedActions": ["Staggered arrivals", "Dedicated evacuation lanes"]
+        },
+        {
+          "zoneId": "zone_013",
+          "riskFactors": ["High vulnerable population ratio", "Older building stock"],
+          "recommendedActions": ["Door-to-door assistance teams", "Mobile clinics"]
+        },
+        {
+          "zoneId": "zone_015",
+          "riskFactors": ["High population density", "Limited emergency services"],
+          "recommendedActions": ["Add fire response unit", "Crowd management barriers"]
+        },
+        {
+          "zoneId": "zone_017",
+          "riskFactors": ["Tourist crowding", "Steep terrain"],
+          "recommendedActions": ["One-way pedestrian flow", "On-site medics"]
+        },
+        {
+          "zoneId": "zone_003",
+          "riskFactors": ["Event-driven surges"],
+          "recommendedActions": ["Pre-event evacuation drills", "Temporary signage"]
         }
       ],
       "evacuationCapacity": {
-        "currentCapacity": 45000,
-        "requiredCapacity": 62847,
-        "deficit": 17847,
-        "evacuationTime": "45 minutes"
+        "currentCapacity": 55200,
+        "requiredCapacity": 73450,
+        "deficit": 18250,
+        "evacuationTime": "40-55 minutes"
       }
     },
     "dataSources": {
       "AAIA_MODEM": {
-        "accuracy": 0.92,
-        "coverage": 0.87,
-        "lastUpdate": "2025-09-01T13:45:00Z",
-        "dataPoints": 156
+        "accuracy": 0.93,
+        "coverage": 0.89,
+        "lastUpdate": "2025-09-04T09:35:00Z",
+        "dataPoints": 194
       },
       "GOVERNMENT": {
-        "accuracy": 0.78,
-        "coverage": 0.95,
-        "lastUpdate": "2025-08-15T09:00:00Z",
-        "dataPoints": 89
+        "accuracy": 0.80,
+        "coverage": 0.96,
+        "lastUpdate": "2025-08-28T10:00:00Z",
+        "dataPoints": 102
+      },
+      "CROWDREPORTS": {
+        "accuracy": 0.68,
+        "coverage": 0.55,
+        "lastUpdate": "2025-09-04T09:20:00Z",
+        "dataPoints": 61
       },
       "COMBINED": {
         "accuracy": 0.95,
         "coverage": 0.98,
-        "lastUpdate": "2025-09-01T14:00:00Z",
-        "dataPoints": 245
+        "lastUpdate": "2025-09-04T09:40:00Z",
+        "dataPoints": 357
       }
     },
     "visualizationData": {
@@ -242,44 +432,29 @@
             "critical": "#DC143C"
           },
           "thresholds": {
-            "low": 1000,
-            "medium": 2000,
+            "low": 900,
+            "medium": 1800,
             "high": 3000,
             "critical": 4000
           }
         }
       ],
       "markers": [
-        {
-          "type": "emergency_service",
-          "coordinates": [36.150, 36.205],
-          "name": "Merkez İtfaiye",
-          "capacity": 25
-        },
-        {
-          "type": "hospital",
-          "coordinates": [36.155, 36.210],
-          "name": "Devlet Hastanesi",
-          "capacity": 150
-        }
+        { "type": "emergency_service", "coordinates": [36.150, 36.205], "name": "Merkez İtfaiye", "capacity": 25 },
+        { "type": "hospital", "coordinates": [36.155, 36.210], "name": "Devlet Hastanesi", "capacity": 150 },
+        { "type": "shelter", "coordinates": [36.162, 36.206], "name": "Geçici Barınma Alanı - 1", "capacity": 1200 },
+        { "type": "shelter", "coordinates": [36.172, 36.214], "name": "Geçici Barınma Alanı - 2", "capacity": 950 },
+        { "type": "distribution", "coordinates": [36.159, 36.199], "name": "Lojistik Dağıtım Noktası", "capacity": 600 },
+        { "type": "police", "coordinates": [36.165, 36.205], "name": "Emniyet Noktası", "capacity": 40 }
       ]
     },
     "timeSeriesData": [
-      {
-        "timestamp": "2025-09-01T13:00:00Z",
-        "totalPopulation": 124580,
-        "averageDensity": 2318
-      },
-      {
-        "timestamp": "2025-09-01T13:30:00Z",
-        "totalPopulation": 125200,
-        "averageDensity": 2330
-      },
-      {
-        "timestamp": "2025-09-01T14:00:00Z",
-        "totalPopulation": 125847,
-        "averageDensity": 2341
-      }
+      { "timestamp": "2025-09-04T08:00:00Z", "totalPopulation": 184250, "averageDensity": 2210 },
+      { "timestamp": "2025-09-04T08:30:00Z", "totalPopulation": 185100, "averageDensity": 2230 },
+      { "timestamp": "2025-09-04T09:00:00Z", "totalPopulation": 186420, "averageDensity": 2255 },
+      { "timestamp": "2025-09-04T09:15:00Z", "totalPopulation": 186980, "averageDensity": 2265 },
+      { "timestamp": "2025-09-04T09:30:00Z", "totalPopulation": 187520, "averageDensity": 2270 },
+      { "timestamp": "2025-09-04T09:45:00Z", "totalPopulation": 187950, "averageDensity": 2275 }
     ]
   }
 }

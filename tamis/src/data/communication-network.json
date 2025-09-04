@@ -5,12 +5,12 @@
       "timestamp": "2025-09-01T14:30:00Z",
       "region": "Hatay İli",
       "coordinates": {
-        "center": [36.206, 36.150],
+        "center": [36.206, 36.15],
         "bounds": {
-          "north": 36.220,
-          "south": 36.130,
-          "east": 36.250,
-          "west": 36.150
+          "north": 36.22,
+          "south": 36.13,
+          "east": 36.25,
+          "west": 36.15
         }
       },
       "status": "monitoring",
@@ -33,7 +33,7 @@
         "type": "primary",
         "location": {
           "name": "Afet Koordinasyon Merkezi",
-          "coordinates": [36.150, 36.205],
+          "coordinates": [36.15, 36.205],
           "address": "Cumhuriyet Meydanı",
           "elevation": 125
         },
@@ -356,7 +356,7 @@
         },
         {
           "type": "VOICE_ALERT",
-          "status": "active", 
+          "status": "active",
           "coverage": 87.8,
           "lastTest": "2025-08-28T14:00:00Z"
         },
@@ -376,7 +376,7 @@
         },
         {
           "name": "MEDICAL_DISPATCH",
-          "frequency": "463.175MHz", 
+          "frequency": "463.175MHz",
           "bandwidth": "25kHz",
           "status": "active"
         },
@@ -446,6 +446,155 @@
       "technicalSupport": "+90 326 214 8100",
       "emergencyResponse": "+90 326 214 8200",
       "fieldMaintenance": "+90 326 214 8300"
+    }
+  },
+  "aaia_modems_information": {
+    "modem_report": {
+      "modem_id": "AAIA-HTY-0007",
+      "timestamp": "2025-09-04T16:45:32Z",
+      "firmware_version": "1.3.2",
+      "hardware": {
+        "model": "RPI4-MODEM-V2",
+        "serial": "HTY7X3921A",
+        "uptime_s": 21450
+      },
+      "power": {
+        "battery_pct": 74,
+        "ext_power": false,
+        "voltage_v": 11.8,
+        "temperature_c": 51.2
+      },
+      "position": {
+        "lat": 36.21591,
+        "lon": 36.15733,
+        "accuracy_m": 8.5,
+        "altitude_m": 92.0,
+        "location_source": "gps"
+      },
+      "status": {
+        "health": "degraded",
+        "last_checkin": "2025-09-04T16:45:00Z",
+        "errors": ["packet_loss_high"]
+      },
+      "radio": {
+        "mode": "mesh",
+        "rssi_dbm": -72,
+        "coverage_radius_m": 250,
+        "band": "2.4GHz",
+        "channel": 6,
+        "packet_loss_pct": 3.2
+      },
+      "clients": [
+        {
+          "mac": "84:7A:88:12:AA:4F",
+          "device_type": "smartphone",
+          "vendor": "Samsung",
+          "rssi_dbm": -65,
+          "first_seen": "2025-09-04T15:40:20Z",
+          "last_seen": "2025-09-04T16:44:10Z"
+        },
+        {
+          "mac": "D3:19:21:9A:EE:3B",
+          "device_type": "tablet",
+          "vendor": "Apple",
+          "rssi_dbm": -81,
+          "first_seen": "2025-09-04T16:05:12Z",
+          "last_seen": "2025-09-04T16:43:55Z"
+        }
+      ],
+      "counters": {
+        "clients_total": 42,
+        "msgs_rx": 18230,
+        "msgs_tx": 17510,
+        "packet_loss_pct": 3.2,
+        "avg_latency_ms": 122
+      }
+    },
+    "geo_enrichment": {
+      "region": {
+        "city": "Hatay",
+        "district": "Antakya",
+        "neighborhood": "Odabaşı Mahallesi"
+      },
+      "nearest_assembly_area": {
+        "id": "ASSEMBLY-HTY-12",
+        "name": "Atatürk Parkı Toplanma Alanı",
+        "distance_m": 380,
+        "capacity": 1200,
+        "current_estimated_people": 850
+      },
+      "affected_buildings": [
+        {
+          "building_id": "B-10293",
+          "type": "residential",
+          "floors": 5,
+          "material": "reinforced_concrete",
+          "geom_center": { "lat": 36.21612, "lon": 36.15798 },
+          "impact_score": 0.82
+        },
+        {
+          "building_id": "B-10477",
+          "type": "hospital",
+          "floors": 3,
+          "material": "masonry",
+          "geom_center": { "lat": 36.2154, "lon": 36.1567 },
+          "impact_score": 0.94
+        }
+      ],
+      "total_estimated_affected_buildings": 27,
+      "density_heatmap_score": 0.71
+    },
+    "analytics": {
+      "overall_health": "warning",
+      "summary": {
+        "active_modems_in_area": 14,
+        "offline_modems_in_area": 2,
+        "total_connected_people_estimate": 315,
+        "predicted_high_risk_buildings": 9
+      },
+      "risk_factors": {
+        "battery_low": false,
+        "overheating": true,
+        "coverage_drop": false,
+        "sudden_client_spike": true
+      },
+      "alerts": [
+        {
+          "alert_id": "AL-9983",
+          "type": "temperature_high",
+          "severity": "high",
+          "message": "Modem sıcaklığı kritik seviyede (51.2°C).",
+          "recommended_action": "Cihazın gölgeye taşınması veya soğutma sağlanması."
+        },
+        {
+          "alert_id": "AL-9984",
+          "type": "sudden_client_spike",
+          "severity": "medium",
+          "message": "Son 10 dakikada bağlı cihaz sayısı %40 arttı.",
+          "recommended_action": "Yakındaki toplanma alanının kapasitesi izlenmeli."
+        }
+      ]
+    },
+    "ui_summary": {
+      "map_layers": {
+        "modem_icon": "orange",
+        "coverage_circle_radius_m": 250,
+        "affected_buildings_highlighted": true,
+        "heatmap_enabled": true
+      },
+      "operator_panel": {
+        "key_metrics": {
+          "affected_buildings": 27,
+          "connected_people_estimate": 315,
+          "active_modems": 14,
+          "offline_modems": 2,
+          "average_battery_pct": 68
+        },
+        "top_risk_areas": [
+          { "name": "Odabaşı Mahallesi", "score": 0.82 },
+          { "name": "Cebrail Mahallesi", "score": 0.75 }
+        ]
+      }
     }
   }
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import SatelliteDamageCompare from '@/components/map/SatelliteDamageCompare';
+import HowItWorks from '@/components/ui/HowItWorks';
 
 // Dynamically import the map to avoid SSR issues
 const DamageReportMap = dynamic(() => import('@/components/map/DamageReportMap'), {
@@ -150,6 +151,16 @@ export default function SatelliteComparisonPage() {
           <p className="text-gray-600">
             Yapay zeka destekli uydu görüntü analizi ile Hatay bölgesindeki hasar tespiti
           </p>
+        </div>
+
+        {/* HowTo at the very top, aligned right under page title */}
+        <div className="relative h-10 mb-4">
+          <HowItWorks
+            title="Uydu Karşılaştırması"
+            howToUseText="Analizi başlatın veya verileri yenileyin; harita ve istatistikler üzerinden hasar dağılımını inceleyin."
+            howItWorksText="Arka planda şu adımlar uygulanır: (1) Öncesi/sonrası uydu görüntüleri coğrafi olarak hizalanır ve normalize edilir. (2) Değişim tespiti (spektral indeksler ve/veya derin öğrenme) ile hasar olasılık haritası çıkarılır. (3) Alan/parselleme bazında segmentasyon yapılarak her alan için değişim yüzdesi ve şiddet skoru üretilir. (4) Eşik değerlere göre hasar düzeyi (Minimal/Orta/Şiddetli/Felaket) atanır; güven puanı belirsizlik ölçümlerinden türetilir. (5) Sonuçlar PostGIS ile mekânsal olarak birleştirilir ve harita ile istatistik panellerine aktarılır."
+            ariaLabel="Uydu karşılaştırması nasıl çalışır"
+          />
         </div>
 
         {/* Control Panel */}
